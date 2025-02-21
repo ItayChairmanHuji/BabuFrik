@@ -20,10 +20,8 @@ class Node(ABC):
             raise ValueError(
                 f"The following fields are missing: {missing_fields} from the config of the node: {self.name}")
 
-    @staticmethod
-    @abstractmethod
-    def name():
-        raise NotImplementedError()
+    def name(self):
+        return self.__module__.split(".")[-1]
 
     @staticmethod
     @abstractmethod

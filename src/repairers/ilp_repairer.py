@@ -22,10 +22,6 @@ class ILPRepairer(Node):
                          fields=["license_file_name", "error_in_marginals"])
 
     @staticmethod
-    def name():
-        return "ilp_repairer"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.REPAIRED_DATA_FILE_NAME
 

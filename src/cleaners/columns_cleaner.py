@@ -17,10 +17,6 @@ class ColumnsCleaner(Node):
                          fields=["max_columns_to_keep"])
 
     @staticmethod
-    def name():
-        return "columns_cleaner"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.CLEANED_DATA_FILE_NAME
 

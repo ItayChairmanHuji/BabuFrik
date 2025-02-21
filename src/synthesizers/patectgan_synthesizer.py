@@ -24,10 +24,6 @@ class PATECTGANSynthesizer(Node):
         PATECTGAN.set_device = set_device
 
     @staticmethod
-    def name():
-        return "patectgan_synthesizer"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.SYNTHETIC_DATA_FILE_NAME
 

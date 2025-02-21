@@ -1,6 +1,5 @@
 {
   "node_name": "patectgan_synthesizer",
-  "output_file_name": "original_data.csv",
 
   "epsilon": 1,
   "regularization": "dragan",

@@ -14,10 +14,6 @@ class ACSGenerator(Node):
                          fields=["survey_year", "horizon", "survey", "states"])
 
     @staticmethod
-    def name():
-        return "acs_generator"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.GENERATED_DATA_FILE_NAME
 

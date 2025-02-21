@@ -14,10 +14,6 @@ class SizeLimitCleaner(Node):
                          fields=["size_limit"])
 
     @staticmethod
-    def name():
-        return "size_limit_cleaner"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.CLEANED_DATA_FILE_NAME
 

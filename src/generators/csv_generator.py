@@ -14,10 +14,6 @@ class CSVGenerator(Node):
                          fields=["file_name"])
 
     @staticmethod
-    def name():
-        return "csv_generator"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.GENERATED_DATA_FILE_NAME
 

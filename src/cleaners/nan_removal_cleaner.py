@@ -13,10 +13,6 @@ class NanRemovalCleaner(Node):
                          fields=["empty_values_threshold"])
 
     @staticmethod
-    def name():
-        return "nan_removal_cleaner"
-
-    @staticmethod
     def output_file_path() -> str:
         return consts.CLEANED_DATA_FILE_NAME
 
