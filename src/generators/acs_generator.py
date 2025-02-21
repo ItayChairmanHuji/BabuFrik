@@ -1,3 +1,4 @@
+import os.path
 from typing import Any
 
 from folktables import ACSDataSource
@@ -21,6 +22,8 @@ class ACSGenerator(Node):
         return consts.GENERATED_DATA_FILE_NAME
 
     def node_action(self, _) -> DataFrame:
-        return ACSDataSource(survey_year=self.config["survey_year"],
+        return (ACSDataSource(survey_year=self.config["survey_year"],
                              horizon=self.config["horizon"],
-                             survey=self.config["survey"]).get_data(states=self.config["states"], download=True)
+                             survey=self.config["survey"],
+                             root_dir=os.path.join(consts.RESOURCES_DIR_PATH, "data"))
+                .get_data(states=self.config["states"], download=True))
