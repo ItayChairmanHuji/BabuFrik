@@ -1,0 +1,8 @@
+{
+  "generators": ["acs_generator"],
+  "cleaners": ["nan_removal_cleaner", "size_limit_cleaner", "columns_cleaner"],
+  "synthesizers": ["patectgan_synthesizer"],
+  "repairers": ["ilp_repairer"],
+
+  "functional_dependencies_file_name": "acs_fd.json"
+}

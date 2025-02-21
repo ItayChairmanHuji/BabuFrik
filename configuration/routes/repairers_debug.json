@@ -1,0 +1,8 @@
+{
+  "generators": ["csv_generator"],
+  "cleaners": [],
+  "synthesizers": [],
+  "repairers": ["ilp_repairer"],
+
+  "functional_dependencies_file_name": "acs_fd.json"
+}

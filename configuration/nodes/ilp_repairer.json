@@ -1,0 +1,5 @@
+{
+  "node_name": "ilp_repairer",
+  "license_file_name": "license.json",
+  "error_in_marginals": 3
+}

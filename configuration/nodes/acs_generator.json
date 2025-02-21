@@ -1,0 +1,7 @@
+{
+  "node_name": "acs_generator",
+  "survey_year": "2021",
+  "horizon": "1-Year",
+  "survey": "person",
+  "states": ["AL"]
+}

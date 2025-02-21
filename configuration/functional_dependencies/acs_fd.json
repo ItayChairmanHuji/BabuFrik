@@ -1,0 +1,22 @@
+[
+  {
+    "source": "CIT",
+    "target": "NATIVITY"
+  },
+  {
+    "source": "ST",
+    "target": "DIVISION"
+  },
+  {
+    "source": "DIVISION",
+    "target": "REGION"
+  },
+  {
+    "source": "RAC2P",
+    "target": "RAC1P"
+  },
+  {
+    "source": "POBP",
+    "target": "WAOB"
+  }
+]
