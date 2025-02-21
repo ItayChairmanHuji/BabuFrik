@@ -5,8 +5,8 @@ from typing import Any
 
 import numpy as np
 from pandas import DataFrame
+from src.utils.functional_dependency import FunctionalDependency
 
-from functional_dependency import FunctionalDependency
 from src.utils import consts
 from src.utils.node import Node
 
