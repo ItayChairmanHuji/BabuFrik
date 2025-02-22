@@ -7,7 +7,7 @@ from typing import Any
 import gurobipy as gp
 from pandas import DataFrame
 
-from functional_dependency import FunctionalDependency
+from src.utils.functional_dependency import FunctionalDependency
 from src.utils import consts
 from src.utils.marginal_calculator import MarginalsCalculator
 from src.utils.node import Node
