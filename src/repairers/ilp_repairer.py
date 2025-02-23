@@ -41,14 +41,14 @@ class ILPRepairer(Node):
         fds_as_json = json.load(open(fd_file))
         return [FunctionalDependency(source=fd["source"], target=fd["target"]) for fd in fds_as_json]
 
-    def __load_marginals(self) -> MarginalsCalculator.MarginalsSet:
+    def __load_marginals(self) -> MarginalsCalculator.Marginals:
         marginals_file_path = os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME)
         marginals_resource_file_path = os.path.join(consts.RESOURCES_DIR_PATH, consts.MARGINALS_FILE_NAME)
         return pickle.load(open(marginals_file_path, "rb")) if os.path.exists(marginals_file_path) \
             else pickle.load(open(marginals_resource_file_path, "rb"))
 
     def __build_model(self, data: DataFrame, fds: list[FunctionalDependency],
-                      marginals: MarginalsCalculator.MarginalsSet) -> gp.Model:
+                      marginals: MarginalsCalculator.Marginals) -> gp.Model:
         number_of_tuples = len(data)
         model = self.__generate_model()
         objective = model.addVars(range(number_of_tuples), vtype=gp.GRB.BINARY,
@@ -73,7 +73,7 @@ class ILPRepairer(Node):
         for pair in violating_pairs:
             model.addConstr(gp.quicksum(objective[i] for i in pair) <= 1)
 
-    def __add_marginals_constraints(self, data: DataFrame, marginals: MarginalsCalculator.MarginalsSet,
+    def __add_marginals_constraints(self, data: DataFrame, marginals: MarginalsCalculator.Marginals,
                                     model: gp.Model, objective: ILPSolution) -> None:
         error_in_marginals = self.config["error_in_marginals"]
         for attributes_pair, attributes_marginals in marginals.items():

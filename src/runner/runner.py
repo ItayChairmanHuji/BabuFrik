@@ -21,6 +21,7 @@ def main():
             for node_name, node_time in runner.times.items():
                 times[node_name].append(node_time)
 
+
     with open(os.path.join(consts.RESOURCES_DIR_PATH, "times.pk"), 'wb') as file:
         pickle.dump(type, file, protocol=pickle.HIGHEST_PROTOCOL)
 
