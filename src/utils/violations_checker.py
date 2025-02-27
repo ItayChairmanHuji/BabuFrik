@@ -2,7 +2,7 @@ import itertools
 
 from pandas import DataFrame
 
-from functional_dependency import FunctionalDependency
+from src.utils.functional_dependency import FunctionalDependency
 
 
 class ViolationsChecker:
