@@ -1,12 +1,11 @@
 import os
-import pickle
 from typing import Any
 
 from pandas import DataFrame
-from snsynth import Synthesizer as ModelCreator
+from snsynth import Synthesizer as SNSynth
 
 from src.utils import consts
-from src.utils.marginal_calculator import MarginalsCalculator
+from src.utils.marginal_calculator import Marginals
 from src.utils.node import Node
 
 
@@ -20,15 +19,17 @@ class MSTSynthesizer(Node):
         return consts.SYNTHETIC_DATA_FILE_NAME
 
     def node_action(self, data: DataFrame) -> DataFrame:
-        marginals = MarginalsCalculator.calculate_marginal(data)
-        marginals_file_path = os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME)
-        with open(marginals_file_path, "wb") as f:
-            pickle.dump(marginals, f, protocol=pickle.HIGHEST_PROTOCOL)
+        Marginals(data).save(self.working_dir)
+        model = self.__train_model(data)
+        return self.__sample(model)
 
-        model = ModelCreator.create(synth="mst", epsilon=self.config["epsilon"], verbose=True)
+    def __train_model(self, data: DataFrame) -> SNSynth:
+        model = SNSynth.create(synth="mst", epsilon=self.config["epsilon"], verbose=True)
         model.fit(data, preprocessor_eps=0)
         model_file_path = os.path.join(self.working_dir, consts.MODEL_FILE_NAME)
         model.save(model_file_path)
+        return model
 
+    def __sample(self, model: SNSynth) -> DataFrame:
         size = self.config["size_to_sample"]
         return model.sample(size)
