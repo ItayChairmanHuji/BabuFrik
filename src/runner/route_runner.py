@@ -43,6 +43,9 @@ class RouteRunner:
         shutil.copyfile(
             os.path.join(consts.FUNCTIONAL_DEPENDENCIES_DIR_PATH, route_config["functional_dependencies_file_name"]),
             os.path.join(self.working_dir, consts.FUNCTIONAL_DEPENDENCIES_FILE_NAME))
+        shutil.copyfile(
+            os.path.join(consts.MARGINALS_ERROR_FACTOR_DIR_PATH, route_config["marginals_errors_factors_file_name"]),
+            os.path.join(self.working_dir, consts.MARGINALS_ERRORS_FACTORS_FILE_NAME))
 
     def __runner_loop(self, nodes: list[Node]) -> None:
         input_file_for_node = None

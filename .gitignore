@@ -2,3 +2,4 @@
 resources/
 configuration/tasks
 configuration/licenses
+configuration/marginals_errors_factors
