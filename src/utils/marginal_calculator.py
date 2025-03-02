@@ -23,7 +23,7 @@ class MarginalsCalculator:
 class Marginals:
     AttributeKey = tuple[str, ...]
     ValuesKey = tuple[Any, ...]
-    MarginalsType = dict[AttributeKey, DataFrame[ValuesKey, float]]
+    MarginalsType = dict[AttributeKey, DataFrame]
 
     def __init__(self, data: Union[DataFrame, str]):
         if not isinstance(data, DataFrame) and not isinstance(data, str):

@@ -11,7 +11,7 @@ from src.utils import consts
 def main():
     routes = json.load(open(consts.MAIN_CONFIGURATION_FILE_PATH))
     runner = RouteRunner()
-    sizes = [i for i in range(100, 8100, 100)]
+    sizes = [i for i in range(1, 3)]
     times = defaultdict(list)
     for size in sizes:
         for route_name in routes:

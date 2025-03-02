@@ -47,5 +47,5 @@ class ILPRepairer(Node):
 
     @staticmethod
     def __get_feasible_solution(data: DataFrame, ilp: ILPModel) -> DataFrame:
-        tuples_to_remove = [i for i, x in enumerate(ilp.model.X) if x == 0]
+        tuples_to_remove = [i for i, x in enumerate(ilp.objective) if x == 0]
         return data.drop(index=tuples_to_remove)

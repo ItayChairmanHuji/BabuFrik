@@ -1,5 +1,5 @@
 import itertools
-from typing import Any
+from typing import Any, Iterator
 
 import gurobipy as gp
 import numpy as np
@@ -25,7 +25,7 @@ class MarginalsConstraintAdder(ConstraintAdder):
         MarginalsConstraintAdder.__set_marginals_error_limit(ilp, domains_cross, marginals_error_var, attrs, res_size)
 
     @staticmethod
-    def __set_marginals_error_limit(ilp: ILPModel, domains_cross: itertools.product[tuple[Any, ...]],
+    def __set_marginals_error_limit(ilp: ILPModel, domains_cross: Iterator[tuple[Any, ...]],
                                     marginals_error_var: gp.tupledict[tuple[Any, ...], gp.Var], attrs: tuple[str, ...],
                                     res_size: gp.LinExpr) -> None:
         for values in domains_cross:

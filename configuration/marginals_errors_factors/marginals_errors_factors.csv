@@ -1,2 +1,2 @@
-DIVISION,REGION,ST,CIT,HINS6,PAP,DIS,NATIVITY,OC,POBP,RAC1P,RAC2P,WAOB,FJWRIP,FJWTRNSP,FMARHDP,FRELSHIPP,PWGTP14,PWGTP20
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+age,workclass,fnlwgt,education,education-num,marital-status,occupation,relationship,race,sex,capital-gain,capital-loss,hours-per-week,native-country,income
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1

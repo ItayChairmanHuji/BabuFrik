@@ -1,4 +1,4 @@
 {
   "node_name": "size_limit_cleaner",
-  "size_limit": 5000
+  "size_limit": 100
 }

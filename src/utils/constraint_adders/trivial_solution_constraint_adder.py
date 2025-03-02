@@ -5,5 +5,5 @@ from src.utils.ilp_model import ILPModel
 class TrivialSolutionConstraintAdder(ConstraintAdder):
     @staticmethod
     def add_constraint(ilp: ILPModel) -> ILPModel:
-        ilp.model.addConstr(ilp.model.objective.sum() >= 1)
+        ilp.model.addConstr(ilp.objective.sum() >= 1)
         return ilp
