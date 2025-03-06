@@ -29,7 +29,7 @@ class ILPRepairer(Node):
         marginals = Marginals(self.working_dir)
         ilp = self.__build_ilp(data, fds, marginals)
         ilp.solve()
-        return self.__get_feasible_solution(data, ilp) if ilp.did_succeed() else self.__get_feasible_solution(data, ilp)
+        return self.__get_feasible_solution(data, ilp) if ilp.did_succeed else self.__get_feasible_solution(data, ilp)
 
     def __build_ilp(self, data: DataFrame, fds: list[FunctionalDependency], marginals: Marginals) -> ILPModel:
         return TrivialSolutionConstraintAdder.add_constraint(
@@ -47,5 +47,5 @@ class ILPRepairer(Node):
 
     @staticmethod
     def __get_feasible_solution(data: DataFrame, ilp: ILPModel) -> DataFrame:
-        tuples_to_remove = [i for i, x in enumerate(ilp.objective) if x == 0]
+        tuples_to_remove = [i for i, x in enumerate(ilp.solution) if x == 0]
         return data.drop(index=tuples_to_remove)

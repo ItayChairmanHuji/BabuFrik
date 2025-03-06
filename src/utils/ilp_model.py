@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any
+from typing import Any, Callable
 
 import gurobipy as gp
 from pandas import DataFrame
@@ -11,7 +11,8 @@ from src.utils.marginal_calculator import Marginals
 
 
 class ILPModel:
-    def __init__(self, data: DataFrame, fds: list[FunctionalDependency], marginals: Marginals, config: dict[str, Any]):
+    def __init__(self, data: DataFrame, fds: list[FunctionalDependency], marginals: Marginals, config: dict[str, Any],
+                 rounding_approach: Callable[[float], int] = None):
         self.data = data
         self.fds = fds
         self.marginals = marginals
@@ -19,7 +20,9 @@ class ILPModel:
         self.model = self.__create_model()
 
         indices = range(len(data))
-        self.objective = self.model.addVars(indices, vtype=gp.GRB.BINARY, name=[f"x_{i}" for i in indices])
+        self.rounding_approach = rounding_approach
+        objective_type = gp.GRB.BINARY if self.rounding_approach is None else gp.GRB.CONTINUOUS
+        self.objective = self.model.addVars(indices, vtype=objective_type, name=[f"x_{i}" for i in indices])
 
     def __create_model(self) -> gp.Model:
         license_file_name = self.config["license_file_name"]
@@ -28,11 +31,19 @@ class ILPModel:
         env = gp.Env(params=license_params)
         return gp.Model("ILP", env=env)
 
-    def solve(self, is_max=True) -> "ILPModel":
-        self.model.setObjective(self.objective.sum(), gp.GRB.MAXIMIZE if is_max else gp.GRB.MINIMIZE)
+    def solve(self, weight_function: Callable[[int], float] = lambda x: 1.0, is_max=True) -> "ILPModel":
+        weighted_sum = gp.quicksum(weight_function(i) * self.objective[i] for i in range(len(self.objective)))
+        optimization_operation = gp.GRB.MAXIMIZE if is_max else gp.GRB.MINIMIZE
+        self.model.setObjective(weighted_sum, optimization_operation)
         self.model.update()
         self.model.optimize()
         return self
 
+    @property
     def did_succeed(self) -> bool:
         return self.model.status == gp.GRB.OPTIMAL
+
+    @property
+    def solution(self) -> iter:
+        should_round = self.rounding_approach is not None
+        yield from map(lambda x: self.rounding_approach(x) if should_round else x, self.objective)
