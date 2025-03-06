@@ -2,35 +2,50 @@ import json
 import os
 import pickle
 from collections import defaultdict
+
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 from src.runner.route_runner import RouteRunner
 from src.utils import consts
 
 
-def main():
-    routes = json.load(open(consts.MAIN_CONFIGURATION_FILE_PATH))
-    runner = RouteRunner()
-    sizes = [i for i in range(1, 3)]
-    times = defaultdict(list)
-    for size in sizes:
-        for route_name in routes:
-            print(f"Running route {route_name} with size {size}")
-            route_config = json.load(open(os.path.join(consts.ROUTES_DIR_PATH, f"{route_name}.json")))
-            runner.run(route_config, size_to_sample=size, error_in_marginals=0.1*size)
-            for node_name, node_time in runner.times.items():
-                times[node_name].append(node_time)
+def size_generator(index: int) -> int:
+    return 500 * (2 ** index)
 
 
+def sizes_generator(num: int) -> list[int]:
+    return [size_generator(i) for i in range(num)]
+
+
+def plot_time(figure: Figure, times: dict[str, list[float]]):
     with open(os.path.join(consts.RESOURCES_DIR_PATH, "times.pk"), 'wb') as file:
         pickle.dump(type, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     for node_name, node_times in times.items():
-        plt.figure()
-        plt.plot(sizes, node_times)
-        plt.title(f"{node_name} time as function of size")
-        plt.xlabel("size")
-        plt.ylabel("time")
-        plt.savefig(os.path.join(consts.RESOURCES_DIR_PATH, f"{node_name}_time_graph.png"))
+        figure.clear()
+        ax = figure.subplots(nrows=1, ncols=1)
+        ax.plot(sizes_generator(len(node_times)), node_times)
+        ax.set_title(f"{node_name} time as function of size")
+        ax.set_xlabel("size")
+        ax.set_ylabel("time")
+        figure.savefig(os.path.join(consts.RESOURCES_DIR_PATH, f"{node_name}_time_graph.png"))
+
+
+def main():
+    routes = json.load(open(consts.MAIN_CONFIGURATION_FILE_PATH))
+    runner = RouteRunner()
+    sizes = sizes_generator(10)
+    times = defaultdict(list)
+    figure = plt.figure()
+    for size in sizes:
+        for route_name in routes:
+            print(f"Running route {route_name} with size {size}")
+            route_config = json.load(open(os.path.join(consts.ROUTES_DIR_PATH, f"{route_name}.json")))
+            runner.run(route_config, size_to_sample=size, error_in_marginals=0.1 * size)
+            for node_name, node_time in runner.times.items():
+                times[node_name].append(node_time)
+        plot_time(figure, times)
+
 if __name__ == '__main__':
     main()

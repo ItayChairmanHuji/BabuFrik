@@ -1,4 +1,5 @@
 import os
+import time
 from typing import Any
 
 from pandas import DataFrame
@@ -32,7 +33,10 @@ class PATECTGANSynthesizer(Node):
         return self.__sample(model)
 
     def __train_model(self, data: DataFrame) -> SNSynth:
+        start_time = time.time()
         model = SNSynth.create(synth="patectgan", epsilon=self.config["epsilon"], verbose=True)
+        end_time = time.time()
+        print(f"Time taken marginals calculation: {end_time - start_time}")
         model.fit(data, categorical_columns=data.columns.values.tolist(), preprocessor_eps=0)
         model_file_path = os.path.join(self.working_dir, consts.MODEL_FILE_NAME)
         model.save(model_file_path)
