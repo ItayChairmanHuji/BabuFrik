@@ -18,9 +18,10 @@ class ILPModel:
         self.marginals = marginals
         self.config = config
         self.model = self.__create_model()
+        self.rounding_approach = rounding_approach
+        self.weight_function = lambda x: 1
 
         indices = range(len(data))
-        self.rounding_approach = rounding_approach
         objective_type = gp.GRB.BINARY if self.rounding_approach is None else gp.GRB.CONTINUOUS
         self.objective = self.model.addVars(indices, vtype=objective_type, name=[f"x_{i}" for i in indices])
 
@@ -31,8 +32,8 @@ class ILPModel:
         env = gp.Env(params=license_params)
         return gp.Model("ILP", env=env)
 
-    def solve(self, weight_function: Callable[[int], float] = lambda x: 1.0, is_max=True) -> "ILPModel":
-        weighted_sum = gp.quicksum(weight_function(i) * self.objective[i] for i in range(len(self.objective)))
+    def solve(self,is_max=True) -> "ILPModel":
+        weighted_sum = gp.quicksum(self.weight_function(i) * self.objective[i] for i in range(len(self.objective)))
         optimization_operation = gp.GRB.MAXIMIZE if is_max else gp.GRB.MINIMIZE
         self.model.setObjective(weighted_sum, optimization_operation)
         self.model.update()

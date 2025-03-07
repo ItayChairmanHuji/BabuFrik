@@ -3,7 +3,7 @@ import os
 import pickle
 from typing import Any, Union
 
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from src.utils import consts
 
@@ -29,7 +29,7 @@ class Marginals:
         if not isinstance(data, DataFrame) and not isinstance(data, str):
             raise TypeError("data must be a DataFrame or a string")
 
-        self.marginals = Marginals.__build_marginals_dict(data) \
+        self.marginals = self.__build_marginals_dict(data) \
             if isinstance(data, DataFrame) else Marginals.__load(data)
 
     def get_marginals(self, keys: dict[str, Any]) -> float:
@@ -43,6 +43,10 @@ class Marginals:
         marginals_file_path = os.path.join(working_dir, consts.MARGINALS_FILE_NAME)
         with open(marginals_file_path, "wb") as f:
             pickle.dump(self.marginals, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def distance(self, other: "Marginals") -> float:
+        return Series((self.marginals[attr_key] - other.marginals[attr_key]).abs().mean()
+                      for attr_key in self.marginals.keys() if attr_key not in other.marginals).mean()
 
     @staticmethod
     def __load(working_dir: str) -> MarginalsType:
@@ -64,8 +68,7 @@ class Marginals:
     @staticmethod
     def __build_marginals_dict(data: DataFrame) -> MarginalsType:
         return {(key := Marginals.__get_attribute_key(attr1, attr2)): Marginals.__calc_marginals(data, *key)
-                for attr1, attr2 in itertools.combinations(data.columns[1:], 2)
-                }
+                for attr1, attr2 in itertools.combinations(data.columns[1:], 2)}
 
     @staticmethod
     def __calc_marginals(data: DataFrame, first_attribute: str, second_attribute: str) -> DataFrame:
