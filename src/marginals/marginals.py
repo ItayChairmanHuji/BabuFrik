@@ -1,11 +1,11 @@
 import itertools
 import os
-import pickle
 from typing import Any, Union
 
 from pandas import DataFrame, Series
 
 from src.utils import consts
+from src.utils.object_loader import ObjectLoader
 
 
 class Marginals:
@@ -29,8 +29,7 @@ class Marginals:
 
     def save(self, working_dir: str) -> None:
         marginals_file_path = os.path.join(working_dir, consts.MARGINALS_FILE_NAME)
-        with open(marginals_file_path, "wb") as f:
-            pickle.dump(self.marginals, f, protocol=pickle.HIGHEST_PROTOCOL)
+        ObjectLoader.save(self.marginals, marginals_file_path)
 
     def distance(self, other: "Marginals") -> float:
         return Series((self.marginals[attr_key] - other.marginals[attr_key]).fillna(1).abs().mean()  # Think about it
@@ -40,8 +39,8 @@ class Marginals:
     def __load(working_dir: str) -> MarginalsType:
         marginals_file_path = os.path.join(working_dir, consts.MARGINALS_FILE_NAME)
         marginals_resource_file_path = os.path.join(consts.RESOURCES_DIR_PATH, consts.MARGINALS_FILE_NAME)
-        return pickle.load(open(marginals_file_path, "rb")) if os.path.exists(marginals_file_path) \
-            else pickle.load(open(marginals_resource_file_path, "rb"))
+        return ObjectLoader.load(marginals_file_path) if os.path.exists(marginals_file_path) \
+            else ObjectLoader.load(str(marginals_resource_file_path))
 
     @staticmethod
     def __get_attribute_key(first_attribute: str, second_attribute: str) -> AttributeKey:

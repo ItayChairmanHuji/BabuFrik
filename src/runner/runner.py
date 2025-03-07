@@ -1,6 +1,5 @@
 import json
 import os
-import pickle
 from collections import defaultdict
 
 import matplotlib.pyplot as plt
@@ -8,20 +7,20 @@ from matplotlib.figure import Figure
 
 from src.runner.route_runner import RouteRunner
 from src.utils import consts
+from src.utils.object_loader import ObjectLoader
 
 
 def size_generator(index: int) -> int:
-    #return 500 * (2 ** index)
+    # return 500 * (2 ** index)
     return index + 1
+
 
 def sizes_generator(num: int) -> list[int]:
     return [size_generator(i) for i in range(num)]
 
 
 def plot_time(figure: Figure, times: dict[str, list[float]]):
-    with open(os.path.join(consts.RESOURCES_DIR_PATH, "times.pk"), 'wb') as file:
-        pickle.dump(type, file, protocol=pickle.HIGHEST_PROTOCOL)
-
+    ObjectLoader.save(times, os.path.join(consts.RESOURCES_DIR_PATH, "times.pk"))
     for node_name, node_times in times.items():
         figure.clear()
         ax = figure.subplots(nrows=1, ncols=1)

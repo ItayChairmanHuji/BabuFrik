@@ -1,5 +1,4 @@
 import os
-import pickle
 from functools import partial
 from typing import Any
 
@@ -9,9 +8,10 @@ from scipy import sparse
 from snsynth import Synthesizer as SNSynth
 from snsynth.mst import MSTSynthesizer as SNMSTSynthesizer
 
-from src.utils import consts
 from src.marginals.marginals import Marginals
+from src.utils import consts
 from src.utils.node import Node
+from src.utils.object_loader import ObjectLoader
 
 
 def compress_domain(self, data, measurements):
@@ -36,7 +36,6 @@ def compress_domain(self, data, measurements):
     return self.transform_data(data, supports), new_measurements, undo_compress_fn
 
 
-
 class MSTSynthesizer(Node):
     def __init__(self, config: dict[str, Any]):
         super().__init__(config=config,
@@ -56,8 +55,7 @@ class MSTSynthesizer(Node):
         model = SNSynth.create(synth="mst", epsilon=self.config["epsilon"], verbose=True)
         model.fit(data, categorical_columns=data.columns.values.tolist(), preprocessor_eps=0)
         model_file_path = os.path.join(self.working_dir, consts.MODEL_FILE_NAME)
-        with open(model_file_path, 'wb') as file:
-            pickle.dump(model, file, protocol=pickle.HIGHEST_PROTOCOL)
+        ObjectLoader.save(model, str(model_file_path))
         return model
 
     def __sample(self, model: SNSynth) -> DataFrame:
