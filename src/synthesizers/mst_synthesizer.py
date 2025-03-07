@@ -10,7 +10,7 @@ from snsynth import Synthesizer as SNSynth
 from snsynth.mst import MSTSynthesizer as SNMSTSynthesizer
 
 from src.utils import consts
-from src.utils.marginals import Marginals
+from src.marginals.marginals import Marginals
 from src.utils.node import Node
 
 

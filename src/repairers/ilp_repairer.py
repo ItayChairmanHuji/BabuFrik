@@ -9,7 +9,7 @@ from src.utils.constraint_adders.trivial_solution_constraint_adder import Trivia
 from src.utils.constraint_adders.violations_constraint_adder import ViolationsConstraintAdder
 from src.utils.functional_dependency import FunctionalDependency, load_fds
 from src.utils.ilp_model import ILPModel
-from src.utils.marginals import Marginals
+from src.marginals.marginals import Marginals
 from src.utils.node import Node
 
 

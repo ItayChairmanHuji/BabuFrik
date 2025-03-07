@@ -7,7 +7,7 @@ from snsynth import Synthesizer as SNSynth
 from snsynth.pytorch.nn import PATECTGAN
 
 from src.utils import consts
-from src.utils.marginals import Marginals
+from src.marginals.marginals import Marginals
 from src.utils.node import Node
 
 
