@@ -8,18 +8,6 @@ from pandas import DataFrame, Series
 from src.utils import consts
 
 
-class MarginalsCalculator:
-    Marginals = dict[tuple, DataFrame]
-
-    @staticmethod
-    def calculate_marginal(data: DataFrame) -> Marginals:
-        attributes = data.columns[1:]
-        return {
-            attributes_pair: data.groupby([*attributes_pair]).size() / len(data)
-            for attributes_pair in itertools.combinations(attributes, 2)
-        }
-
-
 class Marginals:
     AttributeKey = tuple[str, ...]
     ValuesKey = tuple[Any, ...]
@@ -45,7 +33,7 @@ class Marginals:
             pickle.dump(self.marginals, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def distance(self, other: "Marginals") -> float:
-        return Series((self.marginals[attr_key] - other.marginals[attr_key]).fillna(1).abs().mean() # Think about it
+        return Series((self.marginals[attr_key] - other.marginals[attr_key]).fillna(1).abs().mean()  # Think about it
                       for attr_key in self.marginals.keys() if attr_key in other.marginals).mean()
 
     @staticmethod

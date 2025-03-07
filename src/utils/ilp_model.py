@@ -7,7 +7,7 @@ from pandas import DataFrame
 
 from src.utils import consts
 from src.utils.functional_dependency import FunctionalDependency
-from src.utils.marginal_calculator import Marginals
+from src.utils.marginals import Marginals
 
 
 class ILPModel:

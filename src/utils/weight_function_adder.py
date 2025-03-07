@@ -1,5 +1,5 @@
 from src.utils.ilp_model import ILPModel
-from src.utils.marginal_calculator import Marginals
+from src.utils.marginals import Marginals
 
 
 class WeightFunctionAdder:
