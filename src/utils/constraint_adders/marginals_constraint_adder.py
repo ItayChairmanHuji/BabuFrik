@@ -23,7 +23,7 @@ class MarginalsConstraintAdder(ConstraintAdder):
 
     @staticmethod
     def __load_marginals_error_factors(ilp: ILPModel) -> Series:
-        file_name = ilp.config["marginals_error_factors"]
+        file_name = ilp.config["marginals_error_factors_file_name"]
         file_path = os.path.join(consts.MARGINALS_ERROR_FACTORS_DIR_PATH, file_name)
         return pd.read_csv(str(file_path), index_col=[0, 1], skipinitialspace=True).squeeze()
 

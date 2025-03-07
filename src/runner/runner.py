@@ -11,8 +11,8 @@ from src.utils import consts
 
 
 def size_generator(index: int) -> int:
-    return 500 * (2 ** index)
-
+    #return 500 * (2 ** index)
+    return index + 1
 
 def sizes_generator(num: int) -> list[int]:
     return [size_generator(i) for i in range(num)]
@@ -46,6 +46,7 @@ def main():
             for node_name, node_time in runner.times.items():
                 times[node_name].append(node_time)
         plot_time(figure, times)
+
 
 if __name__ == '__main__':
     main()

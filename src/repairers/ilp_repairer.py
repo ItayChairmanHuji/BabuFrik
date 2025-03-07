@@ -18,7 +18,7 @@ class ILPRepairer(Node):
 
     def __init__(self, config: dict[str, Any]):
         super().__init__(config=config,
-                         fields=["license_file_name", "marginals_errors"])
+                         fields=["license_file_name", "marginals_error_factors_file_name"])
 
     @staticmethod
     def output_file_path() -> str:

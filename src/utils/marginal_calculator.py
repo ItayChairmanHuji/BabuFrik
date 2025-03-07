@@ -45,8 +45,8 @@ class Marginals:
             pickle.dump(self.marginals, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     def distance(self, other: "Marginals") -> float:
-        return Series((self.marginals[attr_key] - other.marginals[attr_key]).abs().mean()
-                      for attr_key in self.marginals.keys() if attr_key not in other.marginals).mean()
+        return Series((self.marginals[attr_key] - other.marginals[attr_key]).fillna(1).abs().mean() # Think about it
+                      for attr_key in self.marginals.keys() if attr_key in other.marginals).mean()
 
     @staticmethod
     def __load(working_dir: str) -> MarginalsType:

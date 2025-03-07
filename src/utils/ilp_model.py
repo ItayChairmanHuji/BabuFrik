@@ -33,7 +33,10 @@ class ILPModel:
         return gp.Model("ILP", env=env)
 
     def solve(self,is_max=True) -> "ILPModel":
-        weighted_sum = gp.quicksum(self.weight_function(i) * self.objective[i] for i in range(len(self.objective)))
+        weighted_sum = gp.quicksum(self.weight_function(i) * self.objective[i] for i in range(len(self.data)))
+        print("Weighted sum is:", weighted_sum)
+        for i in range(len(self.data)):
+            print(self.weight_function(i))
         optimization_operation = gp.GRB.MAXIMIZE if is_max else gp.GRB.MINIMIZE
         self.model.setObjective(weighted_sum, optimization_operation)
         self.model.update()

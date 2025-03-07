@@ -1,5 +1,4 @@
 {
-  "node_name": "ilp_repairer",
   "license_file_name": "license.json",
-  "error_in_marginals": 3
+  "marginals_error_factors_file_name": "adults_marginals_error_factor"
 }

@@ -5,7 +5,7 @@ from src.utils.marginal_calculator import Marginals
 class WeightFunctionAdder:
     @staticmethod
     def add_weight_function(ilp: ILPModel) -> ILPModel:
-        weights = {i: WeightFunctionAdder.__get_tuple_weight(ilp, i) for i in range(len(ilp.model))}
+        weights = {i: WeightFunctionAdder.__get_tuple_weight(ilp, i) for i in range(len(ilp.data))}
         ilp.weight_function = lambda i: weights[i]
         return ilp
 
