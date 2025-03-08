@@ -14,7 +14,7 @@ class CSVGenerator(Node):
                          fields=["file_name"])
 
     @staticmethod
-    def output_file_path() -> str:
+    def output_file_name() -> str:
         return consts.GENERATED_DATA_FILE_NAME
 
     def node_action(self, _) -> DataFrame:

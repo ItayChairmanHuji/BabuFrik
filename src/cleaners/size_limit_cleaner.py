@@ -14,7 +14,7 @@ class SizeLimitCleaner(Node):
                          fields=["size_limit"])
 
     @staticmethod
-    def output_file_path() -> str:
+    def output_file_name() -> str:
         return consts.CLEANED_DATA_FILE_NAME
 
     def node_action(self, data: DataFrame) -> DataFrame:

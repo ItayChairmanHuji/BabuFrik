@@ -1,6 +1,5 @@
 import os
 import shutil
-import time
 import uuid
 from itertools import chain
 from typing import Any, TypeVar
@@ -24,11 +23,8 @@ class RouteRunner:
         self.working_dir = working_dir
         self.times: dict[str, float] = {}
 
-    @property
-    def task_id(self) -> str:
-        return os.path.basename(self.working_dir)
-
     def run(self, working_dir: str, route_config: dict[str, Any], **kwargs) -> None:
+        self.working_dir = working_dir
         nodes = self.__create_all_nodes(route_config, kwargs)
         self.__setup_working_dir(route_config)
         self.__runner_loop(nodes)
@@ -47,14 +43,9 @@ class RouteRunner:
 
     def __runner_loop(self, nodes: list[Node]) -> None:
         input_file_for_node = None
-        print(f"Running task {self.task_id}")
+        reports = []
         for node in nodes:
-            self.__run_node(node, input_file_for_node)
-            input_file_for_node = node.output_file_path()
-
-    def __run_node(self, node: Node, input_file_path: str):
-        print(f"Running node {node.name()}")
-        start_time = time.time()
-        node.run(self.working_dir, input_file_path)
-        end_time = time.time()
-        self.times[node.name()] = end_time - start_time
+            print(f"Running node {node.name()}")
+            report = node.run(self.working_dir, input_file_for_node)
+            input_file_for_node = report.output_file_path
+            reports.append(report)

@@ -24,7 +24,7 @@ class PATECTGANSynthesizer(Node):
         PATECTGAN.set_device = set_device
 
     @staticmethod
-    def output_file_path() -> str:
+    def output_file_name() -> str:
         return consts.SYNTHETIC_DATA_FILE_NAME
 
     def node_action(self, data: DataFrame) -> DataFrame:

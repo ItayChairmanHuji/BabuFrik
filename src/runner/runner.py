@@ -35,6 +35,7 @@ def main():
     fields_to_modify: dict[str, list[Any]] = running_config["fields_to_modify"]
     figure = plt.figure()
     times = defaultdict(list)
+    print(f"Running task {task_id}")
     for index, values_to_modify in enumerate(zip(*fields_to_modify.values())):
         dynamic_fields = {key: value for key, value in zip(fields_to_modify.keys(), values_to_modify)}
         route_config = json.load(open(os.path.join(consts.ROUTES_DIR_PATH, f"{route_name}.json")))

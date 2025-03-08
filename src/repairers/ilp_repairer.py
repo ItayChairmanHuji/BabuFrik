@@ -18,7 +18,7 @@ class ILPRepairer(Node):
                          fields=["license_file_name", "marginals_error_factors_file_name"])
 
     @staticmethod
-    def output_file_path() -> str:
+    def output_file_name() -> str:
         return consts.REPAIRED_DATA_FILE_NAME
 
     def node_action(self, data: DataFrame) -> DataFrame:
