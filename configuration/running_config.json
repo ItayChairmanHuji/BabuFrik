@@ -1,0 +1,6 @@
+{
+  "route_name": "mst",
+  "fields_to_change": {
+    "size_to_sample": [1,2,3,4]
+  }
+}

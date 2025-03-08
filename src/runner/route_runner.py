@@ -20,15 +20,15 @@ def create_working_dir_path() -> str:
 class RouteRunner:
     NODES_TYPES = ["generators", "cleaners", "synthesizers", "repairers"]
 
-    def __init__(self):
-        self.working_dir = None
+    def __init__(self, working_dir: str):
+        self.working_dir = working_dir
         self.times: dict[str, float] = {}
 
     @property
     def task_id(self) -> str:
         return os.path.basename(self.working_dir)
 
-    def run(self, route_config: dict[str, Any], **kwargs) -> None:
+    def run(self, working_dir: str, route_config: dict[str, Any], **kwargs) -> None:
         nodes = self.__create_all_nodes(route_config, kwargs)
         self.__setup_working_dir(route_config)
         self.__runner_loop(nodes)
@@ -38,8 +38,6 @@ class RouteRunner:
         return chain.from_iterable(create_nodes(node_type) for node_type in self.NODES_TYPES)
 
     def __setup_working_dir(self, route_config: dict[str, str]) -> None:
-        self.working_dir = create_working_dir_path()
-        os.makedirs(self.working_dir, exist_ok=True)
         shutil.copyfile(
             os.path.join(consts.FUNCTIONAL_DEPENDENCIES_DIR_PATH, route_config["functional_dependencies_file_name"]),
             os.path.join(self.working_dir, consts.FUNCTIONAL_DEPENDENCIES_FILE_NAME))
