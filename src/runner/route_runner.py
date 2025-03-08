@@ -7,6 +7,7 @@ from typing import Any, TypeVar
 from src.runner.nodes_creator import NodesCreator
 from src.utils import consts
 from src.utils.node import Node
+from src.utils.node_report import NodeReport
 
 T = TypeVar("T", bound=Node)
 
@@ -23,11 +24,11 @@ class RouteRunner:
         self.working_dir = working_dir
         self.times: dict[str, float] = {}
 
-    def run(self, working_dir: str, route_config: dict[str, Any], **kwargs) -> None:
+    def run(self, working_dir: str, route_config: dict[str, Any], **kwargs) -> list[NodeReport]:
         self.working_dir = working_dir
         nodes = self.__create_all_nodes(route_config, kwargs)
         self.__setup_working_dir(route_config)
-        self.__runner_loop(nodes)
+        return self.__runner_loop(nodes)
 
     def __create_all_nodes(self, route_config: dict[str, list[str]], fields_to_modify: dict[str, Any]) -> list[Node]:
         create_nodes = lambda node_type: NodesCreator.create_nodes(route_config[node_type], node_type, fields_to_modify)
@@ -41,7 +42,7 @@ class RouteRunner:
             os.path.join(consts.MARGINALS_ERROR_FACTORS_DIR_PATH, route_config["marginals_errors_factors_file_name"]),
             os.path.join(self.working_dir, consts.MARGINALS_ERRORS_FACTORS_FILE_NAME))
 
-    def __runner_loop(self, nodes: list[Node]) -> None:
+    def __runner_loop(self, nodes: list[Node]) -> list[NodeReport]:
         input_file_for_node = None
         reports = []
         for node in nodes:
@@ -49,3 +50,4 @@ class RouteRunner:
             report = node.run(self.working_dir, input_file_for_node)
             input_file_for_node = report.output_file_path
             reports.append(report)
+        return reports
