@@ -1,4 +1,5 @@
 {
+  "code_name":"patectgan_synthesizer",
   "epsilon": 1,
   "regularization": "dragan"
 }

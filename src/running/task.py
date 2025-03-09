@@ -34,7 +34,7 @@ class Task:
         return [self.__create_analyzer(analyzer) for analyzer in self.analyzers_names]
 
     def __create_analyzer(self, analyzer_name: str) -> Analyzer:
-        analyzer_class = analyzers_utils.load_analyzer_class(analyzer_name)
+        analyzer_class, analyzer_config = analyzers_utils.load_analyzer(analyzer_name, self.dynamic_fields)
         results_dir = os.path.join(self.working_dir, analyzer_name)
         os.makedirs(results_dir, exist_ok=True)
         return analyzer_class(
@@ -42,6 +42,5 @@ class Task:
             figure=plt.figure(),
             fds_file_path=self.job.fds_file_path,
             marginals_errors_margins_file_path=self.job.marginals_errors_margins_file_path,
-            config=analyzers_utils.load_analyzer_configuration(analyzer_name,
-                                                               analyzer_class.mandatory_fields(), self.dynamic_fields)
+            config=analyzer_config
         )

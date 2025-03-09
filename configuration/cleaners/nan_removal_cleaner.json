@@ -1,3 +1,4 @@
 {
+  "code_name": "nan_removal_cleaner",
   "empty_values_threshold": 0.5
 }

@@ -9,25 +9,31 @@ from src.utils.configuration import Configuration
 AnalyzerSubClass = TypeVar("AnalyzerSubClass", bound=Analyzer)
 
 
-def load_analyzer_class(analyzer_name: str) -> type[AnalyzerSubClass]:
-    analyzer_class = class_loader.load_class(analyzer_name)
-    if not issubclass(analyzer_class, Analyzer):
+def load_analyzer(analyzer_config_name: str, dynamic_fields: dict[str, list[Any]]) -> tuple[
+    type[AnalyzerSubClass], Configuration]:
+    analyzer_config = __get_json_config(analyzer_config_name)
+    analyzer_class = __get_analyzer_class(analyzer_config)
+    return analyzer_class, __get_analyzer_configuration(analyzer_config, analyzer_class, dynamic_fields)
+
+
+def __get_json_config(analyzer_config_name: str) -> dict[str, Any]:
+    config_file_path = os.path.join(consts.CONFIGURATION_DIR_PATH, "analyzers", f"{analyzer_config_name}.json")
+    return json.load(open(config_file_path, "r"))
+
+
+def __get_analyzer_class(analyzer_config: dict[str, Any]) -> type[AnalyzerSubClass]:
+    analyzer_name = analyzer_config["code_name"]
+    service_class = class_loader.load_class(analyzer_name, "analyzers")
+    if not issubclass(service_class, Analyzer):
         raise Exception(f"Analyzer class {analyzer_name} not found.")
-    return analyzer_class
+    return service_class
 
 
-def is_analyzer_type(analyzer_name: str) -> bool:
-    return analyzer_name.split('_')[-1] == "analyzer"
-
-
-def load_analyzer_configuration(analyzer_name: str, mandatory_fields: list[str],
-                                dynamic_fields: dict[str, list[Any]]) -> Configuration:
-    if not is_analyzer_type(analyzer_name):
-        raise TypeError(f"Analyzer class {analyzer_name} not found.")
-
-    config_file_path = os.path.join(consts.CONFIGURATION_DIR_PATH, f"analyzers", f"{analyzer_name}.json")
-    config = json.load(open(config_file_path, "r"))
+def __get_analyzer_configuration(analyzer_config: dict[str, Any],
+                                 analyzer_class: type[AnalyzerSubClass],
+                                 dynamic_fields: dict[str, list[Any]]) -> Configuration:
+    mandatory_fields = analyzer_class.mandatory_fields()
     if "x_axis_label" in mandatory_fields:
-        x_axis_label = config["x_axis_label"]
-        config["x_axis"] = dynamic_fields[x_axis_label]
-    return Configuration(config, mandatory_fields)
+        x_axis_label = analyzer_config["x_axis_label"]
+        analyzer_config["x_axis"] = dynamic_fields[x_axis_label]
+    return Configuration(analyzer_config, mandatory_fields)
