@@ -9,12 +9,12 @@ from src.violations.functional_dependency import FunctionalDependency, load_fds
 class ViolationsNumberAnalyzer(Analyzer):
     @staticmethod
     def mandatory_fields() -> list[str]:
-        return ["x_axis", "x_axis_label", "services_type"]
+        return ["x_axis", "x_axis_label", "services_types"]
 
     def analyze(self, reports: dict[str, list[Report]]) -> None:
-        fds = load_fds(self.working_dir)
+        fds = load_fds(self.fds_file_path)
         for service_name, reports in reports.items():
-            if service_name.split('_')[-1] not in self.config["services_type"]:
+            if service_name.split('_')[-1] not in self.config["services_types"]:
                 continue
 
             violations = [self.__calc_total_num_of_violations(report, fds) for report in reports]

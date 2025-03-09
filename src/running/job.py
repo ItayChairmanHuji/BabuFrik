@@ -16,6 +16,7 @@ class Job:
         reports = []
         input_file = None
         for service in self.__create_services(working_dir, dynamic_fields):
+            print(f"Running {service.name}")
             report = service.run(input_file)
             input_file = report.output_file_path
             reports.append(report)

@@ -1,9 +1,12 @@
+import os
+
 import gurobipy as gp
 from pandas import DataFrame
 
 from src.ilp.vertex_cover_data_repair_ilp import VertexCoverDataRepairILP
 from src.marginals.marginals import Marginals
 from src.running.service import Service
+from src.storage import object_loader
 from src.utils import consts
 from src.violations.functional_dependency import load_fds
 
@@ -21,10 +24,15 @@ class VertexCoverRepairer(Service):
 
     def service_action(self, data: DataFrame) -> DataFrame:
         fds = load_fds(self.working_dir)
-        marginals = Marginals(self.working_dir)
+        marginals: Marginals = object_loader.load(self.__get_marginals_file_path())
         ilp = VertexCoverDataRepairILP(data, fds, self.config, marginals)
         ilp.solve()
         return self.__get_feasible_solution(data, ilp) if ilp.did_succeed else self.__get_feasible_solution(data, ilp)
+
+    def __get_marginals_file_path(self) -> str:
+        local_marginals_file = str(os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
+        external_marginals_file = str(os.path.join(consts.RESOURCES_DIR_PATH, consts.MARGINALS_FILE_NAME))
+        return local_marginals_file if os.path.exists(local_marginals_file) else external_marginals_file
 
     @staticmethod
     def __get_infeasible_solution(data: DataFrame) -> DataFrame:

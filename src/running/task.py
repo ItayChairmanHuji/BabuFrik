@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 from dataclasses import dataclass
 from typing import Any
 
@@ -17,13 +18,15 @@ class Task:
     analyzers_names: list[str]
 
     def run(self) -> None:
-        reports = []
+        reports = defaultdict(list)
         analyzers = self.__create_analyzers()
-        for job_index, dynamic_values in enumerate(zip(*self.dynamic_fields)):
+        for job_index, dynamic_values in enumerate(zip(*self.dynamic_fields.values())):
+            print(f"Running job {job_index}")
             job_working_dir = os.path.join(self.working_dir, str(job_index))
             os.makedirs(job_working_dir, exist_ok=True)
             dynamic_fields = {field: value for field, value in zip(self.dynamic_fields.keys(), dynamic_values)}
-            reports += self.job.run(job_working_dir, dynamic_fields)
+            for report in self.job.run(job_working_dir, dynamic_fields):
+                reports[report.service_name].append(report)
             for statistics_analyzer in analyzers:
                 statistics_analyzer.analyze(reports)
 
@@ -32,9 +35,13 @@ class Task:
 
     def __create_analyzer(self, analyzer_name: str) -> Analyzer:
         analyzer_class = analyzers_utils.load_analyzer_class(analyzer_name)
+        results_dir = os.path.join(self.working_dir, analyzer_name)
+        os.makedirs(results_dir, exist_ok=True)
         return analyzer_class(
-            working_dir=os.path.join(self.working_dir, "results"),
+            working_dir=results_dir,
             figure=plt.figure(),
-            config=analyzers_utils.load_analyzer_configuration(
-                analyzer_name, analyzer_class.mandatory_fields(), self.dynamic_fields)
+            fds_file_path=self.job.fds_file_path,
+            marginals_errors_margins_file_path=self.job.marginals_errors_margins_file_path,
+            config=analyzers_utils.load_analyzer_configuration(analyzer_name,
+                                                               analyzer_class.mandatory_fields(), self.dynamic_fields)
         )

@@ -7,6 +7,7 @@ from snsynth.pytorch.nn import PATECTGAN
 
 from src.marginals.marginals import Marginals
 from src.running.service import Service
+from src.storage import object_loader
 from src.synthesizers import smartnoise_fixes
 from src.utils import consts
 
@@ -22,7 +23,8 @@ class PATECTGANSynthesizer(Service):
 
     def service_action(self, data: DataFrame) -> DataFrame:
         PATECTGAN.set_device = smartnoise_fixes.patectgan_set_device
-        Marginals(data).save(self.working_dir)
+        marginals = Marginals(data)
+        object_loader.save(marginals, os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
         model = self.__train_model(data)
         return self.__sample(model)
 

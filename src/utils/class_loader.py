@@ -13,4 +13,4 @@ def load_class(name: str) -> type:
 
 def __get_module_name(name: str) -> str:
     class_type = name.split('_')[-1]
-    return f"src_{class_type}_{name}"
+    return f"src.{class_type}s.{name}"

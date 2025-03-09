@@ -13,6 +13,8 @@ class Analyzer(ABC):
     working_dir: str
     figure: Figure
     config: Configuration
+    fds_file_path: str
+    marginals_errors_margin_file_path: str
 
     @property
     def name(self):
@@ -24,7 +26,7 @@ class Analyzer(ABC):
         raise NotImplementedError("Mandatory fields not implemented.")
 
     @abstractmethod
-    def analyze(self, reports: list[Report]) -> None:
+    def analyze(self, reports: dict[str, list[Report]]) -> None:
         raise NotImplementedError()
 
     def plot(self, data: list[float], service_name: str, plot_topic: str) -> None:

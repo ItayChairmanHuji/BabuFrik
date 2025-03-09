@@ -15,9 +15,9 @@ ANALYZERS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "analyzers")
 
 # Other configuration dirs
 TASKS_CONFIGURATION_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "tasks")
-FUNCTIONAL_DEPENDENCIES_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, 'functional_dependencies')
-MARGINALS_ERRORS_MARGINS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, 'marginals_error_margins')
-LICENSES_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, 'licenses')
+FUNCTIONAL_DEPENDENCIES_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "functional_dependencies")
+MARGINALS_ERRORS_MARGINS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "marginals_errors_margins")
+LICENSES_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "licenses")
 
 # Data files names
 GENERATED_DATA_FILE_NAME = "original_data.csv"
@@ -28,4 +28,4 @@ REPAIRED_DATA_FILE_NAME = "repaired_data.csv"
 # Other files names
 MARGINALS_FILE_NAME = "marginals.pkl"
 MODEL_FILE_NAME = "synthesizer_model"
-DEFAULT_TASK_CONFIGURATION_FILE_NAME = os.path.join(CONFIGURATION_DIR_PATH, 'main.json')
+DEFAULT_TASK_CONFIGURATION_FILE_NAME = "main.json"

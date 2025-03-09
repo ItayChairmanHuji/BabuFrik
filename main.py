@@ -16,7 +16,7 @@ def main():
     task_id = str(uuid.uuid4())
     working_dir = os.path.join(consts.TASKS_DIR_PATH, task_id)
     os.makedirs(working_dir, exist_ok=True)
-    task = Task(working_dir=task_id,
+    task = Task(working_dir=working_dir,
                 job=Job(
                     services=task_config.services,
                     fds_file_path=os.path.join(consts.FUNCTIONAL_DEPENDENCIES_DIR_PATH,
@@ -25,6 +25,8 @@ def main():
                                                                     task_config.marginals_errors_margins_file_name)),
                 dynamic_fields=task_config.dynamic_fields,
                 analyzers_names=task_config.analyzers)
+
+    print(f"Running task {task_id}")
     task.run()
 
 
