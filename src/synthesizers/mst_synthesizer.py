@@ -4,6 +4,7 @@ from pandas import DataFrame
 from snsynth import Synthesizer as SNSynth
 from snsynth.mst import MSTSynthesizer as SNMSTSynthesizer
 
+from src.marginals.marginals import Marginals
 from src.running.service import Service
 from src.storage import object_loader
 from src.synthesizers import smartnoise_fixes
@@ -21,7 +22,7 @@ class MSTSynthesizer(Service):
 
     def service_action(self, data: DataFrame) -> DataFrame:
         SNMSTSynthesizer.compress_domain = smartnoise_fixes.mst_compress_domain
-        object_loader.save(data, os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
+        object_loader.save(Marginals(data), os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
         model = self.__train_model(data)
         return self.__sample(model)
 

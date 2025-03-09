@@ -1,5 +1,4 @@
 import os
-import time
 
 from pandas import DataFrame
 from snsynth import Synthesizer as SNSynth
@@ -23,16 +22,12 @@ class PATECTGANSynthesizer(Service):
 
     def service_action(self, data: DataFrame) -> DataFrame:
         PATECTGAN.set_device = smartnoise_fixes.patectgan_set_device
-        marginals = Marginals(data)
-        object_loader.save(marginals, os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
+        object_loader.save(Marginals(data), os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
         model = self.__train_model(data)
         return self.__sample(model)
 
     def __train_model(self, data: DataFrame) -> SNSynth:
-        start_time = time.time()
         model = SNSynth.create(synth="patectgan", epsilon=self.config["epsilon"], verbose=True)
-        end_time = time.time()
-        print(f"Time taken marginals calculation: {end_time - start_time}")
         model.fit(data, categorical_columns=data.columns.values.tolist(), preprocessor_eps=0)
         model_file_path = os.path.join(self.working_dir, consts.MODEL_FILE_NAME)
         model.save(model_file_path)

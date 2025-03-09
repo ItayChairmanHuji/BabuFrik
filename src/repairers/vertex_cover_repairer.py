@@ -23,7 +23,7 @@ class VertexCoverRepairer(Service):
         return consts.REPAIRED_DATA_FILE_NAME
 
     def service_action(self, data: DataFrame) -> DataFrame:
-        fds = load_fds(self.working_dir)
+        fds = load_fds(self.fds_file_path)
         marginals: Marginals = object_loader.load(self.__get_marginals_file_path())
         ilp = VertexCoverDataRepairILP(data, fds, self.config, marginals)
         ilp.solve()

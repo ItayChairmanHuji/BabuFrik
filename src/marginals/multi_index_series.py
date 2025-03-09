@@ -22,6 +22,9 @@ class MultiIndexSeries(Generic[K, V]):
     def __len__(self) -> int:
         return len(self.data)
 
+    def __contains__(self, key: tuple[K, ...]) -> bool:
+        return key in self.data
+
     @staticmethod
     def format_key(key: tuple[K, ...]) -> tuple[K, ...]:
         return tuple(sorted(key))
