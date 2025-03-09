@@ -1,27 +1,25 @@
-from typing import Any
-
 import gurobipy as gp
 from pandas import DataFrame
 
 from src.ilp.vertex_cover_data_repair_ilp import VertexCoverDataRepairILP
 from src.marginals.marginals import Marginals
+from src.runner.service import Service
 from src.utils import consts
 from src.utils.functional_dependency import load_fds
-from src.utils.node import Node
 
 
-class VertexCoverRepairer(Node):
+class VertexCoverRepairer(Service):
     ILPSolution = gp.tupledict[str, gp.Var]
 
-    def __init__(self, config: dict[str, Any]):
-        super().__init__(config=config,
-                         fields=["license_file_name"])
+    @staticmethod
+    def mandatory_fields() -> list[str]:
+        return ["license_file_name"]
 
     @staticmethod
     def output_file_name() -> str:
         return consts.REPAIRED_DATA_FILE_NAME
 
-    def node_action(self, data: DataFrame) -> DataFrame:
+    def service_action(self, data: DataFrame) -> DataFrame:
         fds = load_fds(self.working_dir)
         marginals = Marginals(self.working_dir)
         ilp = VertexCoverDataRepairILP(data, fds, self.config, marginals)

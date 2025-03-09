@@ -1,15 +1,16 @@
-from typing import Any, Callable
+from typing import Callable
 
 import gurobipy as gp
 from pandas import DataFrame
 
 from src.ilp.optimal_data_repair_ilp import OptimalDataRepairILP
 from src.marginals.marginals import Marginals
+from src.utils.configuration import Configuration
 from src.utils.functional_dependency import FunctionalDependency
 
 
 class VertexCoverDataRepairILP(OptimalDataRepairILP):
-    def __init__(self, data: DataFrame, fds: list[FunctionalDependency], config: dict[str, Any], marginals: Marginals):
+    def __init__(self, data: DataFrame, fds: list[FunctionalDependency], config: Configuration, marginals: Marginals):
         super().__init__(data, fds, config)
 
         for var in self.objective.values():

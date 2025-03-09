@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from matplotlib.figure import Figure
 
 from src.utils.configuration import Configuration
-from src.utils.node_report import NodeReport
+from src.utils.report import Report
 
 
 @dataclass
@@ -14,22 +14,23 @@ class StatisticsAnalyzer(ABC):
     figure: Figure
     config: Configuration
 
+    @abstractmethod
     @staticmethod
     def mandatory_fields() -> list[str]:
-        raise ["x_axis", "x_axis_label"]
+        raise NotImplementedError("Mandatory fields not implemented.")
 
     @abstractmethod
-    def analyze_statistics(self, reports: list[NodeReport]) -> None:
+    def analyze_statistics(self, reports: list[Report]) -> None:
         raise NotImplementedError()
 
-    def plot(self, data: list[float], node_name: str, plot_topic: str) -> None:
+    def plot(self, data: list[float], service_name: str, plot_topic: str) -> None:
         self.figure.clear()
         x_axis = self.config["x_axis"]
         x_axis_label = self.config["x_axis_label"]
         ax = self.figure.subplots(nrows=1, ncols=1)
         ax.plot(x_axis[:len(data)], data)
-        ax.set_title(f"{node_name} num of {plot_topic} as function of size")
+        ax.set_title(f"{service_name} num of {plot_topic} as function of size")
         ax.set_xlabel(x_axis_label)
         ax.set_ylabel(plot_topic)
-        figure_path = os.path.join(self.working_dir, f"{node_name}_{plot_topic}.png")
+        figure_path = os.path.join(self.working_dir, f"{service_name}_{plot_topic}.png")
         self.figure.savefig(figure_path)

@@ -1,17 +1,17 @@
 import json
 import os
-from typing import Any
 
 import gurobipy as gp
 from pandas import DataFrame
 
 from src.utils import consts
+from src.utils.configuration import Configuration
 from src.utils.functional_dependency import FunctionalDependency
 from src.utils.violations_checker import ViolationsChecker
 
 
 class OptimalDataRepairILP:
-    def __init__(self, data: DataFrame, fds: list[FunctionalDependency], config: dict[str, Any]):
+    def __init__(self, data: DataFrame, fds: list[FunctionalDependency], config: Configuration):
         self.data = data
         self.fds = fds
         self.config = config

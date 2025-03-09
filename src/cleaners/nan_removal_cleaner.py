@@ -1,22 +1,20 @@
-from typing import Any
-
 from pandas import DataFrame
 
+from src.runner.service import Service
 from src.utils import consts
-from src.utils.node import Node
 
 
-class NanRemovalCleaner(Node):
+class NanRemovalCleaner(Service):
 
-    def __init__(self, config: dict[str, Any]):
-        super().__init__(config=config,
-                         fields=["empty_values_threshold"])
+    @staticmethod
+    def mandatory_fields() -> list[str]:
+        return ["empty_values_threshold"]
 
     @staticmethod
     def output_file_name() -> str:
         return consts.CLEANED_DATA_FILE_NAME
 
-    def node_action(self, data: DataFrame) -> DataFrame:
+    def service_action(self, data: DataFrame) -> DataFrame:
         columns_with_empty_values = self.get_columns_with_empty_values(data)
         columns_to_remove = self.get_columns_to_remove(data, columns_with_empty_values)
         columns_to_remove_data = [column for column in columns_with_empty_values if column not in columns_to_remove]

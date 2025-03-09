@@ -3,7 +3,7 @@ from typing import Any
 
 from src.runner.service import Service
 from src.utils import service_utils
-from src.utils.node_report import NodeReport
+from src.utils.report import Report
 
 
 @dataclass
@@ -12,7 +12,7 @@ class Job:
     fds_file_path: str
     marginals_errors_margins_file_path: str
 
-    def run(self, working_dir: str, dynamic_fields: dict[str, Any]) -> list[NodeReport]:
+    def run(self, working_dir: str, dynamic_fields: dict[str, Any]) -> list[Report]:
         reports = []
         input_file = None
         for service in self.__create_services(working_dir, dynamic_fields):

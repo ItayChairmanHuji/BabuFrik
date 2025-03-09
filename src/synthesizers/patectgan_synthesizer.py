@@ -1,33 +1,26 @@
 import os
 import time
-from typing import Any
 
 from pandas import DataFrame
 from snsynth import Synthesizer as SNSynth
 from snsynth.pytorch.nn import PATECTGAN
 
-from src.utils import consts
 from src.marginals.marginals import Marginals
-from src.utils.node import Node
+from src.runner.service import Service
+from src.utils import consts, smartnoise_fixes
 
 
-def set_device(self, device):
-    self._device = device
-    if self._generator is not None:
-        self._generator.to(self._device)
-
-
-class PATECTGANSynthesizer(Node):
-    def __init__(self, config: dict[str, Any]):
-        super().__init__(config=config,
-                         fields=["epsilon", "size_to_sample"])
-        PATECTGAN.set_device = set_device
+class PATECTGANSynthesizer(Service):
+    @staticmethod
+    def mandatory_fields() -> list[str]:
+        return ["epsilon", "size_to_sample"]
 
     @staticmethod
     def output_file_name() -> str:
         return consts.SYNTHETIC_DATA_FILE_NAME
 
-    def node_action(self, data: DataFrame) -> DataFrame:
+    def service_action(self, data: DataFrame) -> DataFrame:
+        PATECTGAN.set_device = smartnoise_fixes.patectgan_set_device
         Marginals(data).save(self.working_dir)
         model = self.__train_model(data)
         return self.__sample(model)
