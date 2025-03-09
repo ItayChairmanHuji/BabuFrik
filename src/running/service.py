@@ -5,9 +5,9 @@ from dataclasses import dataclass
 
 from pandas import DataFrame
 
+from src.storage.temp_data import TempData
 from src.utils.configuration import Configuration
 from src.utils.report import Report
-from src.utils.temp_data import TempData
 
 
 @dataclass

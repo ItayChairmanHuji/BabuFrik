@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 from src.utils import consts
-from src.utils.multi_index_series import MultiIndexSeries
+from src.marginals.multi_index_series import MultiIndexSeries
 
 
 class MarginalsErrorsMargins:

@@ -3,9 +3,9 @@ from pandas import DataFrame
 
 from src.ilp.vertex_cover_data_repair_ilp import VertexCoverDataRepairILP
 from src.marginals.marginals import Marginals
-from src.runner.service import Service
+from src.running.service import Service
 from src.utils import consts
-from src.utils.functional_dependency import load_fds
+from src.violations.functional_dependency import load_fds
 
 
 class VertexCoverRepairer(Service):

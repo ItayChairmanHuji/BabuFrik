@@ -5,9 +5,9 @@ from itertools import chain
 import numpy as np
 from pandas import DataFrame
 
-from src.runner.service import Service
+from src.running.service import Service
 from src.utils import consts
-from src.utils.functional_dependency import FunctionalDependency
+from src.violations.functional_dependency import FunctionalDependency
 
 
 class ColumnsCleaner(Service):

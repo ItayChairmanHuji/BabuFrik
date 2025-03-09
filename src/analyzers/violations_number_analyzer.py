@@ -1,9 +1,9 @@
 import pandas as pd
 
 from src.analyzers.analyzer import Analyzer
-from src.utils.functional_dependency import FunctionalDependency, load_fds
 from src.utils.report import Report
-from src.utils.violations_checker import ViolationsChecker
+from src.violations import violations_checker
+from src.violations.functional_dependency import FunctionalDependency, load_fds
 
 
 class ViolationsNumberAnalyzer(Analyzer):
@@ -23,4 +23,4 @@ class ViolationsNumberAnalyzer(Analyzer):
     @staticmethod
     def __calc_total_num_of_violations(report: Report, fds: list[FunctionalDependency]):
         data = pd.read_csv(report.output_file_path)
-        return sum(ViolationsChecker.count_functional_dependency_violations(data, fd) for fd in fds)
+        return sum(violations_checker.count_functional_dependency_violations(data, fd) for fd in fds)

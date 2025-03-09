@@ -14,6 +14,10 @@ class Analyzer(ABC):
     figure: Figure
     config: Configuration
 
+    @property
+    def name(self):
+        return self.__module__.split(".")[-1]
+
     @staticmethod
     @abstractmethod
     def mandatory_fields() -> list[str]:

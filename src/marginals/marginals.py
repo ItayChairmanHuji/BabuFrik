@@ -4,9 +4,9 @@ from typing import Union, Any
 
 from pandas import DataFrame, Series
 
+from src.marginals.multi_index_series import MultiIndexSeries
+from src.storage import object_loader
 from src.utils import consts
-from src.utils.multi_index_series import MultiIndexSeries
-from src.utils.object_loader import ObjectLoader
 
 
 class Marginals:
@@ -21,7 +21,7 @@ class Marginals:
 
     def save(self, working_dir: str) -> None:
         marginals_file_path = os.path.join(working_dir, consts.MARGINALS_FILE_NAME)
-        ObjectLoader.save(self.marginals, marginals_file_path)
+        object_loader.save(self.marginals, marginals_file_path)
 
     def distance(self, other: "Marginals") -> float:
         return Series((self.marginals[attr_key] - other.marginals[attr_key]).fillna(1).abs().mean()  # Think about it
@@ -37,5 +37,5 @@ class Marginals:
     def __load_marginals(working_dir: str) -> MultiIndexSeries[str, Series[tuple[Any, ...], float]]:
         marginals_file_path = os.path.join(working_dir, consts.MARGINALS_FILE_NAME)
         marginals_resource_file_path = os.path.join(consts.RESOURCES_DIR_PATH, consts.MARGINALS_FILE_NAME)
-        return ObjectLoader.load(marginals_file_path) if os.path.exists(marginals_file_path) \
-            else ObjectLoader.load(str(marginals_resource_file_path))
+        return object_loader.load(marginals_file_path) if os.path.exists(marginals_file_path) \
+            else object_loader.load(str(marginals_resource_file_path))

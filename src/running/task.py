@@ -2,10 +2,10 @@ import os
 
 from matplotlib import pyplot as plt
 
-from src.runner.job import Job
-from src.runner.task_configuration import TaskConfiguration
-from src.statistics.statistics_analayzer import StatisticsAnalyzer
-from src.utils import analyzers_utils
+from src.analyzers import analyzers_utils
+from src.analyzers.analyzer import Analyzer
+from src.running.job import Job
+from src.running.task_configuration import TaskConfiguration
 
 
 class Task:
@@ -27,13 +27,14 @@ class Task:
             for statistics_analyzer in analyzers:
                 statistics_analyzer.analyze(reports)
 
-    def __create_analyzers(self) -> list[StatisticsAnalyzer]:
+    def __create_analyzers(self) -> list[Analyzer]:
         return [self.__create_analyzer(analyzer) for analyzer in self.config.statistics_analyzers]
 
-    def __create_analyzer(self, analyzer_name: str) -> StatisticsAnalyzer:
+    def __create_analyzer(self, analyzer_name: str) -> Analyzer:
         analyzer_class = analyzers_utils.load_analyzer_class(analyzer_name)
         return analyzer_class(
             working_dir=os.path.join(self.working_dir, "results"),
             figure=plt.figure(),
-            config=analyzers_utils.load_analyzer_configuration(analyzer_name, self.config.dynamic_fields)
+            config=analyzers_utils.load_analyzer_configuration(
+                analyzer_name, analyzer_class.mandatory_fields(), self.config.dynamic_fields)
         )

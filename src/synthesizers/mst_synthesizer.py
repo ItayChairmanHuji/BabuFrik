@@ -5,9 +5,10 @@ from snsynth import Synthesizer as SNSynth
 from snsynth.mst import MSTSynthesizer as SNMSTSynthesizer
 
 from src.marginals.marginals import Marginals
-from src.runner.service import Service
-from src.utils import consts, smartnoise_fixes
-from src.utils.object_loader import ObjectLoader
+from src.running.service import Service
+from src.storage import object_loader
+from src.synthesizers import smartnoise_fixes
+from src.utils import consts
 
 
 class MSTSynthesizer(Service):
@@ -29,7 +30,7 @@ class MSTSynthesizer(Service):
         model = SNSynth.create(synth="mst", epsilon=self.config["epsilon"], verbose=True)
         model.fit(data, categorical_columns=data.columns.values.tolist(), preprocessor_eps=0)
         model_file_path = os.path.join(self.working_dir, consts.MODEL_FILE_NAME)
-        ObjectLoader.save(model, str(model_file_path))
+        object_loader.save(model, str(model_file_path))
         return model
 
     def __sample(self, model: SNSynth) -> DataFrame:

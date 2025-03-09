@@ -1,7 +1,7 @@
 import numpy as np
 from pandas import DataFrame
 
-from src.runner.service import Service
+from src.running.service import Service
 from src.utils import consts
 
 

@@ -9,7 +9,7 @@ from src.ilp.optimal_data_repair_ilp import OptimalDataRepairILP
 from src.marginals.marginals import Marginals
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.utils.configuration import Configuration
-from src.utils.functional_dependency import FunctionalDependency
+from src.violations.functional_dependency import FunctionalDependency
 
 
 class SyntheticDataRepairILP(OptimalDataRepairILP):

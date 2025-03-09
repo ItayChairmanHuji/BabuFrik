@@ -2,7 +2,7 @@ import json
 import os
 from typing import TypeVar, Any
 
-from src.runner.service import Service
+from src.running.service import Service
 from src.utils import class_loader, consts
 from src.utils.configuration import Configuration
 

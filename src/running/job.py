@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Any
 
-from src.runner.service import Service
-from src.utils import service_utils
+from src.running import service_utils
+from src.running.service import Service
 from src.utils.report import Report
 
 

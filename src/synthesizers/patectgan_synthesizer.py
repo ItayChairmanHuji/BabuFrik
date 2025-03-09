@@ -6,8 +6,9 @@ from snsynth import Synthesizer as SNSynth
 from snsynth.pytorch.nn import PATECTGAN
 
 from src.marginals.marginals import Marginals
-from src.runner.service import Service
-from src.utils import consts, smartnoise_fixes
+from src.running.service import Service
+from src.synthesizers import smartnoise_fixes
+from src.utils import consts
 
 
 class PATECTGANSynthesizer(Service):

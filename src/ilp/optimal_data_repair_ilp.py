@@ -6,8 +6,8 @@ from pandas import DataFrame
 
 from src.utils import consts
 from src.utils.configuration import Configuration
-from src.utils.functional_dependency import FunctionalDependency
-from src.utils.violations_checker import ViolationsChecker
+from src.violations import violations_checker
+from src.violations.functional_dependency import FunctionalDependency
 
 
 class OptimalDataRepairILP:
@@ -32,7 +32,7 @@ class OptimalDataRepairILP:
         self.model.addConstr(self.objective.sum() >= 1)
 
     def __add_no_violations_constraint(self) -> None:
-        violating_pairs = ViolationsChecker.find_violating_pairs(self.data, self.fds)
+        violating_pairs = violations_checker.find_violating_pairs(self.data, self.fds)
         self.model.addConstrs((gp.quicksum(self.objective[i] for i in pair) <= 1
                                for pair in violating_pairs), name="violations constraints")
 
