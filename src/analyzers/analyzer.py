@@ -14,7 +14,7 @@ class Analyzer(ABC):
     figure: Figure
     config: Configuration
     fds_file_path: str
-    marginals_errors_margin_file_path: str
+    marginals_errors_margins_file_path: str
 
     @property
     def name(self):
