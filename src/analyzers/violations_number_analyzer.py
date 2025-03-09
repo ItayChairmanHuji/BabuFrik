@@ -1,17 +1,17 @@
 import pandas as pd
 
-from src.statistics.statistics_analayzer import StatisticsAnalyzer
+from src.analyzers.analyzer import Analyzer
 from src.utils.functional_dependency import FunctionalDependency, load_fds
 from src.utils.report import Report
 from src.utils.violations_checker import ViolationsChecker
 
 
-class ViolationsNumberStatisticsAnalyzer(StatisticsAnalyzer):
+class ViolationsNumberAnalyzer(Analyzer):
     @staticmethod
     def mandatory_fields() -> list[str]:
         return ["x_axis", "x_axis_label", "services_type"]
 
-    def analyze_statistics(self, reports: dict[str, list[Report]]) -> None:
+    def analyze(self, reports: dict[str, list[Report]]) -> None:
         fds = load_fds(self.working_dir)
         for service_name, reports in reports.items():
             if service_name.split('_')[-1] != self.config["services_type"]:

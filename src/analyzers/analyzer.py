@@ -9,18 +9,18 @@ from src.utils.report import Report
 
 
 @dataclass
-class StatisticsAnalyzer(ABC):
+class Analyzer(ABC):
     working_dir: str
     figure: Figure
     config: Configuration
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def mandatory_fields() -> list[str]:
         raise NotImplementedError("Mandatory fields not implemented.")
 
     @abstractmethod
-    def analyze_statistics(self, reports: list[Report]) -> None:
+    def analyze(self, reports: list[Report]) -> None:
         raise NotImplementedError()
 
     def plot(self, data: list[float], service_name: str, plot_topic: str) -> None:

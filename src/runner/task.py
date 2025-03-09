@@ -25,7 +25,7 @@ class Task:
             dynamic_fields = {field: value for field, value in zip(self.config.dynamic_fields.keys(), dynamic_values)}
             reports += self.job.run(job_working_dir, dynamic_fields)
             for statistics_analyzer in analyzers:
-                statistics_analyzer.analyze_statistics(reports)
+                statistics_analyzer.analyze(reports)
 
     def __create_analyzers(self) -> list[StatisticsAnalyzer]:
         return [self.__create_analyzer(analyzer) for analyzer in self.config.statistics_analyzers]
