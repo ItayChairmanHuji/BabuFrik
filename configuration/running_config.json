@@ -1,10 +1,24 @@
 {
-  "route_name": "mst",
-  "fields_to_change": {
-    "size_to_sample": [1,2,3,4]
+  "services": [
+    "adult_generator",
+    "nan_removal_cleaner",
+    "size_limit_cleaner",
+    "columns_cleaner",
+    "mst_synthesizer",
+    "vertex_cover_repairer"
+  ],
+  "statistics_analyzers": [
+    "runtime_statistics_analyzer",
+    "violations_number_statistics_analyzer"
+  ],
+  "dynamic_fields": {
+    "size_to_sample": [
+      1,
+      2,
+      3,
+      4
+    ]
   },
-  "statistics_analyzers": {
-    "runtime_statistics_analyzer": {"x_axis_name": "size_to_sample"},
-    "violations_number_statistics_analyzer": {"x_axis_name": "size_to_sample", "nodes_type": "synthesizer"}
-  }
+  "functional_dependencies_file_path": "configuration/functional_dependencies/adult_fd.json",
+  "marginals_errors_margins_file_path": "configuration/marginals_errors_factors/adults_marginals_errors_factors.csv"
 }

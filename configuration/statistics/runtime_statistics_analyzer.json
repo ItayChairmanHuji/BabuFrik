@@ -1,0 +1,9 @@
+  "statistics_analyzers": {
+    "runtime_statistics_analyzer": {
+      "x_axis_name": "size_to_sample"
+    },
+    "violations_number_statistics_analyzer": {
+      "x_axis_name": "size_to_sample",
+      "nodes_type": "synthesizer"
+    }
+  }
