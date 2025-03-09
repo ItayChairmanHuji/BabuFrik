@@ -13,7 +13,7 @@ class ILPRepairer(Service):
 
     @staticmethod
     def mandatory_fields() -> list[str]:
-        return ["license_file_name", "marginals_error_factors_file_name"]
+        return ["license_file_name", "marginals_error_margins_file_name"]
 
     @staticmethod
     def output_file_name() -> str:

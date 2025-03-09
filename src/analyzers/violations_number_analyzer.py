@@ -14,7 +14,7 @@ class ViolationsNumberAnalyzer(Analyzer):
     def analyze(self, reports: dict[str, list[Report]]) -> None:
         fds = load_fds(self.working_dir)
         for service_name, reports in reports.items():
-            if service_name.split('_')[-1] != self.config["services_type"]:
+            if service_name.split('_')[-1] not in self.config["services_type"]:
                 continue
 
             violations = [self.__calc_total_num_of_violations(report, fds) for report in reports]

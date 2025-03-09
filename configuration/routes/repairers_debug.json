@@ -1,9 +1,0 @@
-{
-  "generators": ["csv_generator"],
-  "cleaners": [],
-  "synthesizers": [],
-  "repairers": ["vertex_cover_repairer"],
-
-  "functional_dependencies_file_name": "adult_fd.json",
-  "marginals_errors_factors_file_name": "adults_marginals_errors_factors.csv"
-}

@@ -1,4 +1,3 @@
 {
-  "node_name": "columns_cleaner",
   "max_columns_to_keep": 100
 }

@@ -1,7 +1,4 @@
 {
-  "node_name": "patectgan_synthesizer",
-
   "epsilon": 1,
-  "regularization": "dragan",
-  "size_to_sample": 3
+  "regularization": "dragan"
 }

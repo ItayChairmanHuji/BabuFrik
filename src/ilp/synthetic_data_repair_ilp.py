@@ -15,7 +15,7 @@ from src.violations.functional_dependency import FunctionalDependency
 class SyntheticDataRepairILP(OptimalDataRepairILP):
     def __init__(self, data: DataFrame, fds: list[FunctionalDependency], config: Configuration, marginals: Marginals):
         super().__init__(data, fds, config)
-        marginals_errors_margins = MarginalsErrorsMargins(config["marginals_errors_margins_file_name"])
+        marginals_errors_margins = MarginalsErrorsMargins(config["marginals_error_margins_file_name"])
         self.__add_marginals_conservation_constraint(marginals, marginals_errors_margins)
 
     def __add_marginals_conservation_constraint(self, marginals: Marginals,
