@@ -19,8 +19,10 @@ def main():
     task = Task(working_dir=task_id,
                 job=Job(
                     services=task_config.services,
-                    fds_file_path=task_config.functional_dependencies_file_path,
-                    marginals_errors_margins_file_path=task_config.marginals_errors_margins_file_path),
+                    fds_file_path=os.path.join(consts.FUNCTIONAL_DEPENDENCIES_DIR_PATH,
+                                               task_config.functional_dependencies_file_name),
+                    marginals_errors_margins_file_path=os.path.join(consts.MARGINALS_ERRORS_MARGINS_DIR_PATH,
+                                                                    task_config.marginals_errors_margins_file_name)),
                 dynamic_fields=task_config.dynamic_fields,
                 analyzers_names=task_config.analyzers)
     task.run()
