@@ -3,8 +3,8 @@ import os
 import sys
 import uuid
 
-from src.runner.task import Task
-from src.runner.task_configuration import TaskConfiguration
+from src.running.task import Task
+from src.running.task_configuration import TaskConfiguration
 from src.utils import consts
 
 
