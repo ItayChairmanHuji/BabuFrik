@@ -1,6 +1,5 @@
 .idea/*
 resources/
-configuration/tasks
 configuration/licenses
-configuration/marginals_errors_factors
-tasks/*
+configuration/marginals_errors_margins
+tasks/
