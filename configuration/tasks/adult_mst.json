@@ -1,0 +1,18 @@
+{
+  "services": [
+    "generators.adult_generator",
+    "cleaners.size_limit_cleaner",
+    "cleaners.nan_removal_cleaner",
+    "cleaners.columns_cleaner",
+    "synthesizers.mst_synthesizer"
+  ],
+  "analyzers": [
+    "runtime_analyzer",
+    "violations_number_analyzer"
+  ],
+  "functional_dependencies_file_name": "adult_fd.json",
+  "marginals_errors_margins_file_name": "adult_error_margins.csv",
+  "dynamic_fields": {
+    "size_to_sample": [1000,2000,4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000]
+  }
+}

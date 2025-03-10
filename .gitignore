@@ -1,5 +1,7 @@
 .idea/*
+.venv
 resources/
-configuration/licenses
-configuration/marginals_errors_margins
+configuration/licenses/
+configuration/marginals_errors_margins/
 tasks/
+!configuration/tasks
