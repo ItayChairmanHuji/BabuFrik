@@ -16,7 +16,7 @@ class Marginals:
         return attrs_marginals[values_indices] if values_indices in attrs_marginals else 0
 
     def distance(self, other: "Marginals") -> float:
-        return Series((self.marginals[attr_key] - other.marginals[attr_key]).fillna(1).abs().mean()  # Think about it
+        return Series(self.marginals[attr_key].sub(other.marginals[attr_key], fill_value=0).abs().mean()
                       for attr_key in self.marginals.keys if attr_key in other.marginals).mean()
 
     @staticmethod
