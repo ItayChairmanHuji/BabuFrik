@@ -15,13 +15,15 @@ class ViolationsNumberAnalyzer(Analyzer):
     def analyze(self, reports: dict[str, list[Report]]) -> None:
         fds = load_fds(self.fds_file_path)
         x_axis = self.config["x_axis"]
+        x_label = self.config["x_axis_label"]
         violations = {}
         for service_name, reports in reports.items():
             if service_name.split('_')[-1] not in self.config["services_types"]:
                 continue
-
-            violations[service_name] = {x_element: self.__calc_total_num_of_violations(report, fds)
-                                        for x_element, report in zip(x_axis[:len(reports)], reports)}
+                
+            violations[f"{service_name}_runtime"] = [
+                {x_label: x_element, "violations": self.__calc_total_num_of_violations(report, fds)}
+                for x_element, report in zip(x_axis[:len(reports)], reports)]
 
         self.save_results(violations, consts.VIOLATIONS_RESULT_FILE_NAME)
 
