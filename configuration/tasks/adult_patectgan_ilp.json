@@ -13,6 +13,7 @@
   ],
   "functional_dependencies_file_name": "adult_fd.json",
   "marginals_errors_margins_file_name": "adult_error_margins.csv",
+  "publisher_name": "publisher",
   "dynamic_fields": {
     "size_to_sample": [1000,2000,4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000]
   }

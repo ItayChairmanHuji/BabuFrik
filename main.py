@@ -3,6 +3,8 @@ import os
 import sys
 import uuid
 
+from src.publishers.publisher import Publisher
+
 from src.running.job import Job
 from src.running.task import Task
 from src.running.task_configuration import TaskConfiguration
@@ -28,6 +30,10 @@ def main():
 
     print(f"Running task {task_id}")
     task.run()
+
+    publisher_config_file_path = os.path.join(consts.PUBLISHER_DIR_PATH, f"{task_config.publisher_name}.json")
+    publisher = Publisher(working_dir, json.load(open(publisher_config_file_path)))
+    publisher.publish()
 
 
 if __name__ == '__main__':

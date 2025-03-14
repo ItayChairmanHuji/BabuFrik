@@ -12,6 +12,7 @@ CLEANERS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "cleaner")
 SYNTHESIZERS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "synthesizers")
 REPAIRERS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "repairers")
 ANALYZERS_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "analyzers")
+PUBLISHER_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "publishers")
 
 # Other configuration dirs
 TASKS_CONFIGURATION_DIR_PATH = os.path.join(CONFIGURATION_DIR_PATH, "tasks")
