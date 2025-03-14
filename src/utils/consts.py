@@ -29,3 +29,8 @@ REPAIRED_DATA_FILE_NAME = "repaired_data.csv"
 MARGINALS_FILE_NAME = "marginals.pkl"
 MODEL_FILE_NAME = "synthesizer_model"
 DEFAULT_TASK_CONFIGURATION_FILE_NAME = "main.json"
+
+# Results information
+RESULTS_DIR_NAME = "results"
+RUNTIMES_RESULT_FILE_NAME = "runtimes.pkl"
+VIOLATIONS_RESULT_FILE_NAME = "violations.pkl"
