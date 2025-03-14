@@ -13,8 +13,9 @@ class RuntimeAnalyzer(Analyzer):
         x_label = self.config["x_axis_label"]
         runtimes = {}
         for service_name, reports in reports.items():
-            runtimes[f"{service_name}_runtime"] = [
-                {x_label: x_element, "runtime": report.end_time - report.start_time}
-                for x_element, report in zip(x_axis[:len(reports)], reports)]
+            runtimes[f"{service_name}_runtime"] = {
+                x_label: x_axis[:len(reports)],
+                "runtime": [report.end_time - report.start_time for report in reports],
+            }
 
         self.save_results(runtimes, consts.RUNTIMES_RESULT_FILE_NAME)

@@ -8,6 +8,7 @@ from matplotlib import pyplot as plt
 from src.analyzers import analyzers_utils
 from src.analyzers.analyzer import Analyzer
 from src.running.job import Job
+from src.utils import consts
 
 
 @dataclass
@@ -35,7 +36,7 @@ class Task:
 
     def __create_analyzer(self, analyzer_name: str) -> Analyzer:
         analyzer_class, analyzer_config = analyzers_utils.load_analyzer(analyzer_name, self.dynamic_fields)
-        results_dir = os.path.join(self.working_dir, analyzer_name)
+        results_dir = os.path.join(self.working_dir, consts.RESULTS_DIR_NAME)
         os.makedirs(results_dir, exist_ok=True)
         return analyzer_class(
             working_dir=results_dir,

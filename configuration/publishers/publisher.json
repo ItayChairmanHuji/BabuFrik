@@ -1,3 +1,4 @@
 {
-  "neptune_details_file_name": "neptune_details"
+  "project_name": "Private Synthetic Data Repair",
+  "api_key_file_name": "api_key"
 }

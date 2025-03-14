@@ -20,11 +20,11 @@ class ViolationsNumberAnalyzer(Analyzer):
         for service_name, reports in reports.items():
             if service_name.split('_')[-1] not in self.config["services_types"]:
                 continue
-                
-            violations[f"{service_name}_runtime"] = [
-                {x_label: x_element, "violations": self.__calc_total_num_of_violations(report, fds)}
-                for x_element, report in zip(x_axis[:len(reports)], reports)]
 
+            violations[f"{service_name}_violations"] = {
+                x_label: x_axis[:len(reports)],
+                "runtime": [self.__calc_total_num_of_violations(report, fds) for report in reports],
+            }
         self.save_results(violations, consts.VIOLATIONS_RESULT_FILE_NAME)
 
     @staticmethod

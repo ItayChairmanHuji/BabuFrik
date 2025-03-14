@@ -1,10 +1,10 @@
-import json
 import os
 from dataclasses import dataclass
 from typing import Any
 
-import neptune
-from neptune import Run
+import wandb
+from pandas import DataFrame
+from wandb.apis.public import Run
 
 from src.storage import object_loader
 from src.utils import consts
@@ -22,16 +22,25 @@ class Publisher:
             result_file_path = os.path.join(results_dir_path, result_file_name)
             result = object_loader.load(result_file_path)
             self.__publish_result(run, result)
-        run.stop()
+        run.finish()
 
     def __init_run(self) -> Run:
-        neptune_details_file_name = self.config["neptune_details_file_name"]
-        neptune_details_file_path = os.path.join(consts.LICENSES_DIR_PATH, neptune_details_file_name)
-        neptune_details = json.load(open(neptune_details_file_path))
-        return neptune.init_run(**neptune_details)
+        api_key_file_name = self.config["api_key_file_name"]
+        api_key_file_path = os.path.join(consts.LICENSES_DIR_PATH, api_key_file_name)
+        api_key = open(api_key_file_path).read()
+        wandb.login(key=api_key)
+        return wandb.init(project=self.config["project_name"], name="test-1")
 
     @staticmethod
-    def __publish_result(run: Run, result: dict[str, list[dict[str, float]]]) -> None:
-        for name, values in result.items():
-            for value in values:
-                run[name].append(value)
+    def __publish_result(run: Run, result: dict[str, dict[str, list[float]]]) -> None:
+        for name, data in result.items():
+            table = wandb.Table(dataframe=DataFrame(data))
+            chart_section = name.split("_")[-1]
+            chart_name = f"{chart_section}/{name.removesuffix(f"_{chart_section}")}"
+            run.log({chart_name: wandb.plot.plot_table(
+                data_table=table,
+                vega_spec_name="itay-chairman-hebrew-university-of-jerusalem/line",
+                fields={"x": table.columns[0], "y": table.columns[1], "stroke": None},
+                string_fields={"title": chart_name},
+                split_table=True,
+            )})
