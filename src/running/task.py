@@ -1,5 +1,4 @@
 import os
-from collections import defaultdict
 from dataclasses import dataclass
 from typing import Any
 
@@ -16,23 +15,13 @@ class Task:
     working_dir: str
     job: Job
     dynamic_fields: dict[str, list[Any]]
-    analyzers_names: list[str]
+    analyzers: list[Analyzer]
 
     def run(self) -> None:
-        reports = defaultdict(list)
-        analyzers = self.__create_analyzers()
         for job_index, dynamic_values in enumerate(zip(*self.dynamic_fields.values())):
             print(f"Running job {job_index}")
-            job_working_dir = os.path.join(self.working_dir, str(job_index))
-            os.makedirs(job_working_dir, exist_ok=True)
             dynamic_fields = {field: value for field, value in zip(self.dynamic_fields.keys(), dynamic_values)}
-            for report in self.job.run(job_working_dir, dynamic_fields):
-                reports[report.service_name].append(report)
-            for statistics_analyzer in analyzers:
-                statistics_analyzer.analyze(reports)
-
-    def __create_analyzers(self) -> list[Analyzer]:
-        return [self.__create_analyzer(analyzer) for analyzer in self.analyzers_names]
+            self.job.run(self.working_dir, dynamic_fields)
 
     def __create_analyzer(self, analyzer_name: str) -> Analyzer:
         analyzer_class, analyzer_config = analyzers_utils.load_analyzer(analyzer_name, self.dynamic_fields)

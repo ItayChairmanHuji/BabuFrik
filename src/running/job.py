@@ -3,24 +3,20 @@ from typing import Any
 
 from src.running import service_utils
 from src.running.service import Service
-from src.utils.report import Report
+from src.running.unit import Unit
 
 
 @dataclass
 class Job:
-    services: list[str]
+    units: list[Unit]
     fds_file_path: str
     marginals_errors_margins_file_path: str
 
-    def run(self, working_dir: str, dynamic_fields: dict[str, Any]) -> list[Report]:
-        reports = []
+    def run(self, dynamic_fields: dict[str, Any]) -> None:
         input_file = None
-        for service in self.__create_services(working_dir, dynamic_fields):
-            print(f"Running {service.name}")
-            report = service.run(input_file)
+        for unit in self.units:
+            report = unit.run(input_file, dynamic_fields)
             input_file = report.output_file_path
-            reports.append(report)
-        return reports
 
     def __create_services(self, working_dir: str, dynamic_fields: dict[str, Any]) -> list[Service]:
         return [self.__create_service(service, working_dir, dynamic_fields) for service in self.services]
