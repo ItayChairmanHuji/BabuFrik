@@ -5,7 +5,7 @@ class Configuration:
     def __init__(self, config: dict[str, Any], mandatory_fields: list[str]):
         self.config = config
         for field in mandatory_fields:
-            if field not in self.config:
+            if field not in self.config or field not in self.config["dynamic_fields"]:
                 raise KeyError(f"Field {field} is mandatory in this configuration")
 
     def __getitem__(self, item: str) -> Any:

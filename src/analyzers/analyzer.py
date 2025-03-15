@@ -18,7 +18,7 @@ class Analyzer(ABC):
 
     @property
     def name(self):
-        return self.__module__.split(".")[-1]
+        return self.config["analyzer_name"]
 
     @staticmethod
     def mandatory_fields() -> list[str]:
@@ -30,6 +30,7 @@ class Analyzer(ABC):
 
         self.table.add_data(dynamic_fields[self.config["x_axis"]], self.analyzer_action(report))
         service_name = report.service.name
+        wandb.plot.line
         self.run.log({f"runtime/{service_name}": wandb.plot.plot_table(
             data_table=self.table,
             vega_spec_name=self.config["vega_spec_name"],  # "itay-chairman-hebrew-university-of-jerusalem/line",

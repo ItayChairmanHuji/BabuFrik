@@ -1,4 +1,4 @@
 {
   "code_name": "runtime_analyzer",
-  "x_axis_label": "size_to_sample"
+  "x_axis": "size_to_sample"
 }

@@ -1,39 +1,22 @@
-import json
 import os
 import sys
-import uuid
 
-from src.publishers.publisher import Publisher
-
-from src.running.job import Job
-from src.running.task import Task
+from src.builders import task_builder
 from src.running.task_configuration import TaskConfiguration
+from src.storage import object_loader
 from src.utils import consts
 
 
-def main():
+def load_task_configuration() -> TaskConfiguration:
     task_config_file_name = sys.argv[1] if len(sys.argv) > 1 else consts.DEFAULT_TASK_CONFIGURATION_FILE_NAME
-    task_config_file_path = os.path.join(consts.TASKS_CONFIGURATION_DIR_PATH, task_config_file_name)
-    task_config = TaskConfiguration(**json.load(open(task_config_file_path)))
-    task_id = str(uuid.uuid4())
-    working_dir = os.path.join(consts.TASKS_DIR_PATH, task_id)
-    os.makedirs(working_dir, exist_ok=True)
-    task = Task(working_dir=working_dir,
-                job=Job(
-                    services=task_config.services,
-                    fds_file_path=os.path.join(consts.FUNCTIONAL_DEPENDENCIES_DIR_PATH,
-                                               task_config.functional_dependencies_file_name),
-                    marginals_errors_margins_file_path=os.path.join(consts.MARGINALS_ERRORS_MARGINS_DIR_PATH,
-                                                                    task_config.marginals_errors_margins_file_name)),
-                dynamic_fields=task_config.dynamic_fields,
-                analyzers_names=task_config.analyzers)
+    task_config_file_path = str(os.path.join(consts.TASKS_CONFIGURATION_DIR_PATH, task_config_file_name))
+    return TaskConfiguration(**object_loader.json_load(task_config_file_path))
 
-    print(f"Running task {task_id}")
-    task.run()
 
-    publisher_config_file_path = os.path.join(consts.PUBLISHER_DIR_PATH, f"{task_config.publisher_name}.json")
-    publisher = Publisher(working_dir, json.load(open(publisher_config_file_path)))
-    publisher.publish()
+def main():
+    task_builder.build_task(
+        load_task_configuration()
+    ).run()
 
 
 if __name__ == '__main__':
