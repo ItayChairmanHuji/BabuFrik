@@ -21,6 +21,10 @@ class Service(ABC):
     def name(self):
         return self.__module__.split(".")[-1]
 
+    @property
+    def analyzers(self) -> list[str]:
+        return self.config["analyzers"]
+
     @staticmethod
     @abstractmethod
     def output_file_name() -> str:
@@ -41,7 +45,7 @@ class Service(ABC):
             start_time = time.time()
             temp_data.data = self.service_action(temp_data.data)
             end_time = time.time()
-        return Report(service_name=self.name,
+        return Report(service=self,
                       start_time=start_time,
                       end_time=end_time,
                       output_file_path=output_file_path)

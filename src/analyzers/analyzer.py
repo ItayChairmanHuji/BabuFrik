@@ -1,35 +1,46 @@
-import os
 from abc import abstractmethod, ABC
 from dataclasses import dataclass
+from typing import Any
 
-from matplotlib.figure import Figure
+import wandb
+from wandb import Table
+from wandb.apis.public import Run
 
-from src.storage import object_loader
 from src.utils.configuration import Configuration
 from src.utils.report import Report
 
 
 @dataclass
 class Analyzer(ABC):
-    working_dir: str
-    figure: Figure
+    run: Run
+    table: Table
     config: Configuration
-    fds_file_path: str
-    marginals_errors_margins_file_path: str
 
     @property
     def name(self):
         return self.__module__.split(".")[-1]
 
     @staticmethod
-    @abstractmethod
     def mandatory_fields() -> list[str]:
-        raise NotImplementedError("Mandatory fields not implemented.")
+        return ["x_axis", "vega_spec_name"]
+
+    def analyze(self, dynamic_fields: dict[str, Any], report: Report) -> None:
+        if not self.should_analyze(report):
+            return
+
+        self.table.add_data(dynamic_fields[self.config["x_axis"]], self.analyzer_action(report))
+        service_name = report.service.name
+        self.run.log({f"runtime/{service_name}": wandb.plot.plot_table(
+            data_table=self.table,
+            vega_spec_name=self.config["vega_spec_name"],  # "itay-chairman-hebrew-university-of-jerusalem/line",
+            fields={"x": self.table.columns[0], "y": self.table.columns[1], "stroke": None},
+            string_fields={"title": service_name},
+            split_table=True,
+        )})
 
     @abstractmethod
-    def analyze(self, reports: dict[str, list[Report]]) -> None:
-        raise NotImplementedError()
+    def analyzer_action(self, report: Report) -> float:
+        raise NotImplementedError('Analyzer must implement this method')
 
-    def save_results(self, results: dict[str, dict[str, list[float]]], file_name: str) -> None:
-        file_path = os.path.join(self.working_dir, file_name)
-        object_loader.save(results, file_path)
+    def should_analyze(self, report: Report) -> bool:
+        return self.name in report.service.analyzers
