@@ -2,6 +2,8 @@
 .venv
 resources/
 configuration/licenses/
-configuration/marginals_errors_margins/
 tasks/
 !configuration/tasks
+*__pycache__*
+*.log
+wandb
