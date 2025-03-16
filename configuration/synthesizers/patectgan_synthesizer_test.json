@@ -5,7 +5,7 @@
     "regularization": "dragan"
   },
   "dynamic_fields": {
-    "size_to_sample": [1000,2000,4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000]
+    "size_to_sample": [1,2,3,4]
   },
   "analyzers": ["runtime_analyzer","violations_number_analyzer"],
   "presented_information":{

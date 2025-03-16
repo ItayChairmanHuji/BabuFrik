@@ -1,4 +1,9 @@
 {
   "code_name": "size_limit_cleaner",
-  "size_limit": 10
+  "configuration": {
+    "size_limit": 100
+  },
+  "presented_information": {
+    "dataset_size_limit": 100
+  }
 }

@@ -1,4 +1,9 @@
 {
   "code_name": "columns_cleaner",
-  "max_columns_to_keep": 100
+  "configuration": {
+   "max_columns_to_keep": 100
+  },
+  "presented_information": {
+    "max_columns_in_trained_dataset": 100
+  }
 }

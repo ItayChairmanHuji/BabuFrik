@@ -1,7 +1,5 @@
 {
   "code_name": "violations_number_analyzer",
-  "x_axis_label": "size_to_sample",
-  "services_types": [
-    "synthesizer"
-  ]
+  "vega_spec_name": "itay-chairman-hebrew-university-of-jerusalem/line",
+  "x_axis": "size_to_sample"
 }

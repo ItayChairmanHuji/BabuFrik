@@ -2,21 +2,21 @@ import json
 import os
 from typing import Any, TypeVar
 
+import wandb
 from wandb.apis.public import Run
 
 from src.analyzers.analyzer import Analyzer
-from src.running.service import Service
 from src.utils import class_loader, consts
 
 AnalyzerSubClass = TypeVar("AnalyzerSubClass", bound=Analyzer)
 
 
-def build_analyzer(analyzer_name: str, service: Service, run: Run) -> Analyzer:
+def build_analyzer(analyzer_name: str, run: Run) -> Analyzer:
     config = __get_service_static_config(analyzer_name)
     analyzer_class = __load_analyzer_class(config)
     return analyzer_class(
         run=run,
-        service=service,
+        table=wandb.Table(columns=[config["x_axis"], analyzer_class.section()]),
         config=config
     )
 

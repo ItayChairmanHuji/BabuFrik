@@ -1,4 +1,7 @@
 {
   "code_name": "vertex_cover_repairer",
-  "license_file_name": "license.json"
+  "configuration": {
+    "license_file_name": "license.json"
+  },
+  "analyzers": ["runtime_analyzer","violations_number_analyzer"]
 }

@@ -1,3 +1,6 @@
 {
-  "code_name": "adult_generator"
+  "code_name": "adult_generator",
+  "presented_information": {
+    "database": "adult"
+  }
 }

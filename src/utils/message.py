@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class Message:
-    working_dir: str
-    input_file: str = None
+    from_service: str = None
+    to_service: str = None
+    data_file_path: str = None
+    extra_data: dict[str, Any] = None

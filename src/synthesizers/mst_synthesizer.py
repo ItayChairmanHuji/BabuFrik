@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 from pandas import DataFrame
 from snsynth import Synthesizer as SNSynth
@@ -22,16 +23,25 @@ class MSTSynthesizer(Service):
 
     def service_action(self, data: DataFrame) -> DataFrame:
         SNMSTSynthesizer.compress_domain = smartnoise_fixes.mst_compress_domain
-        object_loader.save(Marginals(data), os.path.join(self.working_dir, consts.MARGINALS_FILE_NAME))
+        self.__save_marginals(data)
         model = self.__train_model(data)
         return self.__sample(model)
+
+    def __save_marginals(self, data: DataFrame) -> None:
+        marginals_path = os.path.join(self.working_dir.path, consts.MARGINALS_FILE_NAME)
+        object_loader.save(Marginals(data), marginals_path)
+        self.extra_data["marginals_file_path"] = marginals_path
 
     def __train_model(self, data: DataFrame) -> SNSynth:
         model = SNSynth.create(synth="mst", epsilon=self.config["epsilon"], verbose=True)
         model.fit(data, categorical_columns=data.columns.values.tolist(), preprocessor_eps=0)
-        model_file_path = os.path.join(self.working_dir, consts.MODEL_FILE_NAME)
-        object_loader.save(model, str(model_file_path))
+        self.__save_model(model)
         return model
+
+    def __save_model(self, model: Any) -> None:
+        model_file_path = os.path.join(self.working_dir.path, consts.MODEL_FILE_NAME)
+        object_loader.save(model, str(model_file_path))
+        self.extra_data["model_file_path"] = model_file_path
 
     def __sample(self, model: SNSynth) -> DataFrame:
         size = self.config["size_to_sample"]
