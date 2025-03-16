@@ -16,8 +16,8 @@ ServiceSubClass = TypeVar("ServiceSubClass", bound=Service)
 def build_service(service_config_name: str, task_config: TaskConfiguration, run: Run) -> Service:
     config = __get_service_static_config(service_config_name)
     service_class = __load_service_class(config)
-    if "information_to_publish" in config:
-        __update_run_configuration(run, config["information_to_publish"])
+    if "presented_information" in config:
+        __update_run_configuration(run, config["presented_information"])
     return service_class(
         working_dir=TempDir(base_path=task_config.working_dir),
         fds_file_path=task_config.functional_dependencies_file_name,
@@ -47,5 +47,4 @@ def __load_service_class(config: dict[str, Any]) -> type[ServiceSubClass]:
 
 
 def __update_run_configuration(run: Run, information_to_publish: dict[str, Any]) -> None:
-    for key, value in information_to_publish.items():
-        run.config[key] = value
+    run.config.update(information_to_publish)
