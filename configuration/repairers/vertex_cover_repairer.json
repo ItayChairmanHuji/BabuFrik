@@ -5,6 +5,6 @@
   },
   "analyzers": ["runtime_analyzer","violations_number_analyzer"],
   "presented_information":{
-    "repair algorithm": "mst"
+    "repair algorithm": "vertex cover"
   }
 }
