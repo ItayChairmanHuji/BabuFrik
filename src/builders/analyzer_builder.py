@@ -31,7 +31,7 @@ def __get_service_static_config(analyzer_name: str) -> dict[str, Any]:
 
 
 def __load_analyzer_class(config: dict[str, Any]) -> type[AnalyzerSubClass]:
-    analyzer_class = class_loader.load_class(config["analyzer_name"], kind="analyzers")
+    analyzer_class = class_loader.load_class(config["code_name"], kind="analyzers")
     if not issubclass(analyzer_class, Analyzer):
         raise Exception(f"The class {analyzer_class} is not an analyzer.")
     return analyzer_class
