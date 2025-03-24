@@ -40,7 +40,7 @@ class PATECTGANSynthesizer(Service):
 
     def __save_model(self, model: Any) -> None:
         model_file_path = os.path.join(self.working_dir.path, consts.MODEL_FILE_NAME)
-        model.save(model_file_path)
+        object_loader.save(model, model_file_path)
         self.extra_data["model_file_path"] = model_file_path
 
     def __sample(self, model: SNSynth) -> DataFrame:
