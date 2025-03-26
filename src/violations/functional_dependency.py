@@ -16,3 +16,7 @@ class FunctionalDependency:
 
 def load_fds(fds_file_path: str) -> list[FunctionalDependency]:
     return [FunctionalDependency(**fd) for fd in json.load(open(fds_file_path))]
+
+
+def is_common_left_hand_side(fds: list[FunctionalDependency]) -> bool:
+    return len({fd.source for fd in fds}) == 1
