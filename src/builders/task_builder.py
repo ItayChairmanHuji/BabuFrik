@@ -34,7 +34,8 @@ def __init_run(task_id: str, task_config: TaskConfiguration) -> Run:
     api_key = open(api_key_file_path).read().strip()
     os.environ["WANDB_SILENT"] = "True"
     wandb.login(key=api_key)
-    return wandb.init(project=task_config.results_dashboard_project_name, name=task_id)
+    return wandb.init(project=task_config.results_dashboard_project_name,
+                      entity=task_config.results_dashboard_entity_name, name=task_id)
 
 
 def __create_working_dir(task_id: str, task_config: TaskConfiguration) -> str:

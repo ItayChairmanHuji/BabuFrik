@@ -8,4 +8,5 @@ class TaskConfiguration:
     marginals_errors_margins_file_name: str
     results_dashboard_api_key_file_name: str
     results_dashboard_project_name: str
+    results_dashboard_entity_name: str
     working_dir: str = None
