@@ -18,7 +18,6 @@ class OptimalDataRepairILP:
         self.model = self.__create_model()
         self.objective = self.model.addVars(range(len(data)),
                                             vtype=gp.GRB.BINARY, name=[f"x_{i}" for i in range(len(data))])
-        self.__add_no_violations_constraint()
         self.__add_no_trivial_solution_constraint()
 
     def __create_model(self) -> gp.Model:
@@ -31,15 +30,19 @@ class OptimalDataRepairILP:
     def __add_no_trivial_solution_constraint(self) -> None:
         self.model.addConstr(self.objective.sum() >= 1)
 
-    def __add_no_violations_constraint(self) -> None:
-        violating_pairs = violations_checker.find_violating_pairs(self.data, self.fds)
-        self.model.addConstrs((gp.quicksum(self.objective[i] for i in pair) <= 1
-                               for pair in violating_pairs), name="violations constraints")
+    def __add_no_violations_constraint(self, model: gp.Model, where: int) -> None:
+        if where == gp.GRB.Callback.MIPSOL:
+            x = model.cbGetSolution(self.solution)
+            violations = violations_checker.find_violating_pairs(
+                self.data.drop(index=[i for i in x if i == 0]), self.fds)
+            for i, j in violations:
+                model.cbLazy(self.objective[i] + self.objective[j] <= 1)
 
     def solve(self) -> "OptimalDataRepairILP":
+        self.model.params.LazyConstraints = True
         self.__set_model_objective()
         self.model.update()
-        self.model.optimize()
+        self.model.optimize(self.__add_no_violations_constraint)
         return self
 
     def __set_model_objective(self) -> None:
