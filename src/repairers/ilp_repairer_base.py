@@ -13,8 +13,8 @@ from src.violations.functional_dependency import load_fds, FunctionalDependency,
 
 
 class ILPRepairerBase(Service, ABC):
-    @abstractmethod
     @property
+    @abstractmethod
     def ilp_type(self) -> type[OptimalDataRepairILP]:
         raise NotImplementedError("ILP type not implemented")
 
@@ -47,6 +47,7 @@ class ILPRepairerBase(Service, ABC):
     @staticmethod
     def __get_feasible_solution(data: DataFrame, ilp: OptimalDataRepairILP) -> DataFrame:
         tuples_to_remove = [index for index, value in ilp.solution.items() if value == 0]
+        print(f"Removing {len(tuples_to_remove)} tuples")
         return data.drop(index=tuples_to_remove)
 
     def __repair_data(self, data: DataFrame, fds: list[FunctionalDependency], marginals: Marginals) -> DataFrame:
