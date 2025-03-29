@@ -35,8 +35,6 @@ class SyntheticDataRepairILP(OptimalDataRepairILP):
                                    values: tuple[Any, ...], repaired_data_size: gp.LinExpr) -> gp.Var:
         matching_tuples_indices = self.data.index[np.logical_and.reduce([self.data[attr] == value
                                                                          for attr, value in zip(attrs, values)])]
-        print(self.objective)
-        print(matching_tuples_indices)
         matching_tuples_size = gp.quicksum(self.objective[i] for i in matching_tuples_indices)
         marginals_error_var = self.model.addVar(vtype=gp.GRB.CONTINUOUS, name=f"abs_diff_{list(attrs)}_{list(values)}")
         marginals_value = marginals.get_marginals(attrs, values)

@@ -13,9 +13,6 @@ class Marginals:
     def get_marginals(self, attrs: tuple[str, ...], values: tuple[Any, ...]) -> float:
         attrs_marginals = self.marginals[attrs]
         values_indices = self.marginals.get_ordering_function(attrs)(values)
-        if attrs_marginals is None:
-            print(attrs)
-            print(values)
         return attrs_marginals[values_indices] if values_indices in attrs_marginals else 0
 
     def distance(self, other: "Marginals") -> float:

@@ -1,3 +1,4 @@
+import os
 import shutil
 from dataclasses import dataclass
 
@@ -14,6 +15,7 @@ class Task:
     routing: dict[str, str]
 
     def run(self) -> None:
+        print(f"Running task {self.task_id}")
         initial_extra_data = {
             "fds_file_path": self.fds_file_path,
             "marginals_error_margins_file_path": self.marginals_errors_margins_file_path
@@ -25,6 +27,10 @@ class Task:
                 continue
             messages += [self.__route_message(m) for m in self.jobs[message.to_service].run(message)]
         shutil.rmtree(self.working_dir)
+
+    @property
+    def task_id(self) -> str:
+        return os.path.basename(self.working_dir)
 
     def __route_message(self, message: Message) -> Message:
         message.to_service = self.routing[message.from_service]

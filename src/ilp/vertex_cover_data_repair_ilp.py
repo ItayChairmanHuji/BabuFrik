@@ -33,6 +33,5 @@ class VertexCoverDataRepairILP(OptimalDataRepairILP):
         self.model.setObjective(weighted_sum, gp.GRB.MAXIMIZE)
 
     @property
-    def solution(self) -> iter:
-        should_round = self.rounding_approach is not None
-        yield from map(lambda x: self.rounding_approach(x) if should_round else x, self.objective)
+    def solution(self) -> dict[int, float]:
+        return {i: self.rounding_approach(x.X) for i, x in self.objective.items()}
