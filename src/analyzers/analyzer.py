@@ -30,7 +30,7 @@ class Analyzer(ABC):
         self.table.add_data(x_axis_value, self.analyzer_action(message))
         service_name = message.from_service
         self.run.log({f"{self.section()}/{service_name}": wandb.plot.plot_table(
-            data_table=wandb.Table(columns=[self.config["x_axis"], self.section()], data=self.table.data),
+            data_table=wandb.Table(columns=self.table.columns, data=self.table.data),
             vega_spec_name=self.config["vega_spec_name"],
             fields={"x": self.table.columns[0], "y": self.table.columns[1], "stroke": None},
             string_fields={"title": service_name},

@@ -14,9 +14,10 @@ AnalyzerSubClass = TypeVar("AnalyzerSubClass", bound=Analyzer)
 def build_analyzer(analyzer_name: str, run: Run) -> Analyzer:
     config = __get_service_static_config(analyzer_name)
     analyzer_class = __load_analyzer_class(config)
+    x_axis_name = config["x_axis_name"] if "x_axis_name" in config else config["x_axis"]
     return analyzer_class(
         run=run,
-        table=wandb.Table(columns=[config["x_axis"], analyzer_class.section()]),
+        table=wandb.Table(columns=[x_axis_name, analyzer_class.section()]),
         config=config
     )
 
