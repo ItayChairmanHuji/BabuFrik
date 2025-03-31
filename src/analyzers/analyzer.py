@@ -33,7 +33,7 @@ class Analyzer(ABC):
             data_table=wandb.Table(columns=self.table.columns, data=self.table.data),
             vega_spec_name=self.config["vega_spec_name"],
             fields={"x": self.table.columns[0], "y": self.table.columns[1], "stroke": None},
-            string_fields={"title": service_name},
+            string_fields={"title": self.title(message)},
             split_table=True,
         )})
 
@@ -44,4 +44,8 @@ class Analyzer(ABC):
     @staticmethod
     @abstractmethod
     def section() -> str:
+        raise NotImplementedError('Analyzer must implement this method')
+
+    @abstractmethod
+    def title(self, message: Message) -> str:
         raise NotImplementedError('Analyzer must implement this method')

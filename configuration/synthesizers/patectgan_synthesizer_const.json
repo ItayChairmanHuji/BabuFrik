@@ -8,6 +8,6 @@
   "analyzers": ["runtime_analyzer_train_size","violations_number_analyzer_train_size"],
   "presented_information":{
     "epsilon": 1,
-    "size_to_sample": 512000
+    "synthetic_data_size": 512000
   }
 }

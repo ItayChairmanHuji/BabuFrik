@@ -9,3 +9,6 @@ class RuntimeAnalyzer(Analyzer):
     @staticmethod
     def section() -> str:
         return "runtime"
+
+    def title(self, message: Message) -> str:
+        return f"{message.from_service} runtime"

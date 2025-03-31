@@ -15,3 +15,6 @@ class ViolationsNumberAnalyzer(Analyzer):
     @staticmethod
     def section() -> str:
         return "violations"
+
+    def title(self, message: Message) -> str:
+        return f"{message.from_service} violations count"

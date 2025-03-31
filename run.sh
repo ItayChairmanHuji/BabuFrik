@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --time=24:00:00
 #SBATCH --mem=100G
-#SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=4
+#SBATCH --gres=gpu:3
+#SBATCH --cpus-per-task=6
 #SBATCH --output=output_%j.log
 #SBATCH --error=error_%j.log
 

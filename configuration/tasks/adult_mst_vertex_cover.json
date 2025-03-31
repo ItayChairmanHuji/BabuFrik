@@ -4,7 +4,7 @@
     "cleaners.size_limit_cleaner",
     "cleaners.nan_removal_cleaner",
     "cleaners.columns_cleaner",
-    "synthesizers.mst_synthesizer",
+    "synthesizers.mst_synthesizer_repair_sizes",
     "repairers.vertex_cover_repairer"
   ],
   "functional_dependencies_file_name": "adult_fd.json",

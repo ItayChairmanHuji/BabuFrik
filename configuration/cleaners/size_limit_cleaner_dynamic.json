@@ -1,12 +1,6 @@
 {
   "code_name": "size_limit_cleaner",
-  "configuration": {
-    "size_limit": 1000
-  },
   "dynamic_fields": {
     "size_limit": [1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000]
-  },
-  "presented_information": {
-    "dataset_size_limit": 1000
   }
 }
