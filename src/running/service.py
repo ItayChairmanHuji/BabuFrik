@@ -55,7 +55,8 @@ class Service(ABC):
         return Message(
             from_service=self.name,
             data_file_path=self.__save_output_data(output_data),
-            extra_data=self.extra_data
+            extra_data=self.extra_data,
+            from_service_code_name=self.__module__.split(".")[-1]
         )
 
     @staticmethod

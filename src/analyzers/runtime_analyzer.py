@@ -11,4 +11,4 @@ class RuntimeAnalyzer(Analyzer):
         return "runtime"
 
     def title(self, message: Message) -> str:
-        return f"{message.from_service} runtime"
+        return f"{message.from_service_code_name} runtime"

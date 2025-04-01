@@ -17,4 +17,4 @@ class ViolationsNumberAnalyzer(Analyzer):
         return "violations"
 
     def title(self, message: Message) -> str:
-        return f"{message.from_service} violations count"
+        return f"{message.from_service_code_name} violations count"

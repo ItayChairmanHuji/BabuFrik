@@ -28,7 +28,7 @@ class Analyzer(ABC):
         x_axis_value = dynamic_fields[self.config["x_axis"]] \
             if self.config["x_axis"] in dynamic_fields else message.extra_data[self.config["x_axis"]]
         self.table.add_data(x_axis_value, self.analyzer_action(message))
-        service_name = message.from_service
+        service_name = message.from_service_code_name
         self.run.log({f"{self.section()}/{service_name}": wandb.plot.plot_table(
             data_table=wandb.Table(columns=self.table.columns, data=self.table.data),
             vega_spec_name=self.config["vega_spec_name"],

@@ -8,3 +8,4 @@ class Message:
     to_service: str = None
     data_file_path: str = None
     extra_data: dict[str, Any] = None
+    from_service_code_name: str = None
