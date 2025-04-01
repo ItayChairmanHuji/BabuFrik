@@ -32,7 +32,7 @@ def __init_run(task_name: str, task_config: TaskConfiguration) -> Run:
     api_key_file_name = task_config.results_dashboard_api_key_file_name
     api_key_file_path = os.path.join(consts.LICENSES_DIR_PATH, api_key_file_name)
     api_key = open(api_key_file_path).read().strip()
-    os.environ["WANDB_SILENT"] = "True"
+    #os.environ["WANDB_SILENT"] = "True"
     wandb.login(key=api_key)
     return wandb.init(project=task_config.results_dashboard_project_name,
                       entity=task_config.results_dashboard_entity_name, name=task_name)
