@@ -65,5 +65,6 @@ class Service(ABC):
 
     def __save_output_data(self, output_data: DataFrame) -> str:
         output_file_path = os.path.join(self.working_dir.path, self.output_file_name())
+        print(output_data)
         output_data.to_csv(output_file_path, index=False)
         return output_file_path

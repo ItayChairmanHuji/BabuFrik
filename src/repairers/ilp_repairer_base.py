@@ -31,7 +31,7 @@ class ILPRepairerBase(Service, ABC):
         marginals: Marginals = self.__load_marginals()
         self.config["marginals_error_margins_file_path"] = self.marginals_errors_margins_file_path
         return self.__repair_data(data, fds, marginals) if \
-            not is_common_left_hand_side(fds) else self.__common_left_hand_side_optimization
+            not is_common_left_hand_side(fds) else self.__common_left_hand_side_optimization(data,fds, marginals)
 
     def __load_marginals(self) -> Marginals:
         return object_loader.load(self.extra_data["marginals_file_path"]) \

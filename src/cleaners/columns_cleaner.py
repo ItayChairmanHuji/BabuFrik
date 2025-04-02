@@ -1,4 +1,3 @@
-import json
 from itertools import chain
 
 import numpy as np
@@ -7,7 +6,6 @@ from pandas import DataFrame
 from src.running.service import Service
 from src.utils import consts
 from src.violations import functional_dependency
-from src.violations.functional_dependency import FunctionalDependency
 
 
 class ColumnsCleaner(Service):
