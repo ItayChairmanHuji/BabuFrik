@@ -56,5 +56,5 @@ class ILPRepairerBase(Service, ABC):
 
     def __common_left_hand_side_optimization(self, data: DataFrame,
                                              fds: list[FunctionalDependency], marginals: Marginals) -> DataFrame:
-        print(data.groupby(fds[0].source).count)
+        print(data.groupby(fds[0].source).size())
         return pd.concat([self.__repair_data(block.reset_index().drop(columns=["index"]), fds, marginals) for _, block in data.groupby(fds[0].source)])

@@ -41,12 +41,12 @@ class OptimalDataRepairILP:
 
     def solve(self) -> "OptimalDataRepairILP":
         self.model.params.LazyConstraints = True
-        self.__set_model_objective()
+        self._set_model_objective()
         self.model.update()
         self.model.optimize(self.__add_no_violations_constraint)
         return self
 
-    def __set_model_objective(self) -> None:
+    def _set_model_objective(self) -> None:
         self.model.setObjective(self.objective.sum(), gp.GRB.MAXIMIZE)
 
     @property
