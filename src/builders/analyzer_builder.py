@@ -17,7 +17,7 @@ def build_analyzer(analyzer_name: str, run: Run) -> Analyzer:
     x_axis_name = config["x_axis_name"] if "x_axis_name" in config else config["x_axis"]
     return analyzer_class(
         run=run,
-        table=wandb.Table(columns=[x_axis_name, analyzer_class.section()]),
+        table=wandb.Table(columns=[x_axis_name, analyzer_class.y_axis_name()]),
         config=config
     )
 

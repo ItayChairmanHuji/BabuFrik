@@ -7,7 +7,7 @@ class RuntimeAnalyzer(Analyzer):
         return float(message.extra_data["runtime"])
 
     @staticmethod
-    def section() -> str:
+    def y_axis_name() -> str:
         return "runtime"
 
     def title(self, message: Message) -> str:

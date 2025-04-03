@@ -13,7 +13,7 @@ class ViolationsNumberAnalyzer(Analyzer):
         return sum(violations_checker.count_functional_dependency_violations(data, fd) for fd in fds)
 
     @staticmethod
-    def section() -> str:
+    def y_axis_name() -> str:
         return "violations"
 
     def title(self, message: Message) -> str:

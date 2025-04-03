@@ -2,7 +2,8 @@ from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from typing import Any
 
-import wandb
+from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 from wandb import Table
 from wandb.apis.public import Run
 
@@ -28,14 +29,15 @@ class Analyzer(ABC):
         x_axis_value = dynamic_fields[self.config["x_axis"]] \
             if self.config["x_axis"] in dynamic_fields else message.extra_data[self.config["x_axis"]]
         self.table.add_data(x_axis_value, self.analyzer_action(message))
-        service_name = message.from_service_code_name
-        self.run.log({f"{self.section()}/{service_name}": wandb.plot.plot_table(
-            data_table=wandb.Table(columns=self.table.columns, data=self.table.data),
-            vega_spec_name=self.config["vega_spec_name"],
-            fields={"x": self.table.columns[0], "y": self.table.columns[1], "stroke": None},
-            string_fields={"title": self.title(message)},
-            split_table=True,
-        )})
+        self.run.log({self.title(message): self.plot()})
+
+    def plot(self) -> Figure:
+        figure, axes = plt.subplots()
+        x_axis, y_axis = zip(*self.table.data)
+        axes.plot(x_axis, y_axis, linewidth=3)
+        axes.set_xlabel(self.table.columns[0])
+        axes.set_ylabel(self.table.columns[1])
+        return figure
 
     @abstractmethod
     def analyzer_action(self, message: Message) -> float:
@@ -43,7 +45,7 @@ class Analyzer(ABC):
 
     @staticmethod
     @abstractmethod
-    def section() -> str:
+    def y_axis_name() -> str:
         raise NotImplementedError('Analyzer must implement this method')
 
     @abstractmethod
