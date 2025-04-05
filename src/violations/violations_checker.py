@@ -8,9 +8,9 @@ ViolatingPair = tuple[int, int]
 
 
 def count_functional_dependency_violations(data: DataFrame, fd: FunctionalDependency) -> int:
-    grouped = data.groupby([fd.source, fd.target]).size().reset_index(name="PairCount")
-    filtering_condition = lambda x: x[f"{fd.target}_x"] < x[f"{fd.target}_y"]
-    merged = grouped.merge(right=grouped, on=fd.source)[filtering_condition]
+    grouped = data.groupby([fd.lhs, fd.rhs]).size().reset_index(name="PairCount")
+    filtering_condition = lambda x: x[f"{fd.rhs}_x"] < x[f"{fd.rhs}_y"]
+    merged = grouped.merge(right=grouped, on=fd.lhs)[filtering_condition]
     return sum(merged["PairCount_x"] * merged["PairCount_y"])
 
 
@@ -24,12 +24,12 @@ def find_violating_pairs(data: DataFrame, fds: list[FunctionalDependency]) -> se
 
 def __find_violating_pairs_for_fd(data: DataFrame, fd: FunctionalDependency) -> set[ViolatingPair]:
     return set().union(*[__extract_violating_pairs(group, fd)
-                         for _, group in data.groupby([fd.source]) if __get_num_of_unique_values(group, fd.target) > 1])
+                         for _, group in data.groupby([fd.lhs]) if __get_num_of_unique_values(group, fd.rhs) > 1])
 
 
 def __extract_violating_pairs(subdata: DataFrame, fd: FunctionalDependency) -> set[ViolatingPair]:
     indices = list(subdata.index)
-    values = subdata[fd.target].values
+    values = subdata[fd.rhs].values
     return {(indices[i], indices[j])
             for i, j in itertools.combinations(range(len(indices)), 2) if values[i] != values[j]}
 
