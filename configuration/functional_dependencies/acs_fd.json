@@ -1,22 +1,22 @@
 [
   {
-    "source": "CIT",
-    "target": "NATIVITY"
+    "lhs": ["CIT"],
+    "rhs": ["NATIVITY"]
   },
   {
-    "source": "ST",
-    "target": "DIVISION"
+    "lhs": ["ST"],
+    "rhs": ["DIVISION"]
   },
   {
-    "source": "DIVISION",
-    "target": "REGION"
+    "lhs": ["DIVISION"],
+    "rhs": ["REGION"]
   },
   {
-    "source": "RAC2P",
-    "target": "RAC1P"
+    "lhs": ["RAC2P"],
+    "rhs": ["RAC1P"]
   },
   {
-    "source": "POBP",
-    "target": "WAOB"
+    "lhs": ["POBP"],
+    "rhs": ["WAOB"]
   }
 ]
