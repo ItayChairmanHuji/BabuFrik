@@ -9,7 +9,8 @@ ViolatingPair = tuple[int, int]
 
 def count_functional_dependency_violations(data: DataFrame, fd: FunctionalDependency) -> int:
     grouped = data.groupby([*fd.lhs, *fd.rhs]).size().reset_index(name="PairCount")
-    filtering_condition = lambda x: x[[f"{rhs}_x" for rhs in fd.rhs]] < x[[f"{rhs}_y" for rhs in fd.rhs]]
+    filtering_condition = lambda x: (
+            x[[f"{rhs}_x" for rhs in fd.rhs]].squeeze(axis=1) < x[[f"{rhs}_y" for rhs in fd.rhs]].squeeze(axis=1))
     merged = grouped.merge(right=grouped, on=fd.lhs)[filtering_condition]
     return sum(merged["PairCount_x"] * merged["PairCount_y"])
 
