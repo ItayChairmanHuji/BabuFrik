@@ -26,7 +26,7 @@ class VertexCoverDataRepairILP(OptimalDataRepairILP):
     def __get_tuple_weight(self, tuple_index: int, marginals: Marginals) -> float:
         data_without_tuple = self.data.drop(index=tuple_index)
         marginals_without_tuple = Marginals(data_without_tuple)
-        return marginals.distance(marginals_without_tuple)
+        return marginals.mean_distance(marginals_without_tuple)
 
     def _set_model_objective(self) -> None:
         weighted_sum = gp.quicksum(self.weight_function(i) * self.objective[i] for i in range(len(self.data)))
