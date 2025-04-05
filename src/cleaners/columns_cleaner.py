@@ -20,7 +20,7 @@ class ColumnsCleaner(Service):
     def service_action(self, data: DataFrame) -> DataFrame:
         max_columns_to_keep = self.config["max_columns_to_keep"]
         fds = functional_dependency.load_fds(self.fds_file_path)
-        fds_columns = set(chain.from_iterable((fd.lhs, fd.rhs) for fd in fds))
+        fds_columns = set(chain.from_iterable((*fd.lhs, *fd.rhs) for fd in fds))
         num_of_columns_to_remove = max(len(data.columns) - len(fds_columns) - max_columns_to_keep, 0)
         columns_to_remove = (np.random
                              .choice(data.columns.difference(fds_columns), num_of_columns_to_remove, replace=False))

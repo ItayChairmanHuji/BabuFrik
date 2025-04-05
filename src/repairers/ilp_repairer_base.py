@@ -9,7 +9,7 @@ from src.marginals.marginals import Marginals
 from src.running.service import Service
 from src.storage import object_loader
 from src.utils import consts
-from src.violations.functional_dependency import load_fds, FunctionalDependency, is_common_left_hand_side
+from src.violations.functional_dependency import load_fds, FunctionalDependency, get_common_lhs
 
 
 class ILPRepairerBase(Service, ABC):
@@ -30,8 +30,11 @@ class ILPRepairerBase(Service, ABC):
         fds = load_fds(self.fds_file_path)
         marginals: Marginals = self.__load_marginals()
         self.config["marginals_error_margins_file_path"] = self.marginals_errors_margins_file_path
-        return self.__repair_data(data, fds, marginals) if \
-            not is_common_left_hand_side(fds) else self.__common_left_hand_side_optimization(data,fds, marginals)
+        common_lhs = get_common_lhs(fds)
+        return self.__repair_data(data, fds, marginals) \
+            if not common_lhs \
+            else pd.concat(
+            [self.__repair_data(block.reset_index(drop=True), fds, marginals) for _, block in data.groupby(common_lhs)])
 
     def __load_marginals(self) -> Marginals:
         return object_loader.load(self.extra_data["marginals_file_path"]) \
@@ -57,4 +60,6 @@ class ILPRepairerBase(Service, ABC):
     def __common_left_hand_side_optimization(self, data: DataFrame,
                                              fds: list[FunctionalDependency], marginals: Marginals) -> DataFrame:
         print(data.groupby(fds[0].lhs).size())
-        return pd.concat([self.__repair_data(block.reset_index().drop(columns=["index"]), fds, marginals) for _, block in data.groupby(fds[0].lhs)])
+        return pd.concat(
+            [self.__repair_data(block.reset_index().drop(columns=["index"]), fds, marginals) for _, block in
+             data.groupby(fds[0].lhs)])
