@@ -1,0 +1,18 @@
+[
+  {
+    "lhs": ["date_collected", "flight_number"],
+    "rhs": ["actual_departure"]
+  },
+  {
+    "lhs": ["date_collected", "flight_number"],
+    "rhs": ["actual_arrival"]
+  },
+  {
+    "lhs": ["date_collected", "flight_number"],
+    "rhs": ["scheduled_departure"]
+  },
+  {
+    "lhs": ["date_collected", "flight_number"],
+    "rhs": ["scheduled_arrival"]
+  }
+]

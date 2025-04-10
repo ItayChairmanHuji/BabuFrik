@@ -1,4 +1,3 @@
-import itertools
 import json
 from dataclasses import dataclass
 from itertools import chain
@@ -19,7 +18,7 @@ class FunctionalDependency:
 
     @property
     def is_trivial(self) -> bool:
-        return self.rhs <= self.lhs
+        return set(self.rhs) <= set(self.lhs)
 
     @property
     def is_consensus(self) -> bool:
@@ -44,26 +43,5 @@ def get_common_lhs(fds: list[FunctionalDependency]) -> list[str]:
     return list(np.bitwise_and.reduce([set(fd.lhs) for fd in fds]))
 
 
-def select_consensus(fds: list[FunctionalDependency]) -> list[str]:
-    for fd in fds:
-        if fd.is_consensus:
-            return fd.rhs
-    return []
-
-
-def get_closure(fds: list[FunctionalDependency], attrs: list[str]) -> list[str]:
-    stop = False
-    result = attrs.copy()
-    while not stop:
-        new_attrs = list(chain.from_iterable(fd.rhs for fd in fds if fd.lhs <= result))
-        stop = not new_attrs
-        result += new_attrs
-    return result
-
-
-def select_marriage(fds: list[FunctionalDependency]) -> tuple[list[str], list[str]]:
-    closures = {fd.lhs: get_closure(fds, fd.lhs) for fd in fds}
-    for a, b in itertools.combinations(closures, 2):
-        if closures[a] == closures[b] and all((a <= fd.lhs or b <= fd.lhs) for fd in fds):
-            return a, b
-    return ()
+def get_consensuses(fds: list[FunctionalDependency]) -> list[str]:
+    return list(chain.from_iterable([fd.rhs for fd in fds if fd.is_consensus]))

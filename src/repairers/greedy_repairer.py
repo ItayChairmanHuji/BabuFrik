@@ -24,7 +24,7 @@ class GreedyRepairer(Service):
     def service_action(self, data: DataFrame) -> DataFrame:
         fds = load_fds(self.fds_file_path)
         marginals: Marginals = self.__load_marginals()
-        marginals_errors_margins = MarginalsErrorsMargins(self.config["marginals_error_margins_file_path"])
+        marginals_errors_margins = MarginalsErrorsMargins(self.marginals_errors_margins_file_path)
         repaired_data = optimal_repair.repair_data(data, fds)
         while self.__should_remove_tuple(repaired_data, marginals, marginals_errors_margins):
             tuple_to_remove = self.__find_tuple_to_remove(repaired_data, marginals)
@@ -40,7 +40,7 @@ class GreedyRepairer(Service):
     def __should_remove_tuple(data: DataFrame, marginals: Marginals,
                               marginals_errors_margins: MarginalsErrorsMargins) -> bool:
         return any(distance > marginals_errors_margins[attrs]
-                   for attrs, distance in marginals.distance(Marginals(data)).iteritems())
+                   for attrs, distance in marginals.distance(Marginals(data)).items())
 
     def __find_tuple_to_remove(self, data: DataFrame, marginals: Marginals) -> int:
         return int(np.argmin(self.__calculate_tuple_cost(data, ind, marginals) for ind in range(len(data))))
