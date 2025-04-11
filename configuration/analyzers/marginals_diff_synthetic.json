@@ -1,0 +1,6 @@
+{
+  "code_name": "marginals_diff_analyzer",
+  "vega_spec_name": "itay-chairman-hebrew-university-of-jerusalem/line",
+  "x_axis": "size_limit",
+  "x_axis_name": "private_data_size"
+}

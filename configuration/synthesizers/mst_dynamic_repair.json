@@ -1,0 +1,29 @@
+{
+  "code_name": "mst_synthesizer",
+  "configuration": {
+    "epsilon": 1
+  },
+  "dynamic_fields": {
+    "size_to_sample": [
+      100,
+      200,
+      400,
+      800,
+      1600,
+      3200,
+      6400,
+      12800,
+      25600,
+      51200
+    ]
+  },
+  "analyzers": [
+    "runtime_synthetic",
+    "violations_number_synthetic",
+    "marginals_diff_synthetic"
+  ],
+  "presented_information": {
+    "epsilon": 1
+  },
+  "repetitions": 10
+}

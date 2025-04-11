@@ -1,0 +1,11 @@
+{
+  "code_name": "size_limit_cleaner",
+  "dynamic_fields": {
+    "size_limit": [
+      1,
+      2,
+      3,
+      4
+    ]
+  }
+}

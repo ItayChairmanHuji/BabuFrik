@@ -1,0 +1,17 @@
+{
+  "code_name": "mst_synthesizer",
+  "configuration": {
+    "epsilon": 1,
+    "size_to_sample": 512000
+  },
+  "analyzers": [
+    "runtime_private",
+    "violations_number_private",
+    "marginals_diff_private"
+  ],
+  "presented_information": {
+    "epsilon": 1,
+    "synthetic_data_size": 512000
+  },
+  "repetitions": 10
+}

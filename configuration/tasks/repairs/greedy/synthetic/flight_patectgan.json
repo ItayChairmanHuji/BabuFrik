@@ -1,0 +1,15 @@
+{
+  "services": [
+    "generators.flight",
+    "cleaners.nan_removal",
+    "cleaners.size_limit_const",
+    "cleaners.columns",
+    "synthesizers.patectgan_dynamic_repair",
+    "repairers.greedy"
+  ],
+  "functional_dependencies_file_name": "flight_fd.json",
+  "marginals_errors_margins_file_name": "flight_error_margins.csv",
+  "results_dashboard_api_key_file_name": "api_key",
+  "results_dashboard_project_name": "Private Synthetic Data Repair",
+  "results_dashboard_entity_name": "itay-chairman-hebrew-university-of-jerusalem"
+}

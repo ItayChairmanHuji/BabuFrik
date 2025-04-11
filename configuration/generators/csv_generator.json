@@ -1,9 +1,0 @@
-{
-  "code_name": "csv_generator",
-  "configuration": {
-    "file_name": "test.csv"
-  },
-  "presented_information": {
-    "database": "test"
-  }
-}

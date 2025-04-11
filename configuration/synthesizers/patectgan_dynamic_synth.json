@@ -1,0 +1,30 @@
+{
+  "code_name": "patectgan_synthesizer",
+  "configuration": {
+    "epsilon": 1,
+    "regularization": "dragan"
+  },
+  "dynamic_fields": {
+    "size_to_sample": [
+      1000,
+      2000,
+      4000,
+      8000,
+      16000,
+      32000,
+      64000,
+      128000,
+      256000,
+      512000
+    ]
+  },
+  "analyzers": [
+    "runtime_synthetic",
+    "violations_number_synthetic",
+    "marginals_diff_synthetic"
+  ],
+  "presented_information": {
+    "epsilon": 1
+  },
+  "repetitions": 10
+}
