@@ -3,7 +3,7 @@
   "configuration": {
     "license_file_name": "license.json"
   },
-  "analyzers": ["runtime_analyzer","violations_number_analyzer"],
+  "analyzers": ["runtime_analyzer","violations_number_analyzer", "repair_size_analyzer"],
   "presented_information":{
     "repair algorithm": "vertex cover"
   }

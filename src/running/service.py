@@ -6,7 +6,7 @@ from typing import Any
 import pandas as pd
 from pandas import DataFrame
 
-from src.utils import consts, timer
+from src.utils import timer
 from src.utils.configuration import Configuration
 from src.utils.message import Message
 from src.utils.temp_dir import TempDir
@@ -52,6 +52,7 @@ class Service(ABC):
         input_data = self.__load_input_data(message)
         output_data, runtime = timer.run_with_timer(lambda: self.service_action(input_data))
         self.extra_data["runtime"] = runtime
+        self.extra_data["original_data_path"] = message.data_file_path
         return Message(
             from_service=self.name,
             data_file_path=self.__save_output_data(output_data),
