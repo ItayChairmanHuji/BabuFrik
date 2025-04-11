@@ -8,6 +8,7 @@ class Configuration:
         self.dynamic_fields = config["dynamic_fields"] if "dynamic_fields" in config else {}
         self.name = config["config_name"] if "config_name" in config else None
         self.type = config["service_type"] if "service_type" in config else None
+        self.repetitions = config["repetitions"] if "repetitions" in config else 1
         for field in mandatory_fields:
             if field not in self.config and field not in self.dynamic_fields:
                 raise KeyError(f"Field {field} is mandatory in this configuration")

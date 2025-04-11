@@ -10,5 +10,6 @@
   "analyzers": ["runtime_analyzer","violations_number_analyzer"],
   "presented_information":{
     "epsilon": 1
-  }
+  },
+  "repetitions": 3
 }

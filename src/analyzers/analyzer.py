@@ -4,6 +4,7 @@ from typing import Any
 
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
+from pandas import DataFrame
 from wandb import Table
 from wandb.apis.public import Run
 
@@ -33,7 +34,9 @@ class Analyzer(ABC):
 
     def plot(self) -> Figure:
         figure, axes = plt.subplots()
-        x_axis, y_axis = zip(*self.table.data)
+        data = DataFrame(self.table.data, columns=["x", "y"]).groupby(["x"]).mean()
+        x_axis = data.index.values
+        y_axis = data["y"].values
         axes.plot(x_axis, y_axis, linewidth=3)
         axes.set_xlabel(self.table.columns[0])
         axes.set_ylabel(self.table.columns[1])
