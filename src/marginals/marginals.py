@@ -17,7 +17,8 @@ class Marginals:
         return attrs_marginals[values_indices] if values_indices in attrs_marginals else 0
 
     def mean_distance(self, other: "Marginals") -> float:
-        return float(np.mean(self.distance(other).values()))
+        attrs_distances = list(self.distance(other).values())
+        return float(np.mean(attrs_distances))
 
     def distance(self, other: "Marginals") -> dict[tuple[str, ...], float]:
         return {attr_key: self.__attr_distance(other, attr_key)
