@@ -1,6 +1,6 @@
 [
   {
-    "lhs": ["education-num"],
+    "lhs": ["educational-num"],
     "rhs": ["education"]
   }
 ]

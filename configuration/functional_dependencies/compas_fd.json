@@ -1,0 +1,52 @@
+[
+  {
+    "lhs": [
+      "DecileScore"
+    ],
+    "rhs": [
+      "ScoreText"
+    ]
+  },
+  {
+    "lhs": [
+      "ScaleID"
+    ],
+    "rhs": [
+      "DisplayText"
+    ]
+  },
+  {
+    "lhs": [
+      "RSL"
+    ],
+    "rhs": [
+      "RSLT"
+    ]
+  },
+  {
+    "lhs": [
+      "DisplayText"
+    ],
+    "rhs": [
+      "ScaleID"
+    ]
+  },
+  {
+    "lhs": [
+      "RSLT"
+    ],
+    "rhs": [
+      "RSL"
+    ]
+  },
+  {
+    "lhs": [
+      "FirstName",
+      "LastName",
+      "DBO"
+    ],
+    "rhs": [
+      "Sex"
+    ]
+  }
+]

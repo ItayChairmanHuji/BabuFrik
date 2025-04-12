@@ -18,5 +18,6 @@
   ],
   "presented_information": {
     "epsilon": 1
-  }
+  },
+  "repetitions": 3
 }

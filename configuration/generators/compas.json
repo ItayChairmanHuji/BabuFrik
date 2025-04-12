@@ -1,7 +1,7 @@
 {
   "code_name": "csv_generator",
   "configuration": {
-    "file_name": "adult.csv"
+    "file_name": "compas.csv"
   },
   "presented_information": {
     "database": "adult"
