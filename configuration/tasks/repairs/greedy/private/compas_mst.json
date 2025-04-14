@@ -5,7 +5,7 @@
     "cleaners.size_limit_dynamic",
     "cleaners.columns",
     "synthesizers.mst_const",
-    "repairers.greedy"
+    "repairers.greedy_private"
   ],
   "functional_dependencies_file_name": "compas_chain_fd.json",
   "marginals_errors_margins_file_name": "compas_error_margins.csv",

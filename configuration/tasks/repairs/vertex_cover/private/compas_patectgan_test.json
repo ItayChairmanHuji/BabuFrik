@@ -4,8 +4,8 @@
     "cleaners.nan_removal",
     "cleaners.size_limit_dynamic_test",
     "cleaners.columns",
-    "synthesizers.mst_const_test",
-    "repairers.ilp_private"
+    "synthesizers.patectgan_const_test",
+    "repairers.vertex_cover_private"
   ],
   "functional_dependencies_file_name": "compas_fd.json",
   "marginals_errors_margins_file_name": "compas_error_margins.csv",

@@ -1,0 +1,16 @@
+{
+  "code_name": "vertex_cover_repairer",
+  "configuration": {
+    "license_file_name": "license.json"
+  },
+  "analyzers": [
+    "runtime_private",
+    "violations_number_private",
+    "repair_size_private",
+    "marginals_diff_private"
+  ],
+  "presented_information": {
+    "repair algorithm": "vertex cover"
+  },
+  "repetitions": 10
+}

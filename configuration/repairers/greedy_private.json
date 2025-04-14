@@ -1,0 +1,15 @@
+{
+  "code_name": "greedy_repairer",
+  "configuration": {
+  },
+  "analyzers": [
+    "runtime_private",
+    "violations_number_private",
+    "repair_size_private",
+    "marginals_diff_private"
+  ],
+  "presented_information": {
+    "repair algorithm": "ilp"
+  },
+  "repetitions": 10
+}

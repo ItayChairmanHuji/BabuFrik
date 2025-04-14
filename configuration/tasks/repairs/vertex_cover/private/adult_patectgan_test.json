@@ -4,8 +4,8 @@
     "cleaners.nan_removal",
     "cleaners.size_limit_dynamic_test",
     "cleaners.columns",
-    "synthesizers.patectgan_const",
-    "repairers.vertex_cover"
+    "synthesizers.patectgan_const_test",
+    "repairers.vertex_cover_private"
   ],
   "functional_dependencies_file_name": "adult_fd.json",
   "marginals_errors_margins_file_name": "adult_error_margins.csv",
