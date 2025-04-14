@@ -4,7 +4,7 @@
     "cleaners.nan_removal",
     "cleaners.size_limit_dynamic_test",
     "cleaners.columns",
-    "synthesizers.mst_const",
+    "synthesizers.mst_const_test",
     "repairers.greedy"
   ],
   "functional_dependencies_file_name": "adult_fd.json",

@@ -4,6 +4,6 @@
     "size_limit": 100
   },
   "presented_information": {
-    "dataset_size_limit": 100
+    "private_data_size": 100
   }
 }

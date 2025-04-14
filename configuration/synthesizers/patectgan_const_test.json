@@ -1,0 +1,18 @@
+{
+  "code_name": "patectgan_synthesizer",
+  "configuration": {
+    "epsilon": 1,
+    "regularization": "dragan",
+    "size_to_sample": 4
+  },
+  "analyzers": [
+    "runtime_private",
+    "violations_number_private",
+    "marginals_diff_private"
+  ],
+  "presented_information": {
+    "epsilon": 1,
+    "synthetic_data_size": 4
+  },
+  "repetitions": 3
+}
