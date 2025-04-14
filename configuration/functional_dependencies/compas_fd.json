@@ -46,7 +46,7 @@
       "DateOfBirth"
     ],
     "rhs": [
-      "Sex"
+      "Sex_Code_Text"
     ]
   }
 ]

@@ -16,7 +16,7 @@ class Job:
     repetitions: int
 
     def run(self, message: Message) -> list[Message]:
-        print(f"Running service {self.service.name}")
+        print(f"Running {self.service.config.type} {self.service.name}")
         return [self.__run_scenario(scenario) for scenario in self.__get_scenarios(message)]
 
     def __get_scenarios(self, message: Message) -> list[Scenario]:
