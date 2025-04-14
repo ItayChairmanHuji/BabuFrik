@@ -9,7 +9,7 @@
   },
   {
     "lhs": [
-      "ScaleID"
+      "Scale_ID"
     ],
     "rhs": [
       "DisplayText"
@@ -17,10 +17,10 @@
   },
   {
     "lhs": [
-      "RSL"
+      "RecSupervisionLevel"
     ],
     "rhs": [
-      "RSLT"
+      "RecSupervisionLevelText"
     ]
   },
   {
@@ -28,22 +28,22 @@
       "DisplayText"
     ],
     "rhs": [
-      "ScaleID"
+      "Scale_ID"
     ]
   },
   {
     "lhs": [
-      "RSLT"
+      "RecSupervisionLevelText"
     ],
     "rhs": [
-      "RSL"
+      "RecSupervisionLevel"
     ]
   },
   {
     "lhs": [
       "FirstName",
       "LastName",
-      "DBO"
+      "DateOfBirth"
     ],
     "rhs": [
       "Sex"

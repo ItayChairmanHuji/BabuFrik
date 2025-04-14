@@ -4,6 +4,6 @@
     "file_name": "compas.csv"
   },
   "presented_information": {
-    "database": "adult"
+    "database": "compas"
   }
 }
