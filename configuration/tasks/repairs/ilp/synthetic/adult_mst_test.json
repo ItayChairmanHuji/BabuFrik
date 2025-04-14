@@ -5,7 +5,7 @@
     "cleaners.size_limit_const_test",
     "cleaners.columns",
     "synthesizers.mst_dynamic_test",
-    "repairers.ilp_private"
+    "repairers.ilp"
   ],
   "functional_dependencies_file_name": "adult_fd.json",
   "marginals_errors_margins_file_name": "adult_error_margins.csv",

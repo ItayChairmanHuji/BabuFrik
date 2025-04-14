@@ -2,7 +2,7 @@
   "services": [
     "generators.flight",
     "cleaners.nan_removal",
-    "cleaners.size_limit_dynamic",
+    "cleaners.size_limit_dynamic_test",
     "cleaners.columns",
     "synthesizers.patectgan_const_test"
   ],
