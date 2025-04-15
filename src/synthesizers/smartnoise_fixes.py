@@ -1,6 +1,8 @@
 from functools import partial
 
 import numpy as np
+import pandas as pd
+from mbi import Dataset
 from scipy import sparse
 
 
@@ -30,3 +32,58 @@ def mst_compress_domain(self, data, measurements):
     undo_compress_fn = partial(self.reverse_data, supports=supports)
 
     return self.transform_data(data, supports), new_measurements, undo_compress_fn
+
+
+def graphical_model_synthetic_data(self, rows=None, method='round'):
+    total = int(self.total) if rows is None else rows
+    cols = self.domain.attrs
+    data = np.zeros((total, len(cols)), dtype=int)
+    df = pd.DataFrame(data, columns=cols)
+    cliques = [set(cl) for cl in self.cliques]
+
+    def synthetic_col(counts, total):
+        if method == 'sample':
+            probas = counts / counts.sum()
+            return np.random.choice(counts.size, total, True, probas)
+        counts *= total / counts.sum()
+        counts.clip(min=0, max=None)
+        counts /= counts.sum()
+        frac, integ = np.modf(counts)
+        integ = integ.astype(np.int64)
+        if np.any(integ < 0):
+            print(f"integ is {integ}")
+            print(f"counts is {counts}")
+            print(f"total is is {total}")
+        extra = total - integ.sum()
+        if extra > 0:
+            idx = np.random.choice(counts.size, extra, False, frac / frac.sum())
+            integ[idx] += 1
+        vals = np.repeat(np.arange(counts.size), integ)
+        np.random.shuffle(vals)
+        return vals
+
+    order = self.elimination_order[::-1]
+    col = order[0]
+    marg = self.project([col]).datavector(flatten=False)
+    df.loc[:, col] = synthetic_col(marg, total)
+    used = {col}
+
+    for col in order[1:]:
+        relevant = [cl for cl in cliques if col in cl]
+        relevant = used.intersection(set.union(*relevant))
+        proj = tuple(relevant)
+        used.add(col)
+        marg = self.project(proj + (col,)).datavector(flatten=False)
+
+        def foo(group):
+            idx = group.name
+            vals = synthetic_col(marg[idx], group.shape[0])
+            group[col] = vals
+            return group
+
+        if len(proj) >= 1:
+            df = df.groupby(list(proj), group_keys=False).apply(foo)
+        else:
+            df[col] = synthetic_col(marg, df.shape[0])
+
+    return Dataset(df, self.domain)

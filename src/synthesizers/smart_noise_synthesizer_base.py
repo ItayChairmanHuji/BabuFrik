@@ -4,6 +4,7 @@ from typing import Any
 
 from pandas import DataFrame
 from snsynth import Synthesizer as SNSynth
+from snsynth.mst import MSTSynthesizer
 
 from src.marginals.marginals import Marginals
 from src.running.service import Service
