@@ -2,7 +2,7 @@
   "services": [
     "generators.flight",
     "cleaners.nan_removal",
-    "cleaners.size_limit_const",
+    "cleaners.size_limit_const_test",
     "cleaners.columns",
     "synthesizers.mst_dynamic_synth"
   ],

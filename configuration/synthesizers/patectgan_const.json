@@ -11,6 +11,7 @@
     "marginals_diff_private"
   ],
   "presented_information": {
+    "generation_algorithm": "patectgan",
     "epsilon": 1,
     "synthetic_data_size": 512000
   },

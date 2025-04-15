@@ -18,6 +18,7 @@
     "marginals_diff_synthetic"
   ],
   "presented_information": {
+    "generation_algorithm": "patectgan",
     "epsilon": 1
   },
   "repetitions": 3

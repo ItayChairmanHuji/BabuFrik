@@ -17,6 +17,7 @@
     "marginals_diff_synthetic"
   ],
   "presented_information": {
+    "generation_algorithm": "mst",
     "epsilon": 1
   },
   "repetitions": 3

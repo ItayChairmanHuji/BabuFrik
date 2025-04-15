@@ -1,6 +1,7 @@
 {
   "code_name": "mst_synthesizer",
   "configuration": {
+    "generation_algorithm": "mst",
     "epsilon": 1,
     "size_to_sample": 4
   },
