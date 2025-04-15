@@ -32,7 +32,7 @@ class Job:
                 for dynamic_key, dynamic_values in zip(self.dynamic_fields.keys(), dynamic_values)}
 
     def __run_scenario(self, scenario: Scenario) -> Message:
-        print(f"Running service {self.service.name} with settings {scenario.dynamic_fields}")
+        print(f"Running {self.service.config.type} {self.service.name} with settings {scenario.dynamic_fields}")
         self.__update_service_config(scenario)
         return self.__run_and_analyze(scenario)
 
