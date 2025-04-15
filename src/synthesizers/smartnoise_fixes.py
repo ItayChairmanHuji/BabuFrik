@@ -34,7 +34,7 @@ def mst_compress_domain(self, data, measurements):
     return self.transform_data(data, supports), new_measurements, undo_compress_fn
 
 
-def graphical_model_synthetic_data(self, rows=None, method='round'):
+def synthetic_data(self, rows=None, method='round'):
     total = int(self.total) if rows is None else rows
     cols = self.domain.attrs
     data = np.zeros((total, len(cols)), dtype=int)
@@ -45,13 +45,10 @@ def graphical_model_synthetic_data(self, rows=None, method='round'):
         if method == 'sample':
             probas = counts / counts.sum()
             return np.random.choice(counts.size, total, True, probas)
+        counts = counts if counts.sum() != 0 else np.ones(counts.size, dtype=int)
         counts *= total / counts.sum()
         frac, integ = np.modf(counts)
-        integ = integ.astype(np.int64)
-        if np.any(integ < 0):
-            print(f"integ is {integ}")
-            print(f"counts is {counts}")
-            print(f"total is is {total}")
+        integ = integ.astype(int)
         extra = total - integ.sum()
         if extra > 0:
             idx = np.random.choice(counts.size, extra, False, frac / frac.sum())
