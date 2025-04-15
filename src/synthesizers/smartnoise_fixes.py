@@ -46,10 +46,7 @@ def graphical_model_synthetic_data(self, rows=None, method='round'):
             probas = counts / counts.sum()
             return np.random.choice(counts.size, total, True, probas)
         counts *= total / counts.sum()
-        counts.clip(min=0, max=None)
-        counts /= counts.sum()
         frac, integ = np.modf(counts)
-        frac[frac is None] = 0
         integ = integ.astype(np.int64)
         if np.any(integ < 0):
             print(f"integ is {integ}")
