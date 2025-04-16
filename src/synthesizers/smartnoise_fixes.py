@@ -45,7 +45,7 @@ def graphical_model_synthetic_data(self, rows=None, method='round'):
         if method == 'sample':
             probas = counts / counts.sum()
             return np.random.choice(counts.size, total, True, probas)
-        counts = counts if counts.sum() != 0 else np.ones(counts.size, dtype=int)
+        counts = counts if counts.sum() != 0 else np.ones(counts.size)
         counts *= total / counts.sum()
         frac, integ = np.modf(counts)
         integ = integ.astype(int)
