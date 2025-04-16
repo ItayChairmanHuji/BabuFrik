@@ -34,7 +34,7 @@ def mst_compress_domain(self, data, measurements):
     return self.transform_data(data, supports), new_measurements, undo_compress_fn
 
 
-def synthetic_data(self, rows=None, method='round'):
+def graphical_model_synthetic_data(self, rows=None, method='round'):
     total = int(self.total) if rows is None else rows
     cols = self.domain.attrs
     data = np.zeros((total, len(cols)), dtype=int)
