@@ -9,7 +9,7 @@
     "marginals_diff_private"
   ],
   "presented_information": {
-    "repair algorithm": "ilp"
+    "repair algorithm": "greedy"
   },
   "repetitions": 10
 }

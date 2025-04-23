@@ -18,7 +18,7 @@
   ],
   "presented_information": {
     "generation_algorithm": "mst",
-    "epsilon": 1
+    "epsilon": 10
   },
   "repetitions": 3
 }

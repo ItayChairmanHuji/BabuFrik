@@ -1,7 +1,6 @@
 {
   "code_name": "mst_synthesizer",
   "configuration": {
-    "generation_algorithm": "mst",
     "epsilon": 10,
     "size_to_sample": 4
   },
@@ -11,8 +10,9 @@
     "marginals_diff_private"
   ],
   "presented_information": {
-    "epsilon": 1,
-    "synthetic_data_size": 4
+    "epsilon": 10,
+    "synthetic_data_size": 4,
+    "generation_algorithm": "mst"
   },
   "repetitions": 3
 }
