@@ -2,11 +2,7 @@ from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from typing import Any
 
-from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
 from pandas import DataFrame
-from wandb import Table
-from wandb.apis.public import Run
 
 from src.utils.configuration import Configuration
 from src.utils.message import Message
@@ -14,8 +10,8 @@ from src.utils.message import Message
 
 @dataclass
 class Analyzer(ABC):
-    run: Run
-    table: Table
+    result_file_path: str
+    results: DataFrame
     config: Configuration
 
     @property
@@ -27,20 +23,16 @@ class Analyzer(ABC):
         return ["x_axis", "vega_spec_name"]
 
     def analyze(self, dynamic_fields: dict[str, Any], message: Message) -> None:
-        x_axis_value = dynamic_fields[self.config["x_axis"]] \
-            if self.config["x_axis"] in dynamic_fields else message.extra_data[self.config["x_axis"]]
-        self.table.add_data(x_axis_value, self.analyzer_action(message))
-        self.run.log({self.title(message): self.plot()})
-
-    def plot(self) -> Figure:
-        figure, axes = plt.subplots()
-        data = DataFrame(self.table.data, columns=["x", "y"]).groupby(["x"]).mean()
-        x_axis = data.index.values
-        y_axis = data["y"].values
-        axes.plot(x_axis, y_axis, linewidth=3)
-        axes.set_xlabel(self.table.columns[0])
-        axes.set_ylabel(self.table.columns[1])
-        return figure
+        self.results.loc[len(self.results)] = [
+            dynamic_fields[self.config["x_axis"]] \
+                if self.config["x_axis"] in dynamic_fields else message.extra_data[self.config["x_axis"]],
+            self.config["x_axis_name"],
+            message.extra_data["dataset_name"],
+            self.y_axis_name(),
+            message.from_service_code_name,
+            self.analyzer_action(message)
+        ]
+        self.results.to_csv(self.result_file_path, index=False)
 
     @abstractmethod
     def analyzer_action(self, message: Message) -> float:

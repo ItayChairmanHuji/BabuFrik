@@ -2,8 +2,7 @@ import json
 import os
 from typing import Any, TypeVar
 
-import wandb
-from wandb.apis.public import Run
+from pandas import DataFrame
 
 from src.analyzers.analyzer import Analyzer
 from src.utils import class_loader, consts
@@ -11,13 +10,12 @@ from src.utils import class_loader, consts
 AnalyzerSubClass = TypeVar("AnalyzerSubClass", bound=Analyzer)
 
 
-def build_analyzer(analyzer_name: str, run: Run) -> Analyzer:
+def build_analyzer(analyzer_name: str, working_dir: str) -> Analyzer:
     config = __get_service_static_config(analyzer_name)
     analyzer_class = __load_analyzer_class(config)
-    x_axis_name = config["x_axis_name"] if "x_axis_name" in config else config["x_axis"]
     return analyzer_class(
-        run=run,
-        table=wandb.Table(columns=[x_axis_name, analyzer_class.y_axis_name()]),
+        result_file_path=os.path.join(working_dir, consts.RESULTS_DIR_NAME, analyzer_name),
+        results=DataFrame(columns=["data_size", "data_type", "dataset_name", "value_name", "service", "value"]),
         config=config
     )
 

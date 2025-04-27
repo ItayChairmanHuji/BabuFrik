@@ -18,4 +18,5 @@ class CSVGenerator(Service):
 
     def service_action(self, _) -> DataFrame:
         file_path = os.path.join(consts.RESOURCES_DIR_PATH, self.config["file_name"])
+        self.extra_data["dataset_name"] = self.config["file_name"].split(".")[0]
         return pd.read_csv(str(file_path))

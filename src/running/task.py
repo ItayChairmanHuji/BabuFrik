@@ -2,7 +2,12 @@ import os
 import shutil
 from dataclasses import dataclass
 
+import pandas as pd
+from wandb.apis.public import Run
+from wandb.sdk.data_types.table import Table
+
 from src.running.job import Job
+from src.utils import consts
 from src.utils.message import Message
 
 
@@ -13,8 +18,9 @@ class Task:
     marginals_errors_margins_file_path: str
     jobs: dict[str, Job]
     routing: dict[str, str]
+    run: Run
 
-    def run(self) -> None:
+    def run_task(self) -> None:
         print(f"Running task {self.task_id}")
         initial_extra_data = {
             "fds_file_path": self.fds_file_path,
@@ -26,6 +32,10 @@ class Task:
             if message.to_service is None:
                 continue
             messages += [self.__route_message(m) for m in self.jobs[message.to_service].run(message)]
+
+        results_dir = os.path.join(self.working_dir, consts.RESULTS_DIR_NAME)
+        results = pd.concat([pd.read_csv(os.path.join(results_dir, result_file)) for result_file in os.listdir(results_dir)])
+        self.run.log({"results": Table(data=results)})
         shutil.rmtree(self.working_dir)
 
     @property

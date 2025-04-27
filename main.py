@@ -17,7 +17,7 @@ def load_task_configuration() -> tuple[str, TaskConfiguration]:
 def main():
     task_builder.build_task(
         *load_task_configuration()
-    ).run()
+    ).run_task()
 
 
 if __name__ == '__main__':
