@@ -4,7 +4,6 @@ from typing import Any
 
 from pandas import DataFrame
 from snsynth import Synthesizer as SNSynth
-from snsynth.mst import MSTSynthesizer
 
 from src.marginals.marginals import Marginals
 from src.running.service import Service
@@ -24,7 +23,7 @@ class SmartNoiseSynthesizerBase(Service, ABC):
 
     @staticmethod
     def mandatory_fields() -> list[str]:
-        return ["epsilon", "size_to_sample"]
+        return ["training_eps", "preprocessor_eps", "size_to_sample", "unique_values_threshold"]
 
     @staticmethod
     def output_file_name() -> str:
@@ -42,8 +41,12 @@ class SmartNoiseSynthesizerBase(Service, ABC):
         self.extra_data["marginals_file_path"] = marginals_path
 
     def __train_model(self, data: DataFrame) -> SNSynth:
-        model = SNSynth.create(synth=self.smart_noise_name, epsilon=self.config["epsilon"], verbose=True)
-        model.fit(data, categorical_columns=data.columns.values.tolist(), preprocessor_eps=0)
+        eps = self.config["training_eps"] + self.config["preprocessor_eps"]
+        model = SNSynth.create(synth=self.smart_noise_name, epsilon=eps, verbose=True)
+        continuous_columns = data.columns[data.nunique() > self.config["unique_values_threshold"]].tolist()
+        categorical_columns = data.columns.drop(continuous_columns).tolist()
+        model.fit(data, categorical_columns=categorical_columns,
+                  continuous_columns=continuous_columns, preprocessor_eps=self.config["preprocessor_eps"])
         self.__save_model(model)
         return model
 

@@ -2,7 +2,9 @@
   "code_name": "mst_synthesizer",
   "configuration": {
     "generation_algorithm": "mst",
-    "epsilon": 1,
+    "training_eps": 1,
+    "preprocessor_eps": 0.1,
+    "unique_values_threshold": 10000,
     "size_to_sample": 512000
   },
   "analyzers": [

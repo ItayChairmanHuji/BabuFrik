@@ -1,7 +1,9 @@
 {
   "code_name": "mst_synthesizer",
   "configuration": {
-    "epsilon": 1
+    "training_eps": 1,
+    "preprocessor_eps": 0.1,
+    "unique_values_threshold": 10000
   },
   "dynamic_fields": {
     "size_to_sample": [

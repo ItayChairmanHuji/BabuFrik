@@ -17,5 +17,6 @@ class SizeLimitCleaner(Service):
 
     def service_action(self, data: DataFrame) -> DataFrame:
         num_of_rows_to_remove = max(len(data) - self.config["size_limit"], 0)
+        self.extra_data["size_limit"] = len(data) - num_of_rows_to_remove
         rows_to_remove = np.random.choice(data.index, num_of_rows_to_remove, replace=False)
         return data.drop(index=rows_to_remove)
