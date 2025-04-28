@@ -2,8 +2,6 @@ import json
 import os
 from typing import Any, TypeVar
 
-from pandas import DataFrame
-
 from src.analyzers.analyzer import Analyzer
 from src.utils import class_loader, consts
 
@@ -14,8 +12,8 @@ def build_analyzer(analyzer_name: str, working_dir: str) -> Analyzer:
     config = __get_service_static_config(analyzer_name)
     analyzer_class = __load_analyzer_class(config)
     return analyzer_class(
-        result_file_path=os.path.join(working_dir, consts.RESULTS_DIR_NAME, analyzer_name),
-        results=DataFrame(columns=["data_size", "data_type", "dataset_name", "value_name", "service", "value"]),
+        result_dir_path=os.path.join(working_dir, consts.RESULTS_DIR_NAME),
+        results_columns=["data_size", "data_type", "dataset_name", "value_name", "service", "value"],
         config=config
     )
 

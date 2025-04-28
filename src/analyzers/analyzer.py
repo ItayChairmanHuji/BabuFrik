@@ -1,3 +1,5 @@
+import os
+import uuid
 from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from typing import Any
@@ -10,8 +12,8 @@ from src.utils.message import Message
 
 @dataclass
 class Analyzer(ABC):
-    result_file_path: str
-    results: DataFrame
+    result_dir_path: str
+    results_columns: list[str]
     config: Configuration
 
     @property
@@ -23,7 +25,7 @@ class Analyzer(ABC):
         return ["x_axis", "vega_spec_name"]
 
     def analyze(self, dynamic_fields: dict[str, Any], message: Message) -> None:
-        self.results.loc[len(self.results)] = [
+        result_values = [
             dynamic_fields[self.config["x_axis"]] \
                 if self.config["x_axis"] in dynamic_fields else message.extra_data[self.config["x_axis"]],
             self.config["x_axis_name"],
@@ -32,7 +34,8 @@ class Analyzer(ABC):
             message.from_service_code_name,
             self.analyzer_action(message)
         ]
-        self.results.to_csv(self.result_file_path, index=False)
+        DataFrame({key: [value] for key, value in zip(self.results_columns, result_values)}).to_csv(
+            os.path.join(self.result_dir_path, str(uuid.uuid4())), index=False)
 
     @abstractmethod
     def analyzer_action(self, message: Message) -> float:
