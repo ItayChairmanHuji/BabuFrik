@@ -22,13 +22,14 @@ class Analyzer(ABC):
 
     @staticmethod
     def mandatory_fields() -> list[str]:
-        return ["x_axis", "vega_spec_name"]
+        return ["data_size_config_field", "data_type"]
 
     def analyze(self, dynamic_fields: dict[str, Any], message: Message) -> None:
         result_values = [
-            dynamic_fields[self.config["x_axis"]] \
-                if self.config["x_axis"] in dynamic_fields else message.extra_data[self.config["x_axis"]],
-            self.config["x_axis_name"],
+            dynamic_fields[self.config["data_size_config_field"]]
+            if self.config["data_size_config_field"] in dynamic_fields
+            else message.extra_data[self.config["data_size_config_field"]],
+            self.config["data_type"],
             message.extra_data["dataset_name"],
             self.y_axis_name(),
             message.from_service_code_name,
