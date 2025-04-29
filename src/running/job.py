@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Optional
 
 from src.analyzers.analyzer import Analyzer
 from src.running.service import Service
@@ -38,8 +38,12 @@ class Job:
             self.service.config[dynamic_key] = dynamic_value
             scenario.message.extra_data[dynamic_key] = dynamic_value
 
-    def __run_and_analyze(self, scenario: Scenario) -> Message:
-        message = self.service.run(scenario.message)
-        for analyzer in self.analyzers:
-            analyzer.analyze(scenario.dynamic_fields, message)
-        return message
+    def __run_and_analyze(self, scenario: Scenario) -> Optional[Message]:
+        try:
+            message = self.service.run(scenario.message)
+            for analyzer in self.analyzers:
+                analyzer.analyze(scenario.dynamic_fields, message)
+            return message
+        except Exception as e:
+            print(f"Failed running or analyzing service {self.service.name} with exception {e}")
+            raise

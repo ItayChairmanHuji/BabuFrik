@@ -3,7 +3,7 @@
   "configuration": {
     "training_eps": 10,
     "preprocessor_eps": 0.1,
-    "unique_values_threshold": 10000,
+    "unique_values_threshold": 8000,
     "size_to_sample": 4
   },
   "analyzers": [

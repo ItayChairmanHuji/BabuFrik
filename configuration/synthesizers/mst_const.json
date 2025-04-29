@@ -4,7 +4,7 @@
     "generation_algorithm": "mst",
     "training_eps": 1,
     "preprocessor_eps": 0.1,
-    "unique_values_threshold": 10000,
+    "unique_values_threshold": 8000,
     "size_to_sample": 512000
   },
   "analyzers": [

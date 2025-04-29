@@ -2,7 +2,9 @@ import os
 from abc import ABC, abstractmethod
 from typing import Any
 
+import pandas as pd
 from pandas import DataFrame
+from sklearn.preprocessing import LabelEncoder
 from snsynth import Synthesizer as SNSynth
 
 from src.marginals.marginals import Marginals
@@ -44,6 +46,11 @@ class SmartNoiseSynthesizerBase(Service, ABC):
         eps = self.config["training_eps"] + self.config["preprocessor_eps"]
         model = SNSynth.create(synth=self.smart_noise_name, epsilon=eps, verbose=True)
         continuous_columns = data.columns[data.nunique() > self.config["unique_values_threshold"]].tolist()
+        le = LabelEncoder()
+        for continuous_column in continuous_columns:
+            as_numeric = pd.to_numeric(data[continuous_column], errors='coerce')
+            data[continuous_column] = as_numeric if as_numeric.notnull().all() \
+                else le.fit_transform(data[continuous_column])
         categorical_columns = data.columns.drop(continuous_columns).tolist()
         model.fit(data, categorical_columns=categorical_columns,
                   continuous_columns=continuous_columns, preprocessor_eps=self.config["preprocessor_eps"])
