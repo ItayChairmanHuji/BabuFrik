@@ -14,7 +14,8 @@
   ],
   "presented_information": {
     "epsilon": 1,
-    "synthetic_data_size": 512000
+    "synthetic_data_size": 512000,
+    "generation_algorithm": "mst"
   },
   "repetitions": 10
 }
