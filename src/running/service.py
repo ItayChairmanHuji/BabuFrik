@@ -1,6 +1,7 @@
 import os
 from abc import abstractmethod, ABC
 from dataclasses import dataclass
+from multiprocessing import Manager, Lock
 from typing import Any
 
 import pandas as pd
@@ -19,6 +20,7 @@ class Service(ABC):
     marginals_errors_margins_file_path: str
     config: Configuration
     extra_data: dict[str, Any] = None
+    lock: Lock = Manager().Lock()
 
     @property
     def name(self):
@@ -50,7 +52,7 @@ class Service(ABC):
         self.working_dir.reset()
         self.extra_data = message.extra_data.copy()
         input_data = self.__load_input_data(message)
-        output_data, runtime = timer.run_with_timer(lambda: self.service_action(input_data))
+        output_data, runtime = self.__execute_action(input_data)
         self.extra_data["runtime"] = runtime
         self.extra_data["original_data_path"] = message.data_file_path
         return Message(
@@ -63,6 +65,13 @@ class Service(ABC):
     @staticmethod
     def __load_input_data(message: Message) -> DataFrame:
         return pd.read_csv(message.data_file_path) if message.data_file_path is not None else None
+
+    def __execute_action(self, input_data: DataFrame) -> tuple[DataFrame, float]:
+        should_lock = self.config["should_lock"] if "should_lock" in self.config else False
+        if should_lock:
+            with self.lock:
+                return timer.run_with_timer(lambda: self.service_action(input_data))
+        return timer.run_with_timer(lambda: self.service_action(input_data))
 
     def __save_output_data(self, output_data: DataFrame) -> str:
         output_file_path = os.path.join(self.working_dir.path, self.output_file_name())

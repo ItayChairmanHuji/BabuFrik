@@ -4,7 +4,8 @@
     "training_eps": 1,
     "preprocessor_eps": 0.1,
     "unique_values_threshold": 8000,
-    "regularization": "dragan"
+    "regularization": "dragan",
+    "should_lock": true
   },
   "dynamic_fields": {
     "size_to_sample": [
