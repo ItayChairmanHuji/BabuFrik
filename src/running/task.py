@@ -43,7 +43,11 @@ class Task:
                         sub_tasks.add(executor.submit(job.run, message))
                 done, sub_tasks = concurrent.futures.wait(sub_tasks, return_when=concurrent.futures.FIRST_COMPLETED)
                 for sub_task in done:
-                    responses = sub_task.result()
+                    try:
+                        responses = sub_task.result()
+                    except Exception as e:
+                        print(f"Failed to run task {self.task_id} with exception {e}")
+                        raise Exception(f"Failed to run task {self.task_id} with exception {e}")
                     for response in responses:
                         ready_queue.put(self.__route_message(response))
         results_dir = os.path.join(self.working_dir, consts.RESULTS_DIR_NAME)
