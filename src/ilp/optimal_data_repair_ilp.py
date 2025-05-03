@@ -17,7 +17,7 @@ class OptimalDataRepairILP:
         self.config = config
         self.model = self.__create_model()
         self.objective = self.model.addVars(range(len(data)),
-                                            vtype=gp.GRB.BINARY, name=[f"x_{i}" for i in range(len(data))])
+                                            vtype=self.variable_type, name=[f"x_{i}" for i in range(len(data))])
         self.__add_no_trivial_solution_constraint()
         self.violating_tuples = violations_checker.find_violating_pairs(self.data, self.fds)
 
@@ -29,6 +29,10 @@ class OptimalDataRepairILP:
         model = gp.Model("ILP", env=env)
         model.setParam('OutputFlag', False)
         return model
+
+    @property
+    def variable_type(self) -> str:
+        return gp.GRB.BINARY
 
     def __add_no_trivial_solution_constraint(self) -> None:
         self.model.addConstr(self.objective.sum() >= 1)

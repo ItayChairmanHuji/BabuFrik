@@ -24,6 +24,9 @@ def find_violating_pairs(data: DataFrame, fds: list[FunctionalDependency]) -> se
 
 
 def __find_violating_pairs_for_fd(data: DataFrame, fd: FunctionalDependency) -> set[ViolatingPair]:
+    if fd.is_consensus:
+        return __extract_violating_pairs(data, fd) if __get_num_of_unique_values(data, fd.rhs) > 1 else set()
+
     return set().union(*[__extract_violating_pairs(group, fd)
                          for _, group in data.groupby([*fd.lhs]) if __get_num_of_unique_values(group, fd.rhs) > 1])
 

@@ -12,12 +12,17 @@ from src.violations.functional_dependency import FunctionalDependency
 class VertexCoverDataRepairILP(OptimalDataRepairILP):
     def __init__(self, data: DataFrame, fds: list[FunctionalDependency], config: Configuration, marginals: Marginals):
         super().__init__(data, fds, config)
-
-        for var in self.objective.values():
-            var.VType = gp.GRB.CONTINUOUS
-
         self.rounding_approach = lambda x: 0 if x < 0.5 else 1
         self.weight_function = self.__build_weight_function(marginals)
+
+    @property
+    def variable_type(self) -> str:
+        return gp.GRB.CONTINUOUS
+
+    def __add_normalization_constraint(self) -> None:
+        for _, var in self.objective:
+            self.model.addConstr(var >= 0)
+            self.model.addConstr(var <= 1)
 
     def __build_weight_function(self, marginals: Marginals) -> Callable[[int], float]:
         weights = {i: self.__get_tuple_weight(i, marginals) for i in range(len(self.data))}

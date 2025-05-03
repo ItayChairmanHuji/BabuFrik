@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 from src.analyzers.analyzer import Analyzer
 from src.running.service import Service

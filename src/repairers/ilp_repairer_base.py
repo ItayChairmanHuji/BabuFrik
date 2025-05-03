@@ -31,10 +31,12 @@ class ILPRepairerBase(Service, ABC):
         marginals: Marginals = self.__load_marginals()
         self.config["marginals_error_margins_file_path"] = self.marginals_errors_margins_file_path
         common_lhs = get_common_lhs(fds)
+        fds_without_common = [fd.remove_attrs(common_lhs) for fd in fds]
         return self.__repair_data(data, fds, marginals) \
             if not common_lhs \
             else pd.concat(
-            [self.__repair_data(block.reset_index(drop=True), fds, marginals) for _, block in data.groupby(common_lhs)])
+            [self.__repair_data(block.reset_index(drop=True), fds_without_common, marginals)
+             for _, block in data.groupby(common_lhs)])
 
     def __load_marginals(self) -> Marginals:
         return object_loader.load(self.extra_data["marginals_file_path"]) \
