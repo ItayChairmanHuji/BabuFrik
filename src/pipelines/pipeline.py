@@ -87,8 +87,9 @@ class Pipeline:
 
     def create_run(self, task: Task) -> Run:
         config = replace(self.config, private_data_size=task.private_data_size,
-                         synthetic_data_size=task.synthetic_data_size, fds=task.fds)
+                         synthetic_data_size=task.synthetic_data_size)
         config = asdict(config)
+        config["run_id"] = self.run_id
         config["num_of_constraints"] = len(task.fds)
         del config["fds"]
         return wandb.init(
