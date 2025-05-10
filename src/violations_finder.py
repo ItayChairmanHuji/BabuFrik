@@ -1,6 +1,6 @@
 import itertools
 
-from narwhals import DataFrame
+from pandas import DataFrame
 
 from src.constraints.functional_dependency import FunctionalDependency
 

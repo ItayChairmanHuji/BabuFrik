@@ -1,5 +1,5 @@
 import numpy as np
-from narwhals import DataFrame
+from pandas import DataFrame
 from src.constraints.functional_dependencies import FunctionalDependencies
 
 from src.marginals.marginals import Marginals

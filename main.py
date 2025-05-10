@@ -5,7 +5,7 @@ import uuid
 from typing import Union
 
 import pandas as pd
-from narwhals import DataFrame
+from pandas import DataFrame
 
 import wandb
 from src import utils, consts

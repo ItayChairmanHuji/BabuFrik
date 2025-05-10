@@ -2,7 +2,7 @@ import itertools
 from typing import Any
 
 import numpy as np
-from narwhals import DataFrame, Series
+from pandas import DataFrame, Series
 
 from src.marginals.multi_index_series import MultiIndexSeries
 

@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from typing import Union, Callable
 
 import prefect
-from narwhals import DataFrame
+from pandas import DataFrame
 from prefect import flow
 
 from src import utils

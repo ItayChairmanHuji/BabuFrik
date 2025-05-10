@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from narwhals import DataFrame
+from pandas import DataFrame
 from sklearn.preprocessing import LabelEncoder
 
 

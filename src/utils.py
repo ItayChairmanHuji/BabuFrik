@@ -2,7 +2,7 @@ import json
 import time
 from typing import Callable
 
-from narwhals import DataFrame
+from pandas import DataFrame
 
 from src import violations_finder
 from src.constraints.functional_dependencies import FunctionalDependencies

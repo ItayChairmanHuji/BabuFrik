@@ -4,7 +4,7 @@ from threading import Lock
 from typing import Any
 
 import wandb
-from narwhals import DataFrame
+from pandas import DataFrame
 from wandb import Table
 from wandb.apis.public import Run
 

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from narwhals import DataFrame
+from pandas import DataFrame
 
 from src.marginals.marginals import Marginals
 from src.action import Action
