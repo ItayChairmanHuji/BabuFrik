@@ -1,9 +1,0 @@
-{
-  "code_name": "size_limit_cleaner",
-  "configuration": {
-    "size_limit": 100
-  },
-  "presented_information": {
-    "private_data_size": 100
-  }
-}
