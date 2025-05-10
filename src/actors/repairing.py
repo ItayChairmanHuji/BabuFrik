@@ -1,4 +1,4 @@
-from pandas import DataFrame
+from narwhals import DataFrame
 
 from src import consts
 from src.constraints.functional_dependencies import FunctionalDependencies

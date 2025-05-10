@@ -1,5 +1,5 @@
 import pandas as pd
-from pandas import DataFrame
+from narwhals import DataFrame
 
 from src.constraints.functional_dependencies import FunctionalDependencies
 

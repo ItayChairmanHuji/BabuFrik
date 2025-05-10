@@ -1,8 +1,8 @@
 import itertools
 
-from pandas import DataFrame
+from narwhals import DataFrame
 
-from src.violations.functional_dependency import FunctionalDependency
+from src.constraints.functional_dependency import FunctionalDependency
 
 ViolatingPair = tuple[int, int]
 

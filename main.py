@@ -1,13 +1,13 @@
+import json
 import os
 import sys
 import uuid
 from typing import Union
 
 import pandas as pd
-import wandb
-from pandas import DataFrame
-from src.storage import object_loader
+from narwhals import DataFrame
 
+import wandb
 from src import utils, consts
 from src.configuration import Configuration
 from src.constraints.functional_dependencies import FunctionalDependencies
@@ -17,6 +17,7 @@ from src.pipelines.pipeline import Pipeline
 from src.pipelines.private_data_pipeline import PrivateDataPipeline
 from src.pipelines.run_type import RunType
 from src.pipelines.synthetic_data_pipeline import SyntheticDataPipeline
+from src.results_publisher import ResultsPublisher
 
 
 def load_configuration() -> Configuration:
@@ -25,7 +26,7 @@ def load_configuration() -> Configuration:
 
     config_file_name = sys.argv[1]
     config_file_path = str(os.path.join(consts.TASKS_CONFIGURATION_DIR, config_file_name))
-    return Configuration(**object_loader.json_load(config_file_path))
+    return Configuration(**json.load(open(config_file_path)))
 
 
 def load_dataset(config: Configuration) -> DataFrame:
@@ -67,19 +68,22 @@ def create_pipeline(run_id: str, data: DataFrame, config: Configuration,
                                        data=data,
                                        config=config,
                                        fds=fds,
-                                       marginals_errors_margins=marginals_errors_margins)
+                                       marginals_errors_margins=marginals_errors_margins,
+                                       results_publisher=ResultsPublisher(run_id=run_id, config=config))
         case RunType.SYNTHETIC_DATA:
             return SyntheticDataPipeline(run_id=run_id,
                                          data=data,
                                          config=config,
                                          fds=fds,
-                                         marginals_errors_margins=marginals_errors_margins)
+                                         marginals_errors_margins=marginals_errors_margins,
+                                         results_publisher=ResultsPublisher(run_id=run_id, config=config))
         case RunType.CONSTRAINTS_NUM:
             return ConstraintsNumPipeline(run_id=run_id,
                                           data=data,
                                           config=config,
                                           fds=fds,
-                                          marginals_errors_margins=marginals_errors_margins)
+                                          marginals_errors_margins=marginals_errors_margins,
+                                          results_publisher=ResultsPublisher(run_id=run_id, config=config))
 
 
 def test():
@@ -95,7 +99,7 @@ def main():
     run_type = get_run_type(config)
     fds = load_fds(config, run_type)
     marginals_errors = load_marginals_error_margins(config)
-    create_pipeline(run_id, data, config, fds, marginals_errors).run()
+    create_pipeline(run_id, data, config, fds, marginals_errors, run_type).run()
 
 
 if __name__ == '__main__':

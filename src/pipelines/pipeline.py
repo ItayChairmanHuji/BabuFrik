@@ -1,14 +1,10 @@
 from abc import abstractmethod
-from dataclasses import dataclass, replace, asdict
+from dataclasses import dataclass, replace
 from typing import Union, Callable
 
 import prefect
-import wandb
-from pandas import DataFrame
+from narwhals import DataFrame
 from prefect import flow
-from prefect.futures import PrefectFuture
-from wandb import Table
-from wandb.apis.public import Run
 
 from src import utils
 from src.action import Action
@@ -17,7 +13,7 @@ from src.configuration import Configuration
 from src.constraints.functional_dependencies import FunctionalDependencies
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.marginals_accessors import public_marginals_access
-from src.statistics import Statistics
+from src.results_publisher import ResultsPublisher
 from src.task import Task
 
 
@@ -28,26 +24,19 @@ class Pipeline:
     config: Configuration
     fds: Union[FunctionalDependencies | list[FunctionalDependencies]]
     marginals_errors_margins: MarginalsErrorsMargins
-    results: DataFrame = DataFrame(columns=["dataset", "synthesizer_algorithm", "repair_algorithm",
-                                            "private_data_size", "synthetic_data_size", "number_of_violations",
-                                            "action", "value"])
+    results_publisher: ResultsPublisher
 
     @flow
     def run(self) -> None:
-        init_task = Task(data=self.data, private_data_size=-1,
-                         synthetic_data_size=-1, fds=self.fds, action=Action.INITIALISING)
-        ready_tasks = [init_task]
-        working_tasks = []
-        while len(ready_tasks) > 0 or len(working_tasks) > 0:
-            while len(ready_tasks) > 0:
-                task = ready_tasks.pop()
-                working_tasks.extend(self.run_task(task))
-            ready_tasks.extend([task for task in working_tasks if task.done()])
-            working_tasks = [task for task in working_tasks if not task.done()]
+        self.run_pipeline()
 
     @abstractmethod
-    def run_task(self, task: Task) -> list[PrefectFuture[Task]]:
+    def run_pipeline(self) -> None:
         raise NotImplementedError("Not implemented run task method")
+
+    @prefect.task
+    def init_task(self, task: Task) -> Task:
+        return replace(task, action=Action.CLEANING)
 
     @prefect.task
     def clean_data(self, task: Task) -> Task:
@@ -77,38 +66,9 @@ class Pipeline:
         func = lambda: repairing.repair_data(data=task.data, fds=task.fds, marginals=task.marginals,
                                              marginals_error_margins=self.marginals_errors_margins,
                                              repair_algorithm=self.config.repair_algorithm)
-        return replace(task, data=self.run_and_publish(func, task), action=Action.TERMINATING)
+        return replace(task, data=self.run_and_publish(func, task))
 
     def run_and_publish(self, func: Callable[[], DataFrame], task: Task) -> DataFrame:
-        with self.create_run(task) as run:
-            result, statistics = utils.run_with_statistics(func, task.fds, task.marginals)
-            self.publish_statistics(run, task, statistics)
+        result, statistics = utils.run_with_statistics(func, task.fds, task.marginals)
+        self.results_publisher.publish_results(task, statistics)
         return result
-
-    def create_run(self, task: Task) -> Run:
-        config = replace(self.config, private_data_size=task.private_data_size,
-                         synthetic_data_size=task.synthetic_data_size)
-        config = asdict(config)
-        config["run_id"] = self.run_id
-        config["num_of_constraints"] = len(task.fds)
-        del config["fds"]
-        return wandb.init(
-            project="Private Synthetic Data Repair",
-            entity="itay-chairman-hebrew-university-of-jerusalem",
-            name=f"{self.config.dataset_name}_{task.action}",
-            config=config
-        )
-
-    def publish_statistics(self, run: Run, task: Task, statistics: Statistics) -> None:
-        run.log(Table({
-            "dataset": [self.config.dataset_name] * 3,
-            "synthesizer_algorithm": [self.config.generator_name] * 3,
-            "repair_algorithm": [self.config.repair_algorithm] * 3,
-            "private_data_size": [task.private_data_size] * 3,
-            "synthetic_data_size": [task.synthetic_data_size] * 3,
-            "number_of_constraints": [len(task.fds)] * 3,
-            "run_type": ["synthetic_data"] * 3,
-            "action": ["synthesizing"] * 3,
-            "measurement": ["runtime", "violations_count", "marginals_difference"],
-            "value": [statistics.runtime, statistics.violations_count, statistics.marginals_difference],
-        }))

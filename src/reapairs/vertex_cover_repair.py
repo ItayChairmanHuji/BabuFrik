@@ -2,7 +2,7 @@ import json
 from typing import Any, Callable
 
 import gurobipy as gp
-from pandas import DataFrame
+from narwhals import DataFrame
 
 from src.marginals.marginals import Marginals
 from src import violations_finder

@@ -1,29 +1,16 @@
-from dataclasses import replace
-
 from src.action import Action
 from src.pipelines.pipeline import Pipeline
 from src.task import Task
 
 
 class ConstraintsNumPipeline(Pipeline):
-    def run_task(self, task: Task) -> list[Task]:
-        result_tasks = []
-        match task.action:
-            case Action.INITIALISING:
-                result_tasks.append(replace(task, action=Action.CLEANING))
-            case Action.CLEANING:
-                for fds in self.fds:
-                    result_tasks.append(self.clean_data.submit(replace(task, fds=fds)))
-            case Action.MARGINALS:
-                result_tasks.append(self.get_marginals.submit(task))
-            case Action.SYNTHESIZING:
-                for _ in range(self.config.generations_repeats):
-                    result_tasks.append(self.generate_synthetic_data.submit(task))
-            case Action.REPAIRING:
+    def run_pipeline(self) -> None:
+        for fds in self.fds:
+            clean_task = Task(data=self.data, private_data_size=self.config.private_data_size,
+                              synthetic_data_size=self.config.synthetic_data_size, fds=fds, action=Action.CLEANING)
+            marginals_task = self.clean_data.submit(clean_task)
+            synthesizing_task = self.get_marginals.submit(marginals_task.result(), wait_for=[marginals_task])
+            for _ in range(self.config.generations_repeats):
+                repairing_tasks = self.generate_synthetic_data.submit(synthesizing_task, wait_for=[synthesizing_task])
                 for _ in range(self.config.repair_repeats):
-                    result_tasks.append(self.repair_data.submit(task))
-            case Action.TERMINATING:
-                pass
-            case _:
-                raise NotImplementedError("Invalid action")
-        return result_tasks
+                    self.repair_data.submit(repairing_tasks.result(), wait_for=[repairing_tasks])
