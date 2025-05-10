@@ -1,0 +1,6 @@
+[
+  {
+    "lhs": ["date_collected", "flight_number"],
+    "rhs": ["actual_departure"]
+  }
+]

@@ -1,6 +1,6 @@
 import json
 import time
-from typing import Callable
+from typing import Callable, Optional
 
 from pandas import DataFrame
 
@@ -16,12 +16,12 @@ def load_fds_file(fds_file_path: str) -> FunctionalDependencies:
 
 
 def input_type_validation(list_type_value, *str_type_values) -> bool:
-    return type(list_type_value) is list[str] or list[int] and all(
-        type(str_type_value) is str or int for str_type_value in str_type_values)
+    return isinstance(list_type_value, list) and all(
+        isinstance(str_type_value, (str, int)) for str_type_value in str_type_values)
 
 
-def run_with_statistics(func: Callable[[], DataFrame], fds: FunctionalDependencies,
-                        marginals: Marginals) -> tuple[DataFrame, Statistics]:
+def run_with_statistics(func: Callable[[], DataFrame],
+                        fds: FunctionalDependencies, marginals: Marginals) -> tuple[DataFrame, Statistics]:
     start_time = time.time()
     result = func()
     runtime = time.time() - start_time

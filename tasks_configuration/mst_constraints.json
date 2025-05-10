@@ -1,0 +1,21 @@
+{
+  "dataset_name": "flight",
+  "private_data_size": 1000,
+  "empty_values_threshold": 0.5,
+  "columns_threshold": 100,
+  "epsilon": 1,
+  "generator_name": "mst",
+  "synthetic_data_size": 1000,
+  "unique_values_threshold": 10000,
+  "generator_extra_data": {
+  },
+  "generations_repeats": 10,
+  "repair_algorithm": "",
+  "repair_repeats": 0,
+  "fds": [
+    "fds1.json",
+    "fds2.json",
+    "fds3.json",
+    "fds.json"
+  ]
+}

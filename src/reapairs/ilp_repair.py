@@ -6,10 +6,10 @@ import gurobipy as gp
 import numpy as np
 from pandas import DataFrame
 
-from src.marginals.marginals import Marginals
-from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src import violations_finder
 from src.constraints.functional_dependencies import FunctionalDependencies
+from src.marginals.marginals import Marginals
+from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 
 
 def repair_data(data: DataFrame, fds: FunctionalDependencies,
@@ -22,8 +22,9 @@ def repair_data(data: DataFrame, fds: FunctionalDependencies,
     add_marginals_conservation_constraint(data, model, objective, marginals, marginals_error_margins)
     model.setObjective(objective.sum(), gp.GRB.MAXIMIZE)
     model.update()
+    model.setParam(gp.GRB.Param.LazyConstraints, 1)
     model.optimize(no_violations_constraint_callback)
-    return data.drop(index=[i for i in range(len(data)) if objective[i] == 0])
+    return data.drop(index=[i for i in range(len(data)) if objective[i].X == 0])
 
 
 def create_model(license_file_path: str):
@@ -56,8 +57,9 @@ def add_marginals_conservation_constraint(data: DataFrame, model: gp.Model,
     for attrs in itertools.combinations(attributes, 2):
         domains = tuple(data[attr].unique() for attr in attrs)
 
-        marginals_errors_vars = [calc_marginals_error_var(marginals, attrs, values, repaired_data_size) for values in
-                                 itertools.product(*domains)]
+        marginals_errors_vars = [
+            calc_marginals_error_var(data, model, objective, marginals, attrs, values, repaired_data_size) for values in
+            itertools.product(*domains)]
         marginals_errors = gp.quicksum(marginals_errors_vars)
         model.addConstr(marginals_errors <= marginals_error_margins[attrs]
                         * len(marginals_errors_vars) * repaired_data_size, name="marginal_consistency")

@@ -17,3 +17,4 @@ class Configuration:
     repair_algorithm: str
     repair_repeats: int
     fds: Union[str, list[str]]
+    should_calc_repair_size: bool
