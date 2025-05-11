@@ -17,7 +17,7 @@
     256000,
     512000
   ],
-  "unique_values_threshold": 1000,
+  "unique_values_threshold": 10000,
   "generator_extra_data": {
   },
   "generations_repeats": 10,
