@@ -1,6 +1,6 @@
 {
   "dataset_name": "flight",
-  "private_data_size": 10,
+  "private_data_size": 1000,
   "empty_values_threshold": 0.5,
   "columns_threshold": 100,
   "epsilon": 1,
@@ -17,7 +17,7 @@
     256000,
     512000
   ],
-  "unique_values_threshold": 10000,
+  "unique_values_threshold": 1000,
   "generator_extra_data": {
   },
   "generations_repeats": 10,

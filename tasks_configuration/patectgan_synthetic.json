@@ -17,12 +17,13 @@
     256000,
     512000
   ],
-  "unique_values_threshold": 10000,
+  "unique_values_threshold": 1000,
   "generator_extra_data": {
     "regularization": "dragan"
   },
   "generations_repeats": 10,
   "repair_algorithm": "",
   "repair_repeats": 0,
-  "fds": "fds.json"
+  "fds": "fds.json",
+  "should_calc_repair_size": true
 }

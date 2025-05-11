@@ -18,6 +18,7 @@ from src.results_publisher import ResultsPublisher
 from src.task import Task
 
 
+
 @dataclass
 class Pipeline:
     run_id: str
@@ -35,11 +36,11 @@ class Pipeline:
     def run_pipeline(self) -> None:
         raise NotImplementedError("Not implemented run task method")
 
-    @prefect.task(cache_policy=NO_CACHE)
+    @prefect.task(persist_result=False, cache_policy=NO_CACHE)
     def init_task(self, task: Task) -> Task:
         return replace(task, action=Action.CLEANING)
 
-    @prefect.task(cache_policy=NO_CACHE)
+    @prefect.task(persist_result=False, cache_policy=NO_CACHE)
     def clean_data(self, task: Task) -> Task:
         clean_data = cleaning.clean_data(data=task.data, empty_values_threshold=self.config.empty_values_threshold,
                                          columns_threshold=self.config.columns_threshold,
@@ -49,11 +50,11 @@ class Pipeline:
         clean_data_size = min(task.private_data_size, len(clean_data))
         return replace(task, data=clean_data, private_data_size=clean_data_size, action=Action.MARGINALS)
 
-    @prefect.task(cache_policy=NO_CACHE)
+    @prefect.task(persist_result=False, cache_policy=NO_CACHE)
     def get_marginals(self, task: Task) -> Task:
         return replace(task, action=Action.SYNTHESIZING, marginals=public_marginals_access.get_marginals(task.data))
 
-    @prefect.task(cache_policy=NO_CACHE)
+    @prefect.task(persist_result=False, cache_policy=NO_CACHE)
     def generate_synthetic_data(self, task: Task) -> Task:
         func = lambda: synthesizing.generate_synthetic_data(data=task.data, training_epsilon=self.config.epsilon,
                                                             model_name=self.config.generator_name,
@@ -62,7 +63,7 @@ class Pipeline:
                                                             sample_size=task.synthetic_data_size)
         return replace(task, data=self.run_and_publish(func, task), action=Action.REPAIRING)
 
-    @prefect.task(cache_policy=NO_CACHE)
+    @prefect.task(persist_result=False, cache_policy=NO_CACHE)
     def repair_data(self, task: Task) -> Task:
         func = lambda: repairing.repair_data(data=task.data, fds=task.fds, marginals=task.marginals,
                                              marginals_error_margins=self.marginals_errors_margins,
