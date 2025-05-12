@@ -5,3 +5,6 @@ licenses
 error*
 output*
 wandb
+flight.csv 
+adult.csv 
+compas.csv
