@@ -5,6 +5,7 @@ import uuid
 from typing import Union
 
 import pandas as pd
+import ray
 from pandas import DataFrame
 
 import wandb
@@ -103,4 +104,5 @@ def main():
 
 
 if __name__ == '__main__':
+    ray.init(include_dashboard=False)
     main()

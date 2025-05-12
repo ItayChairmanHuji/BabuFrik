@@ -2,3 +2,6 @@
 .venv
 licenses
 *__pycache__*
+error*
+output*
+wandb

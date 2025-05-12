@@ -3,9 +3,9 @@ from typing import Optional
 
 from pandas import DataFrame
 
-from src.marginals.marginals import Marginals
 from src.action import Action
 from src.constraints.functional_dependencies import FunctionalDependencies
+from src.marginals.marginals import Marginals
 
 
 @dataclass

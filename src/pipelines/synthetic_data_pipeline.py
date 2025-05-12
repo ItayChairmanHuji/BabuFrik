@@ -6,7 +6,7 @@ from src.task import Task
 
 
 class SyntheticDataPipeline(Pipeline):
-    def run_pipeline(self) -> None:
+    def run(self) -> None:
         clean_task = Task(data=self.data, private_data_size=self.config.private_data_size, synthetic_data_size=-1,
                           fds=self.fds, action=Action.CLEANING)
         marginals_task = self.clean_data.submit(clean_task)
