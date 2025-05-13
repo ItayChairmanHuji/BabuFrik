@@ -1,6 +1,6 @@
 {
   "dataset_name": "flight",
-  "private_data_size": 1,
+  "private_data_size": 1000,
   "empty_values_threshold": 0.5,
   "columns_threshold": 100,
   "epsilon": 1,
@@ -10,9 +10,9 @@
   "generator_extra_data": {
     "regularization": "dragan"
   },
-  "generations_repeats": 1,
+  "generations_repeats": 10,
   "repair_algorithm": "ilp",
-  "repair_repeats": 1,
+  "repair_repeats": 10,
   "fds": ["fds1.json","fds2.json","fds3.json","fds.json"],
   "should_calc_repair_size": true
 }

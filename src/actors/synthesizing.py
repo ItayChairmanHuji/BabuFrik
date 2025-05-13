@@ -11,7 +11,7 @@ def generate_synthetic_data(data: DataFrame, training_epsilon: float, model_name
                             unique_values_threshold: int, model_extra_data: dict[str, Any],
                             sample_size: int) -> DataFrame:
     MSTSynthesizer.compress_domain = smart_noise_fixes.mst_compress_domain
-    preprocess_epsilon = 0.1
+    preprocess_epsilon = 1
     eps = training_epsilon + preprocess_epsilon
     model = Synthesizer.create(synth=model_name, epsilon=eps, verbose=True, **model_extra_data)
     continuous_columns = data.columns[data.nunique() > unique_values_threshold].tolist()
