@@ -6,7 +6,7 @@ from src.task import Task
 
 
 class PrivateDataPipeline(Pipeline):
-    def run_pipeline(self) -> None:
+    def run(self) -> None:
         results = []
         for private_data_size in self.config.private_data_size:
             marginals_task = self.clean_data.remote(self,  Task(data=self.data, private_data_size=private_data_size,

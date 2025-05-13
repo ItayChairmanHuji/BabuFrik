@@ -4,7 +4,7 @@ from src.task import Task
 
 
 class SyntheticDataPipeline(Pipeline):
-    def run_pipeline(self) -> None:
+    def run(self) -> None:
         results = []
         for synthetic_data_size in self.config.synthetic_data_size:
             clean_task = Task(data=self.data, private_data_size=self.config.private_data_size,

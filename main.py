@@ -65,22 +65,26 @@ def create_pipeline(run_id: str, data: DataFrame, config: Configuration,
                     marginals_errors_margins: MarginalsErrorsMargins, run_type: RunType) -> Pipeline:
     match run_type:
         case RunType.PRIVATE_DATA:
-            pipeline_type = PrivateDataPipeline
+            return PrivateDataPipeline(run_id=run_id,
+                                       data=data,
+                                       config=config,
+                                       fds=fds,
+                                       marginals_errors_margins=marginals_errors_margins,
+                                       results_publisher=ResultsPublisher(run_id=run_id, config=config))
         case RunType.SYNTHETIC_DATA:
-            pipeline_type = SyntheticDataPipeline
+            return SyntheticDataPipeline(run_id=run_id,
+                                         data=data,
+                                         config=config,
+                                         fds=fds,
+                                         marginals_errors_margins=marginals_errors_margins,
+                                         results_publisher=ResultsPublisher(run_id=run_id, config=config))
         case RunType.CONSTRAINTS_NUM:
-            pipeline_type = ConstraintsNumPipeline
-        case _:
-            raise Exception("Invalid run type")
-
-    return pipeline_type(
-        run_id=run_id,
-        data=data,
-        config=config,
-        fds=fds,
-        marginals_errors_margins=marginals_errors_margins,
-        results_publisher=ResultsPublisher(config=config, run_type=run_type)
-    )
+            return ConstraintsNumPipeline(run_id=run_id,
+                                          data=data,
+                                          config=config,
+                                          fds=fds,
+                                          marginals_errors_margins=marginals_errors_margins,
+                                          results_publisher=ResultsPublisher(run_id=run_id, config=config))
 
 
 def test():
