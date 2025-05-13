@@ -25,8 +25,12 @@ class Pipeline:
     marginals_errors_margins: MarginalsErrorsMargins
     results_publisher: ResultsPublisher
 
+    def run(self) -> None:
+        with self.results_publisher:
+            self.run_pipeline()
+
     @abstractmethod
-    def run(self):
+    def run_pipeline(self):
         raise NotImplementedError("Not implemented run task method")
 
     @ray.remote

@@ -1,6 +1,4 @@
-import uuid
-from dataclasses import replace, asdict, dataclass
-from typing import Any
+from dataclasses import dataclass
 
 import wandb
 from pandas import DataFrame
@@ -8,14 +6,28 @@ from wandb import Table
 from wandb.apis.public import Run
 
 from src.configuration import Configuration
+from src.pipelines.run_type import RunType
 from src.statistics import Statistics
 from src.task import Task
 
 
 @dataclass
 class ResultsPublisher:
-    run_id: str
     config: Configuration
+    run_type: RunType
+    run: Run = None
+
+    def __enter__(self) -> "ResultsPublisher":
+        self.run = wandb.init(
+            project="Private Synthetic Data Repair",
+            entity="itay-chairman-hebrew-university-of-jerusalem",
+            name=f"{self.config.dataset_name}_{self.config.generator_name}_{self.config.repair_algorithm}_{self.run_type}",
+            config=self.config
+        )
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.run.finish()
 
     def publish_results(self, run: Run, task: Task, statistics: Statistics) -> None:
         n = 3
@@ -37,21 +49,3 @@ class ResultsPublisher:
             "measurement": measurements,
             "value": values,
         }))})
-
-    def create_run(self, task: Task) -> Run:
-        return wandb.init(
-            project="Private Synthetic Data Repair",
-            entity="itay-chairman-hebrew-university-of-jerusalem",
-            name=f"{self.config.dataset_name}_{task.action}",
-            config=self.create_run_config(task),
-            id=str(uuid.uuid4()),
-            reinit="create_new"
-        )
-
-    def create_run_config(self, task: Task) -> dict[str, Any]:
-        config = replace(self.config, private_data_size=task.private_data_size,
-                         synthetic_data_size=task.synthetic_data_size)
-        config = asdict(config)
-        config["run_id"] = self.run_id
-        config["num_of_constraints"] = len(task.fds)
-        return config

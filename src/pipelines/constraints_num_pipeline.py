@@ -6,7 +6,7 @@ from src.task import Task
 
 
 class ConstraintsNumPipeline(Pipeline):
-    def run(self):
+    def run_pipeline(self):
         results = []
         for fds in self.fds:
             clean_task = Task(data=self.data, private_data_size=self.config.private_data_size,
