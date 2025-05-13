@@ -44,8 +44,7 @@ class ResultsPublisher:
             entity="itay-chairman-hebrew-university-of-jerusalem",
             name=f"{self.config.dataset_name}_{task.action}",
             config=self.create_run_config(task),
-            id=str(uuid.uuid4()),
-            reinit="create_new"
+            settings=wandb.Settings(start_method="thread")
         )
 
     def create_run_config(self, task: Task) -> dict[str, Any]:
