@@ -45,7 +45,7 @@ class ResultsPublisher:
             name=f"{self.config.dataset_name}_{task.action}",
             config=self.create_run_config(task),
             id=str(uuid.uuid4()),
-            reinit="finish_previous"
+            reinit="creat_new"
         )
 
     def create_run_config(self, task: Task) -> dict[str, Any]:
