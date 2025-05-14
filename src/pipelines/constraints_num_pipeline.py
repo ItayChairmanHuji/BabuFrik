@@ -13,6 +13,8 @@ class ConstraintsNumPipeline(Pipeline):
                               synthetic_data_size=self.config.synthetic_data_size, fds=fds, action=Action.CLEANING)
             marginals_task = self.clean_data.remote(self, clean_task)
             synthesizing_task = self.get_marginals.remote(self, marginals_task)
+            if self.config.generations_repeats == 0:
+                results.append(synthesizing_task)
             for _ in range(self.config.generations_repeats):
                 repairing_tasks = self.generate_synthetic_data.remote(self, synthesizing_task)
                 for _ in range(self.config.repair_repeats):
