@@ -1,3 +1,5 @@
+import ray
+
 from src.action import Action
 from src.pipelines.pipeline import Pipeline
 from src.task import Task
@@ -15,3 +17,4 @@ class SyntheticDataPipeline(Pipeline):
                 repairing_tasks = self.generate_synthetic_data.remote(self, synthesizing_task)
                 for _ in range(self.config.repair_repeats):
                     results.append(self.repair_data.remote(self, repairing_tasks))
+        ray.get(results)

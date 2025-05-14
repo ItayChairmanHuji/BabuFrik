@@ -17,4 +17,4 @@ class ConstraintsNumPipeline(Pipeline):
                 repairing_tasks = self.generate_synthetic_data.remote(self, synthesizing_task)
                 for _ in range(self.config.repair_repeats):
                     results.append(self.repair_data.remote(self, repairing_tasks))
-        ray.wait(results)
+        ray.get(results)
