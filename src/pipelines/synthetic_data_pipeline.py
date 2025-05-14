@@ -13,10 +13,10 @@ class SyntheticDataPipeline(Pipeline):
                               synthetic_data_size=synthetic_data_size, fds=self.fds, action=Action.CLEANING)
             marginals_task = self.clean_data.remote(self, clean_task)
             synthesizing_task = self.get_marginals.remote(self, marginals_task)
-            if self.config.generations_repeats == 0:
-                results.append(synthesizing_task)
             for _ in range(self.config.generations_repeats):
                 repairing_tasks = self.generate_synthetic_data.remote(self, synthesizing_task)
+                if self.config.repair_repeats == 0:
+                    results.append(repairing_tasks)
                 for _ in range(self.config.repair_repeats):
                     results.append(self.repair_data.remote(self, repairing_tasks))
         ray.get(results)

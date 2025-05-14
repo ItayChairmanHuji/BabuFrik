@@ -9,7 +9,7 @@ class PrivateDataPipeline(Pipeline):
     def run(self) -> None:
         results = []
         for private_data_size in self.config.private_data_size:
-            marginals_task = self.clean_data.remote(self,  Task(data=self.data, private_data_size=private_data_size,
+            marginals_task = self.clean_data.remote(self, Task(data=self.data, private_data_size=private_data_size,
                                                                synthetic_data_size=self.config.synthetic_data_size,
                                                                fds=self.fds, action=Action.CLEANING))
             synthesizing_task = self.get_marginals.remote(self, marginals_task)
