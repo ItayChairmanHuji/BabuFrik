@@ -15,5 +15,4 @@ class PrivateDataPipeline(Pipeline):
             synthesizing_task = self.get_marginals.remote(self, marginals_task)
             for _ in range(self.config.generations_repeats):
                 results.append(self.generate_synthetic_data.remote(self, synthesizing_task))
-        print(results)
-        ray.wait(results)
+        ray.get(results)
