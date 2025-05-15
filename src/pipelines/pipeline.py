@@ -25,9 +25,41 @@ class Pipeline:
     marginals_errors_margins: MarginalsErrorsMargins
     results_publisher: ResultsPublisher
 
+    def run(self) -> None:
+        if self.config.repair_repeats == 0:
+            self.run_without_repair()
+        else:
+            self.run_with_repair()
+
+    def run_with_repair(self) -> None:
+        pending_tasks = []
+        initial_tasks = self.create_initial_tasks()
+        for initial_task in initial_tasks:
+            task = self.clean_data.remote(self, initial_task)
+            task = self.get_marginals.remote(self, task)
+            for _ in range(self.config.generations_repeats):
+                task = self.generate_synthetic_data.remote(self, task)
+                for _ in range(self.config.repair_repeats):
+                    task = self.repair_data.remote(self, task)
+                    pending_tasks.append(task)
+                    self.wait_for_pending_tasks(pending_tasks)
+        self.finish_last_pending_tasks(pending_tasks)
+
+    def run_without_repair(self) -> None:
+        pending_tasks = []
+        initial_tasks = self.create_initial_tasks()
+        for initial_task in initial_tasks:
+            task = self.clean_data.remote(self, initial_task)
+            task = self.get_marginals.remote(self, task)
+            for _ in range(self.config.generations_repeats):
+                task = self.generate_synthetic_data.remote(self, task)
+                pending_tasks.append(task)
+                self.wait_for_pending_tasks(pending_tasks)
+        self.finish_last_pending_tasks(pending_tasks)
+
     @abstractmethod
-    def run(self):
-        raise NotImplementedError("Not implemented run task method")
+    def create_initial_tasks(self) -> list[Task]:
+        raise NotImplementedError("Not implemented")
 
     @ray.remote
     def clean_data(self, task: Task) -> Task:
@@ -81,3 +113,13 @@ class Pipeline:
                             len(task.data) - optimal_repair_size)
             self.results_publisher.publish_results(run, task, statistics)
         return result
+
+    def wait_for_pending_tasks(self, pending_tasks: list) -> None:
+        if len(pending_tasks) >= self.config.num_of_tasks_in_parallel:
+            ray.get(pending_tasks)
+            pending_tasks.clear()
+
+    @staticmethod
+    def finish_last_pending_tasks(pending_tasks: list) -> None:
+        if pending_tasks:
+            ray.get(pending_tasks)

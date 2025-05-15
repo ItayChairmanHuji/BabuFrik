@@ -6,7 +6,7 @@
   "epsilon": 1,
   "generator_name": "mst",
   "synthetic_data_size": 1000,
-  "unique_values_threshold": 1000,
+  "unique_values_threshold": 1.1,
   "generator_extra_data": {
   },
   "generations_repeats": 10,
@@ -18,5 +18,6 @@
     "fds3.json",
     "fds.json"
   ],
-  "should_calc_repair_size": true
+  "should_calc_repair_size": true,
+  "num_of_tasks_in_parallel": 10
 }

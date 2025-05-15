@@ -87,12 +87,6 @@ def create_pipeline(run_id: str, data: DataFrame, config: Configuration,
                                           results_publisher=ResultsPublisher(run_id=run_id, config=config))
 
 
-def test():
-    api_key = open(consts.WANDB_LICENSE_PATH).read().strip()
-    # os.environ["WANDB_SILENT"] = "True"
-    wandb.login(key=api_key)
-
-
 def main():
     run_id = str(uuid.uuid4())
     config = load_configuration()
