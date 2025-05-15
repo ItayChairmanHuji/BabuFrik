@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def clean_data(data: DataFrame, empty_values_threshold: float, columns_threshold: int,
-               columns_to_keep: list[str], rows_threshold: int, unique_values_threshold: int) -> DataFrame:
+               columns_to_keep: list[str], rows_threshold: int, unique_values_threshold: float) -> DataFrame:
     result = clean_empty_values(data, empty_values_threshold)
     result = limit_number_of_columns(result, columns_threshold, columns_to_keep)
     result = limit_number_of_rows(result, rows_threshold)
@@ -33,7 +33,7 @@ def limit_number_of_rows(data: DataFrame, rows_threshold: int) -> DataFrame:
     return data.drop(index=rows_to_remove)
 
 
-def make_continuous_columns_numerical(data: DataFrame, unique_values_threshold: int) -> DataFrame:
+def make_continuous_columns_numerical(data: DataFrame, unique_values_threshold: float) -> DataFrame:
     continuous_columns = data.columns[data.nunique() / len(data) > unique_values_threshold].tolist()
     le = LabelEncoder()
     for continuous_column in continuous_columns:

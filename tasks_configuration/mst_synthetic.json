@@ -1,6 +1,6 @@
 {
   "dataset_name": "flight",
-  "private_data_size": 1000,
+  "private_data_size": 10000,
   "empty_values_threshold": 0.5,
   "columns_threshold": 100,
   "epsilon": 1,
@@ -17,12 +17,13 @@
     256000,
     512000
   ],
-  "unique_values_threshold": 1000,
+  "unique_values_threshold": 0.9,
   "generator_extra_data": {
   },
   "generations_repeats": 10,
   "repair_algorithm": "",
   "repair_repeats": 0,
   "fds": "fds.json",
-    "should_calc_repair_size": true
+  "should_calc_repair_size": true,
+  "num_of_tasks_in_parallel": 64
 }

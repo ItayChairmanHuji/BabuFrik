@@ -8,7 +8,7 @@ from src import smart_noise_fixes
 
 
 def generate_synthetic_data(data: DataFrame, training_epsilon: float, model_name: str,
-                            unique_values_threshold: int, model_extra_data: dict[str, Any],
+                            unique_values_threshold: float, model_extra_data: dict[str, Any],
                             sample_size: int) -> DataFrame:
     MSTSynthesizer.compress_domain = smart_noise_fixes.mst_compress_domain
     preprocess_epsilon = 1

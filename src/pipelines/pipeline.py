@@ -116,8 +116,8 @@ class Pipeline:
 
     def wait_for_pending_tasks(self, pending_tasks: list) -> None:
         if len(pending_tasks) >= self.config.num_of_tasks_in_parallel:
-            ray.get(pending_tasks)
-            pending_tasks.clear()
+            ready_tasks, pending_tasks = ray.wait(pending_tasks)
+            ray.get(ready_tasks)
 
     @staticmethod
     def finish_last_pending_tasks(pending_tasks: list) -> None:
