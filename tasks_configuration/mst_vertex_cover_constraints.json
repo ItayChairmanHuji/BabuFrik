@@ -14,5 +14,5 @@
   "repair_repeats": 10,
   "fds": ["fds1.json","fds2.json","fds3.json","fds.json"],
   "should_calc_repair_size": true,
-  "num_of_tasks_in_parallel": 64
+  "num_of_tasks_in_parallel": 10
 }
