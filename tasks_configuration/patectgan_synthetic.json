@@ -17,7 +17,7 @@
     256000,
     512000
   ],
-  "unique_values_threshold": 0.9,
+  "unique_values_threshold": 0.1,
   "generator_extra_data": {
     "regularization": "dragan"
   },
