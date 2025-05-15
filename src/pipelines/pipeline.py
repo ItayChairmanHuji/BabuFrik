@@ -43,7 +43,7 @@ class Pipeline:
                 for _ in range(self.config.repair_repeats):
                     post_repair = self.repair_data.remote(self, post_synthesizing)
                     pending_tasks.append(post_repair)
-                    self.wait_for_pending_tasks(pending_tasks)
+                    pending_tasks = self.wait_for_pending_tasks(pending_tasks)
         self.finish_last_pending_tasks(pending_tasks)
 
     def run_without_repair(self) -> None:
@@ -60,7 +60,7 @@ class Pipeline:
 
     def wait_for_pending_tasks(self, pending_tasks: list[ObjectRef]) -> list[ObjectRef]:
         if len(pending_tasks) >= self.config.num_of_tasks_in_parallel:
-            ready_tasks, pending_tasks = ray.wait(pending_tasks)
+            ready_tasks, pending_tasks = ray.wait(pending_tasks, num_returns=1)
             ray.get(ready_tasks)
         return pending_tasks
 
@@ -125,4 +125,3 @@ class Pipeline:
                             len(task.data) - optimal_repair_size)
             self.results_publisher.publish_results(run, task, statistics)
         return result
-
