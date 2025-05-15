@@ -35,13 +35,13 @@ class Pipeline:
         pending_tasks = []
         initial_tasks = self.create_initial_tasks()
         for initial_task in initial_tasks:
-            task = self.clean_data.remote(self, initial_task)
-            task = self.get_marginals.remote(self, task)
+            post_clean = self.clean_data.remote(self, initial_task)
+            post_marginals = self.get_marginals.remote(self, post_clean)
             for _ in range(self.config.generations_repeats):
-                task = self.generate_synthetic_data.remote(self, task)
+                post_synthesizing = self.generate_synthetic_data.remote(self, post_marginals)
                 for _ in range(self.config.repair_repeats):
-                    task = self.repair_data.remote(self, task)
-                    pending_tasks.append(task)
+                    post_repair = self.repair_data.remote(self, post_synthesizing)
+                    pending_tasks.append(post_repair)
                     self.wait_for_pending_tasks(pending_tasks)
         self.finish_last_pending_tasks(pending_tasks)
 
@@ -49,11 +49,11 @@ class Pipeline:
         pending_tasks = []
         initial_tasks = self.create_initial_tasks()
         for initial_task in initial_tasks:
-            task = self.clean_data.remote(self, initial_task)
-            task = self.get_marginals.remote(self, task)
+            post_clean = self.clean_data.remote(self, initial_task)
+            post_marginals = self.get_marginals.remote(self, post_clean)
             for _ in range(self.config.generations_repeats):
-                task = self.generate_synthetic_data.remote(self, task)
-                pending_tasks.append(task)
+                post_synthesizing = self.generate_synthetic_data.remote(self, post_marginals)
+                pending_tasks.append(post_synthesizing)
                 self.wait_for_pending_tasks(pending_tasks)
         self.finish_last_pending_tasks(pending_tasks)
 
