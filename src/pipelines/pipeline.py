@@ -4,6 +4,7 @@ from typing import Union, Callable
 
 import ray
 from pandas import DataFrame
+from ray._raylet import ObjectRef
 
 from src import utils
 from src.action import Action
@@ -54,8 +55,19 @@ class Pipeline:
             for _ in range(self.config.generations_repeats):
                 post_synthesizing = self.generate_synthetic_data.remote(self, post_marginals)
                 pending_tasks.append(post_synthesizing)
-                self.wait_for_pending_tasks(pending_tasks)
+                pending_tasks = self.wait_for_pending_tasks(pending_tasks)
         self.finish_last_pending_tasks(pending_tasks)
+
+    def wait_for_pending_tasks(self, pending_tasks: list[ObjectRef]) -> list[ObjectRef]:
+        if len(pending_tasks) >= self.config.num_of_tasks_in_parallel:
+            ready_tasks, pending_tasks = ray.wait(pending_tasks)
+            ray.get(ready_tasks)
+        return pending_tasks
+
+    @staticmethod
+    def finish_last_pending_tasks(pending_tasks: list) -> None:
+        if pending_tasks:
+            ray.get(pending_tasks)
 
     @abstractmethod
     def create_initial_tasks(self) -> list[Task]:
@@ -114,12 +126,3 @@ class Pipeline:
             self.results_publisher.publish_results(run, task, statistics)
         return result
 
-    def wait_for_pending_tasks(self, pending_tasks: list) -> None:
-        if len(pending_tasks) >= self.config.num_of_tasks_in_parallel:
-            ready_tasks, pending_tasks = ray.wait(pending_tasks)
-            ray.get(ready_tasks)
-
-    @staticmethod
-    def finish_last_pending_tasks(pending_tasks: list) -> None:
-        if pending_tasks:
-            ray.get(pending_tasks)
