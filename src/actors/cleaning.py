@@ -34,7 +34,7 @@ def limit_number_of_rows(data: DataFrame, rows_threshold: int) -> DataFrame:
 
 
 def make_continuous_columns_numerical(data: DataFrame, unique_values_threshold: float) -> DataFrame:
-    continuous_columns = data.columns[data.nunique() / len(data) > unique_values_threshold].tolist()
+    continuous_columns = data.columns[data.nunique() > unique_values_threshold].tolist()
     le = LabelEncoder()
     for continuous_column in continuous_columns:
         as_numeric = pd.to_numeric(data[continuous_column], errors='coerce')

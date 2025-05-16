@@ -6,7 +6,7 @@
   "epsilon": 1,
   "generator_name": "patectgan",
   "synthetic_data_size": 10000,
-  "unique_values_threshold": 0.9,
+  "unique_values_threshold": 1000,
   "generator_extra_data": {
     "regularization": "dragan"
   },
@@ -14,6 +14,6 @@
   "repair_algorithm": "greedy",
   "repair_repeats": 10,
   "fds": ["fds1.json","fds2.json","fds3.json","fds.json"],
-  "should_calc_repair_size": true,
+  "should_calc_repair_size": false,
   "num_of_tasks_in_parallel": 10
 }
