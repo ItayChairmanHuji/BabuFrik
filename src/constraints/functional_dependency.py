@@ -28,3 +28,9 @@ class FunctionalDependency:
         self.lhs = [lhs for lhs in self.lhs if lhs not in attrs]
         self.rhs = [rhs for rhs in self.rhs if rhs not in attrs]
         return self
+
+    @property
+    def dc_format(self) -> str:
+        lhs_str = '&'.join(f"EQ(t1.{lhs},t2.{lhs})" for lhs in self.lhs)
+        rhs_strs = [f"IQ(t1.{rhs},t2.{rhs})" for rhs in self.rhs]
+        return '\n'.join(f"t1&t2&{lhs_str}&{rhs_str}" for rhs_str in rhs_strs)

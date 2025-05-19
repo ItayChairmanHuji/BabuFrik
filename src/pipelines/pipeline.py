@@ -90,7 +90,8 @@ class Pipeline:
 
     @ray.remote
     def generate_synthetic_data(self, task: Task) -> Task:
-        func = lambda: synthesizing.generate_synthetic_data(data=task.data, training_epsilon=self.config.epsilon,
+        func = lambda: synthesizing.generate_synthetic_data(data=task.data, fds=task.fds,
+                                                            training_epsilon=self.config.epsilon,
                                                             model_name=self.config.generator_name,
                                                             unique_values_threshold=self.config.unique_values_threshold,
                                                             model_extra_data=self.config.generator_extra_data,

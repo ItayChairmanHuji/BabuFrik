@@ -47,3 +47,7 @@ class FunctionalDependencies:
 
     def remove_attrs(self, attrs: list[str]) -> 'FunctionalDependencies':
         return FunctionalDependencies([fd.remove_attrs(attrs) for fd in self.fds])
+
+    @property
+    def dc_format(self) -> str:
+        return '\n'.join(fd.dc_format for fd in self.fds)
