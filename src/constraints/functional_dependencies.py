@@ -18,6 +18,10 @@ class FunctionalDependencies:
         return iter(self.fds)
 
     @property
+    def lhs(self) -> set[str]:
+        return set(chain.from_iterable(fd.lhs for fd in self.fds))
+
+    @property
     def is_empty(self) -> bool:
         return len(self.fds) == 0
 

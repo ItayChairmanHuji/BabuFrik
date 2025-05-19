@@ -1,3 +1,4 @@
+import itertools
 import json
 from typing import Any, Callable
 
@@ -15,13 +16,12 @@ def repair_data(data: DataFrame, fds: FunctionalDependencies,
     objective = model.addVars(range(len(data)), vtype=gp.GRB.CONTINUOUS, name=[f"x_{i}" for i in range(len(data))])
     add_no_trivial_solution_constraint(model, objective)
     add_normalization_constraint(model, objective)
-    no_violations_constraint_callback = lambda m, w: no_violations_constraint(m, w, objective, data, fds)
+    add_no_violations_constraint(model, objective, data, fds)
     weight_function = build_weight_function(data, marginals)
     weighted_sum = gp.quicksum(weight_function(i) * objective[i] for i in range(len(data)))
     model.setObjective(weighted_sum, gp.GRB.MINIMIZE)
     model.update()
-    model.setParam(gp.GRB.Param.LazyConstraints, 1)
-    model.optimize(no_violations_constraint_callback)
+    model.optimize()
     return data.drop(index=[i for i in range(len(data)) if objective[i].X >= 0.5])
 
 
@@ -43,14 +43,12 @@ def add_normalization_constraint(model: gp.Model, objective: gp.tupledict[Any, g
         model.addConstr(var <= 1)
 
 
-def no_violations_constraint(model: gp.Model, where: int, objective: gp.tupledict[Any, gp.Var],
-                             data: DataFrame, fds: FunctionalDependencies) -> None:
-    if where == gp.GRB.Callback.MIPSOL:
-        x = model.cbGetSolution(objective)
-        current_result = data.drop(index=[i for i in range(len(data)) if x[i] == 1])
-        violating_tuples = violations_finder.find_violating_pairs(current_result, fds.fds)
-        for i, j in violating_tuples:
-            if x[i] + x[j] < 1: model.cbLazy(objective[i] + objective[j] >= 1)
+def add_no_violations_constraint(model: gp.Model, objective: gp.tupledict[Any, gp.Var],
+                                 data: DataFrame, fds: FunctionalDependencies) -> None:
+    violating_tuples = violations_finder.find_violating_tuples(data, fds)
+    for violating_tuple_set in violating_tuples:
+        for i, j in itertools.combinations(violating_tuple_set, 2):
+            model.addConstr(objective[i] + objective[j] >= 1)
 
 
 def build_weight_function(data: DataFrame, marginals: Marginals) -> Callable[[int], float]:

@@ -44,7 +44,7 @@ def no_violations_constraint(model: gp.Model, where: int, objective: gp.tupledic
     if where == gp.GRB.Callback.MIPSOL:
         x = model.cbGetSolution(objective)
         current_result = data.drop(index=[i for i in range(len(data)) if x[i] == 0])
-        violating_tuples = violations_finder.find_violating_pairs(current_result, fds.fds)
+        violating_tuples = violations_finder.find_violating_tuples(current_result, fds.fds)
         for i, j in violating_tuples:
             if x[i] + x[j] > 1: model.cbLazy(objective[i] + objective[j] <= 1)
 

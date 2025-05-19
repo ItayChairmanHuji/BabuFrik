@@ -1,7 +1,6 @@
-import itertools
-
 from pandas import DataFrame
 
+from src.constraints.functional_dependencies import FunctionalDependencies
 from src.constraints.functional_dependency import FunctionalDependency
 
 ViolatingPair = tuple[int, int]
@@ -19,24 +18,12 @@ def generate_violations_report(violations: dict[FunctionalDependency, int]) -> s
     return ''.join(f'{fd}: {violations} \n' for (fd, violations) in violations.items())
 
 
-def find_violating_pairs(data: DataFrame, fds: list[FunctionalDependency]) -> set[ViolatingPair]:
-    return set().union(*[__find_violating_pairs_for_fd(data, fd) for fd in fds])
+def find_violating_tuples(data: DataFrame, fds: FunctionalDependencies) -> list[list[int]]:
+    return [find_violating_tuples_for_fd(data, fd) for fd in fds]
 
 
-def __find_violating_pairs_for_fd(data: DataFrame, fd: FunctionalDependency) -> set[ViolatingPair]:
-    if fd.is_consensus:
-        return __extract_violating_pairs(data, fd) if __get_num_of_unique_values(data, fd.rhs) > 1 else set()
-
-    return set().union(*[__extract_violating_pairs(group, fd)
-                         for _, group in data.groupby([*fd.lhs]) if __get_num_of_unique_values(group, fd.rhs) > 1])
-
-
-def __extract_violating_pairs(subdata: DataFrame, fd: FunctionalDependency) -> set[ViolatingPair]:
-    indices = list(subdata.index)
-    values = subdata[fd.rhs].values
-    return {(indices[i], indices[j])
-            for i, j in itertools.combinations(range(len(indices)), 2) if values[i] != values[j]}
-
-
-def __get_num_of_unique_values(data: DataFrame, columns: list[str]) -> int:
-    return len(data[columns].drop_duplicates())
+def find_violating_tuples_for_fd(data: DataFrame, fd: FunctionalDependency) -> list[int]:
+    num_unique_rhs_per_group = data.groupby(fd.lhs)[fd.rhs].nunique()
+    violating_keys = num_unique_rhs_per_group[num_unique_rhs_per_group > 1].dropna().index
+    mask = data.set_index(fd.lhs).index.isin(violating_keys)
+    return data[mask].index.tolist()
