@@ -5,7 +5,7 @@ from typing import Any, Callable
 import gurobipy as gp
 from pandas import DataFrame
 
-from src import violations_finder
+from src.constraints import violations_finder
 from src.constraints.functional_dependencies import FunctionalDependencies
 from src.marginals.marginals import Marginals
 

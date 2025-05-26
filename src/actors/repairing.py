@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from src import consts
+from src.entities import consts
 from src.constraints.functional_dependencies import FunctionalDependencies
 from src.marginals.marginals import Marginals
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins

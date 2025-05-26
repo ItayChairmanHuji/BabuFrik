@@ -3,12 +3,13 @@ import uuid
 from typing import Any
 
 import pandas as pd
+import pyvacy
 from pandas import DataFrame
 from snsynth import Synthesizer
 from snsynth.mst import MSTSynthesizer
 
 import kamino.synthesizer.kamino
-from src import smart_noise_fixes
+from src.utils import smart_noise_fixes
 from src.constraints.functional_dependencies import FunctionalDependencies
 
 
@@ -29,6 +30,7 @@ def generate_synthetic_data(data: DataFrame, fds: FunctionalDependencies, traini
 
 
 def run_kamino(data: DataFrame, fds: FunctionalDependencies):
+    pyvacy.analysis.moments_accountant()
     temp_dir_name = str(uuid.uuid4())
     os.mkdir(temp_dir_name)
     data_path = os.path.join(temp_dir_name, "data.csv")

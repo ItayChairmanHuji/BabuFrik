@@ -1,6 +1,6 @@
-from src.action import Action
+from src.entities.action import Action
 from src.pipelines.pipeline import Pipeline
-from src.task import Task
+from src.entities.task import Task
 
 
 class SyntheticDataPipeline(Pipeline):

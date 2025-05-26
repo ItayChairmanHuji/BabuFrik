@@ -5,20 +5,24 @@ import uuid
 from typing import Union
 
 import pandas as pd
+import pyvacy
 import ray
 from pandas import DataFrame
 
-import wandb
-from src import utils, consts
-from src.configuration import Configuration
+sys.modules['pyvacy.pyvacy'] = pyvacy
+sys.path.append("./kaminos")
+
+from src import utils
+from src.entities import consts
+from src.entities.configuration import Configuration
 from src.constraints.functional_dependencies import FunctionalDependencies
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.pipelines.constraints_num_pipeline import ConstraintsNumPipeline
 from src.pipelines.pipeline import Pipeline
 from src.pipelines.private_data_pipeline import PrivateDataPipeline
-from src.pipelines.run_type import RunType
+from src.entities.run_type import RunType
 from src.pipelines.synthetic_data_pipeline import SyntheticDataPipeline
-from src.results_publisher import ResultsPublisher
+from src.pipelines.results_publisher import ResultsPublisher
 
 
 def load_configuration() -> Configuration:
@@ -99,4 +103,5 @@ def main():
 
 if __name__ == '__main__':
     ray.init(include_dashboard=False)
+    sys.modules['pyvacy.pyvacy'] = pyvacy
     main()

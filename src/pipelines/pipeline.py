@@ -7,14 +7,14 @@ from pandas import DataFrame
 from ray._raylet import ObjectRef
 
 from src import utils
-from src.action import Action
+from src.entities.action import Action
 from src.actors import repairing, synthesizing, cleaning
-from src.configuration import Configuration
+from src.entities.configuration import Configuration
 from src.constraints.functional_dependencies import FunctionalDependencies
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.marginals_accessors import public_marginals_access
-from src.results_publisher import ResultsPublisher
-from src.task import Task
+from src.pipelines.results_publisher import ResultsPublisher
+from src.entities.task import Task
 
 
 @dataclass
