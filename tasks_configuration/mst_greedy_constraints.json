@@ -6,7 +6,7 @@
   "epsilon": 1,
   "generator_name": "mst",
   "synthetic_data_size": 10000,
-  "unique_values_threshold": 1000,
+
   "generator_extra_data": {
   },
   "generations_repeats": 10,

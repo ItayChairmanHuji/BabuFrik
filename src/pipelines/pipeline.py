@@ -7,14 +7,14 @@ from pandas import DataFrame
 from ray._raylet import ObjectRef
 
 from src import utils
-from src.entities.action import Action
 from src.actors import repairing, synthesizing, cleaning
-from src.entities.configuration import Configuration
 from src.constraints.functional_dependencies import FunctionalDependencies
+from src.entities.action import Action
+from src.entities.configuration import Configuration
+from src.entities.task import Task
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.marginals_accessors import public_marginals_access
 from src.pipelines.results_publisher import ResultsPublisher
-from src.entities.task import Task
 
 
 @dataclass
@@ -79,8 +79,7 @@ class Pipeline:
                                          empty_values_threshold=self.config.empty_values_threshold,
                                          columns_threshold=self.config.columns_threshold,
                                          columns_to_keep=list(task.fds.attributes),
-                                         rows_threshold=task.private_data_size,
-                                         unique_values_threshold=self.config.unique_values_threshold)
+                                         rows_threshold=task.private_data_size)
         clean_data_size = min(task.private_data_size, len(clean_data))
         return replace(task, data=clean_data, private_data_size=clean_data_size, action=Action.MARGINALS)
 
@@ -91,9 +90,8 @@ class Pipeline:
     @ray.remote
     def generate_synthetic_data(self, task: Task) -> Task:
         func = lambda: synthesizing.generate_synthetic_data(data=task.data, fds=task.fds,
-                                                            training_epsilon=self.config.epsilon,
+                                                            eps=self.config.epsilon,
                                                             model_name=self.config.generator_name,
-                                                            unique_values_threshold=self.config.unique_values_threshold,
                                                             model_extra_data=self.config.generator_extra_data,
                                                             sample_size=task.synthetic_data_size)
         return replace(task, data=self.run_and_publish(func, task), action=Action.REPAIRING)
@@ -114,7 +112,7 @@ class Pipeline:
 
     def run_and_publish(self, func: Callable[[], DataFrame], task: Task, optimal_repair_size: int = None) -> DataFrame:
         with self.results_publisher.create_run(task) as run:
-            result, statistics = utils.run_with_statistics(func, task.fds, task.marginals)
+            result, statistics = utils.utils.run_with_statistics(func, task.fds, task.marginals)
             if optimal_repair_size is not None:
                 if optimal_repair_size == -1:
                     statistics.repair_size = 1
