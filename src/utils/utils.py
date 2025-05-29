@@ -17,9 +17,7 @@ def load_fds_file(fds_file_path: str) -> FunctionalDependencies:
     return FunctionalDependencies([FunctionalDependency(**fd) for fd in json.load(open(fds_file_path))])
 
 
-def input_type_validation(list_type_value, *str_type_values) -> bool:
-    return isinstance(list_type_value, list) and all(
-        isinstance(str_type_value, (str, int)) for str_type_value in str_type_values)
+
 
 
 def create_violations_graph(data: DataFrame, fds: FunctionalDependencies) -> nx.Graph:
