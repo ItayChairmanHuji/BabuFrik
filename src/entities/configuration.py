@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any, Union, Optional
 
 from src.entities.algorithms import MarginalsGenerationAlgorithms, RepairAlgorithms, SynthesizingAlgorithms, \
-    CostFunctions, QualityFunctions
+    CostFunctions, QualityFunctions, NodesTypes
 from src.entities.run_type import RunType
 
 
@@ -12,7 +12,7 @@ def input_type_validation(list_type_value, *str_type_values) -> bool:
 
 
 @dataclass
-class InputConfiguration:
+class Configuration:
     dataset_name: str
     synthesizing_algorithm: SynthesizingAlgorithms
     marginals_algorithm: MarginalsGenerationAlgorithms = MarginalsGenerationAlgorithms.PUBLIC_MARGINALS
@@ -30,6 +30,7 @@ class InputConfiguration:
     synthesizing_privacy_budget: float = 1
     synthesizing_extra_data: Optional[dict[str, Any]] = None
     num_of_tasks_in_parallel: int = 10
+    monitored_object: NodesTypes = NodesTypes.REPAIRING
 
     @property
     def synthesizer_extra_data(self) -> dict:
@@ -51,4 +52,14 @@ class InputConfiguration:
             temp.remove(value)
             if input_type_validation(value, *temp):
                 return key
+        raise Exception("Invalid configuration input")
+
+    @property
+    def target_attribute(self) -> str:
+        if self.dataset_name == "adult":
+            return "income"
+        elif self.dataset_name == "flight":
+            return "actual_arrival"
+        elif self.dataset_name == "compas":
+            return "RecSupervisionLevel"
         raise Exception("Invalid configuration input")

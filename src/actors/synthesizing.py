@@ -5,13 +5,15 @@ from snsynth import Synthesizer
 from snsynth.mst import MSTSynthesizer
 
 from src.constraints.functional_dependencies import FunctionalDependencies
+from src.entities.algorithms import SynthesizingAlgorithms
 from src.external_code.kamino_runner import run_kamino
 from src.utils import smart_noise_fixes
 
 
-def generate_synthetic_data(data: DataFrame, fds: FunctionalDependencies, eps: float, model_name: str,
-                            model_extra_data: dict[str, Any], sample_size: int) -> DataFrame:
-    if model_name == "kamino":
+def generate_synthetic_data(data: DataFrame, fds: FunctionalDependencies, eps: float,
+                            model_name: SynthesizingAlgorithms, model_extra_data: dict[str, Any],
+                            sample_size: int) -> DataFrame:
+    if model_name == SynthesizingAlgorithms.KAMINO:
         return run_kamino(data, fds)
     return smart_noise_synthesis(data, eps, model_name, model_extra_data, sample_size)
 

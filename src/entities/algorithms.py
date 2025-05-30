@@ -27,3 +27,9 @@ class QualityFunctions(EnumType):
     MARGINALS_DISTANCE = "marginals_distance"
     DELETION_OVERHEAD = "deletion_overhead"
     ML_ACCURACY = "ml_accuracy"
+
+class NodesTypes(EnumType):
+    CLEANING = "cleaning"
+    SYNTHESIZING = "synthesizing"
+    MARGINALS = "marginals"
+    REPAIRING = "repairing"

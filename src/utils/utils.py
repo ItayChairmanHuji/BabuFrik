@@ -1,5 +1,4 @@
 import itertools
-import json
 import time
 from typing import Callable
 
@@ -8,16 +7,8 @@ from pandas import DataFrame
 
 from src.constraints import violations_finder
 from src.constraints.functional_dependencies import FunctionalDependencies
-from src.constraints.functional_dependency import FunctionalDependency
 from src.entities.statistics import Statistics
 from src.marginals.marginals import Marginals
-
-
-def load_fds_file(fds_file_path: str) -> FunctionalDependencies:
-    return FunctionalDependencies([FunctionalDependency(**fd) for fd in json.load(open(fds_file_path))])
-
-
-
 
 
 def create_violations_graph(data: DataFrame, fds: FunctionalDependencies) -> nx.Graph:

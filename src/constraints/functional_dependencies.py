@@ -7,6 +7,9 @@ import numpy as np
 from src.constraints.functional_dependency import FunctionalDependency
 
 
+def load_fds_file(fds_file_path: str) -> "FunctionalDependencies":
+    return FunctionalDependencies([FunctionalDependency(**fd) for fd in json.load(open(fds_file_path))])
+
 @dataclass
 class FunctionalDependencies:
     fds: list[FunctionalDependency]
