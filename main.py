@@ -10,6 +10,8 @@ import ray
 from pandas import DataFrame
 
 from src.constraints import functional_dependencies
+from src.pipelines.num_of_private_marginals_pipeline import NumOfPrivateMarginalsPipeline
+from src.pipelines.privacy_budget_pipeline import PrivacyBudgetPipeline
 
 sys.modules['pyvacy.pyvacy'] = pyvacy
 sys.path.append("./kaminos")
@@ -64,6 +66,10 @@ def get_pipeline_type(run_type: RunType) -> type[T]:
             return SyntheticDataPipeline
         case RunType.CONSTRAINTS_NUM:
             return ConstraintsNumPipeline
+        case RunType.MARGINALS_NUM:
+            return NumOfPrivateMarginalsPipeline
+        case RunType.PRIVACY_BUDGET:
+            return PrivacyBudgetPipeline
 
 
 def main():

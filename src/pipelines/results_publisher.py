@@ -17,24 +17,20 @@ class ResultsPublisher:
     config: Configuration
 
     def publish_results(self, run: Run, task: Task, statistics: Statistics) -> None:
-        n = 3
-        measurements = ["runtime", "violations_count", "marginals_difference"]
-        values = [statistics.runtime, statistics.violations_count, statistics.marginals_difference]
-        if statistics.repair_size is not None:
-            n = 4
-            measurements.append("repair_size")
-            values.append(statistics.repair_size)
+        n = 2
         run.log({"results": Table(dataframe=DataFrame({
             "dataset": [self.config.dataset_name] * n,
-            "synthesizer_algorithm": [self.config.generator_name] * n,
-            "repair_algorithm": [self.config.repair_algorithm] * n,
+            "synthesizer_algorithm": [self.config.synthesizing_algorithm] * n,
+            "repair_algorithm": [self.config.repairing_algorithm] * n,
             "private_data_size": [task.private_data_size] * n,
             "synthetic_data_size": [task.synthetic_data_size] * n,
             "number_of_constraints": [len(task.fds)] * n,
-            "run_type": ["synthetic_data"] * n,
-            "action": ["synthesizing"] * n,
-            "measurement": measurements,
-            "value": values,
+            "privacy_budget": [task.marginals_privacy_budget] * n,
+            "num_of_private_marginals": [task.relative_num_of_private_marginals] * n,
+            "monitored_object": [self.config.monitored_object] * n,
+            "action": [statistics.action] * n,
+            "measurement": ["runtime", statistics.quality_func],
+            "value": [statistics.runtime, statistics.quality],
         }))})
 
     def create_run(self, task: Task) -> Run:

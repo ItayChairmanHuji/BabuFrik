@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 
+from src.entities.action import Action
+from src.entities.algorithms import QualityFunctions
+
 
 @dataclass
 class Statistics:
     runtime: float
-    violations_count: int
-    marginals_difference: float
-    repair_size: float = None
+    action: Action
+    quality_func: QualityFunctions
+    quality: float

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Union, Optional
 
+from src.entities.action import Action
 from src.entities.algorithms import MarginalsGenerationAlgorithms, RepairAlgorithms, SynthesizingAlgorithms, \
     CostFunctions, QualityFunctions, NodesTypes
 from src.entities.run_type import RunType
@@ -15,15 +16,17 @@ def input_type_validation(list_type_value, *str_type_values) -> bool:
 class Configuration:
     dataset_name: str
     synthesizing_algorithm: SynthesizingAlgorithms
+    synthesizing_quality: QualityFunctions = QualityFunctions.NO_QUALITY
     marginals_algorithm: MarginalsGenerationAlgorithms = MarginalsGenerationAlgorithms.PUBLIC_MARGINALS
+    marginals_quality: QualityFunctions = QualityFunctions.NO_QUALITY
     repairing_algorithm: RepairAlgorithms = RepairAlgorithms.NO_REPAIR
+    repairing_quality: QualityFunctions = QualityFunctions.NO_QUALITY
     private_data_size: Union[int | list[int]] = 5_000
     synthetic_data_size: Union[int | list[int]] = 15_000
     fds: Union[str, list[str]] = "fds.json"
     marginals_privacy_budget: Union[float | list[float]] = 1
     relative_num_of_marginals: Union[float | list[float]] = 0.5
     cost_function: CostFunctions = CostFunctions.LEAVE_ONE_OUT
-    quality_function: QualityFunctions = QualityFunctions.VIOLATIONS_COUNT
     repetitions: int = 10
     empty_values_threshold: float = 0.5
     columns_threshold: int = 100
@@ -63,3 +66,14 @@ class Configuration:
         elif self.dataset_name == "compas":
             return "RecSupervisionLevel"
         raise Exception("Invalid configuration input")
+
+    def quality_function(self, action: Action) -> QualityFunctions:
+        match action:
+            case Action.CLEANING:
+                return QualityFunctions.NO_QUALITY
+            case Action.SYNTHESIZING:
+                return self.synthesizing_quality
+            case Action.MARGINALS:
+                return self.marginals_quality
+            case Action.REPAIRING:
+                return self.repairing_quality

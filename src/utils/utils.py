@@ -1,14 +1,12 @@
 import itertools
 import time
-from typing import Callable
+from typing import Callable, Any
 
 import networkx as nx
 from pandas import DataFrame
 
 from src.constraints import violations_finder
 from src.constraints.functional_dependencies import FunctionalDependencies
-from src.entities.statistics import Statistics
-from src.marginals.marginals import Marginals
 
 
 def create_violations_graph(data: DataFrame, fds: FunctionalDependencies) -> nx.Graph:
@@ -21,11 +19,8 @@ def create_violations_graph(data: DataFrame, fds: FunctionalDependencies) -> nx.
     return graph
 
 
-def run_with_statistics(func: Callable[[], DataFrame],
-                        fds: FunctionalDependencies, marginals: Marginals) -> tuple[DataFrame, Statistics]:
+def run_with_runtime(func: Callable[[], Any]) -> tuple[Any, float]:
     start_time = time.time()
     result = func()
     runtime = time.time() - start_time
-    violations = sum(violations_finder.count_functional_dependency_violations(result, fd) for fd in fds)
-    marginals_difference = marginals.mean_distance(Marginals(result))
-    return result, Statistics(runtime, violations, marginals_difference)
+    return result, runtime

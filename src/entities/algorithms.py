@@ -23,6 +23,7 @@ class CostFunctions(EnumType):
     SHAPLEY = "shapley"
 
 class QualityFunctions(EnumType):
+    NO_QUALITY = "no_quality"
     VIOLATIONS_COUNT = "violations_count"
     MARGINALS_DISTANCE = "marginals_distance"
     DELETION_OVERHEAD = "deletion_overhead"
