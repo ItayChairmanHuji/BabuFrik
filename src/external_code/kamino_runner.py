@@ -14,16 +14,13 @@ from kamino.synthesizer.util import _analyze_privacy
 from src.constraints.functional_dependencies import FunctionalDependencies
 
 
-def kamino_fixes() -> None:
-
-
 def run_kamino(data: DataFrame, fds: FunctionalDependencies):
     temp_dir_name = str(uuid.uuid4())
     os.mkdir(temp_dir_name)
     try:
         data_path = send_data_to_kamino(data, temp_dir_name)
         constraints_path = send_constraints_to_kamino(fds, temp_dir_name)
-        weights_path = send_weights_to_kamino(fds, temp_dir_name) # Might be removed, not sure it's used
+        weights_path = send_weights_to_kamino(fds, temp_dir_name)  # Might be removed, not sure it's used
         params = get_run_params(data)
         analyze_run_privacy(params)
         return generate_synthetic_data(data_path, constraints_path, params)
@@ -77,7 +74,8 @@ def analyze_run_privacy(params: dict[str, Any]) -> None:
     epsilon2 = _analyze_privacy(params)
     params['epsilon2'] = epsilon2
 
-def generate_synthetic_data(data_path: str, constraints_path: str, params: dict[str,Any]) -> DataFrame:
+
+def generate_synthetic_data(data_path: str, constraints_path: str, params: dict[str, Any]) -> DataFrame:
     kamino.syn_data(
         path_data=data_path,
         path_ic=constraints_path,
