@@ -10,22 +10,18 @@ import ray
 from pandas import DataFrame
 
 from src.constraints import functional_dependencies
-from src.pipelines.num_of_private_marginals_pipeline import NumOfPrivateMarginalsPipeline
-from src.pipelines.privacy_budget_pipeline import PrivacyBudgetPipeline
-
-sys.modules['pyvacy.pyvacy'] = pyvacy
-sys.path.append("./kaminos")
-
+from src.constraints.functional_dependencies import FunctionalDependencies
 from src.entities import consts
 from src.entities.configuration import Configuration
-from src.constraints.functional_dependencies import FunctionalDependencies
+from src.entities.run_type import RunType
 from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.pipelines.constraints_num_pipeline import ConstraintsNumPipeline
+from src.pipelines.num_of_private_marginals_pipeline import NumOfPrivateMarginalsPipeline
 from src.pipelines.pipeline import Pipeline
+from src.pipelines.privacy_budget_pipeline import PrivacyBudgetPipeline
 from src.pipelines.private_data_pipeline import PrivateDataPipeline
-from src.entities.run_type import RunType
-from src.pipelines.synthetic_data_pipeline import SyntheticDataPipeline
 from src.pipelines.results_publisher import ResultsPublisher
+from src.pipelines.synthetic_data_pipeline import SyntheticDataPipeline
 
 T = TypeVar("T", bound=Pipeline)
 
