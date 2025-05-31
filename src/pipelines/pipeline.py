@@ -41,7 +41,7 @@ class Pipeline(ABC):
 
     def run(self) -> None:
         pending_tasks = []
-        initial_tasks = self.create_initial_tasks()
+        initial_tasks = self.create_initial_tasks() * self.config.repetitions
         for initial_task in initial_tasks:
             clean_task_id = self.run_task.remote(self, initial_task, self.clean_data)
             synth_task_id = self.run_task.remote(self, clean_task_id, self.generate_synthetic_data)

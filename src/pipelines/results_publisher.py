@@ -27,7 +27,6 @@ class ResultsPublisher:
             "number_of_constraints": [len(task.fds)] * n,
             "privacy_budget": [task.marginals_privacy_budget] * n,
             "num_of_private_marginals": [task.relative_num_of_private_marginals] * n,
-            "monitored_object": [self.config.monitored_object] * n,
             "action": [statistics.action] * n,
             "measurement": ["runtime", statistics.quality_func],
             "value": [statistics.runtime, statistics.quality],

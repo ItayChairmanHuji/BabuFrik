@@ -3,7 +3,7 @@ from typing import Any, Union, Optional
 
 from src.entities.action import Action
 from src.entities.algorithms import MarginalsGenerationAlgorithms, RepairAlgorithms, SynthesizingAlgorithms, \
-    CostFunctions, QualityFunctions, NodesTypes
+    CostFunctions, QualityFunctions
 from src.entities.run_type import RunType
 
 
@@ -29,11 +29,9 @@ class Configuration:
     cost_function: CostFunctions = CostFunctions.LEAVE_ONE_OUT
     repetitions: int = 10
     empty_values_threshold: float = 0.5
-    columns_threshold: int = 100
     synthesizing_privacy_budget: float = 1
     synthesizing_extra_data: Optional[dict[str, Any]] = None
     num_of_tasks_in_parallel: int = 10
-    monitored_object: NodesTypes = NodesTypes.REPAIRING
 
     @property
     def synthesizer_extra_data(self) -> dict:

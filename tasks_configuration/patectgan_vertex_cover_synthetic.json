@@ -1,10 +1,6 @@
 {
   "dataset_name": "flight",
-  "private_data_size": 10000,
-  "empty_values_threshold": 0.5,
-  "columns_threshold": 100,
-  "epsilon": 1,
-  "generator_name": "patectgan",
+  "synthesizing_algorithm": "patectgan",
   "synthetic_data_size": [
     1000,
     2000,
@@ -17,14 +13,7 @@
     256000,
     512000
   ],
-
-  "generator_extra_data": {
-    "regularization": "dragan"
-  },
-  "generations_repeats": 10,
-  "repair_algorithm": "vertex_cover",
-  "repair_repeats": 10,
-  "fds": "fds.json",
-  "should_calc_repair_size": false,
-  "num_of_tasks_in_parallel": 10
+  "repairing_algorithm": "greedy_vertex_cover",
+  "repairing_quality": "marginals_distance",
+  "repetitions": 10
 }
