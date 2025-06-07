@@ -1,16 +1,13 @@
-from typing import Callable
-
 from pandas import DataFrame
 
-from src.marginals.marginals import Marginals
+from src.marginals.marginals_constraints import MarginalsConstraints
 
 
 class LeaveOneOutTupleCostFunction:
-    def calculate_cost(self, data: DataFrame, marginals: Marginals) -> Callable[[int], float]:
-        weights = {i: self.get_tuple_cost(data, i, marginals) for i in range(len(data))}
-        return lambda i: weights[i]
+    def calculate_cost(self, data: DataFrame, marginals: MarginalsConstraints) -> dict[int, float]:
+        return {i: self.get_tuple_cost(data, i, marginals) for i in range(len(data))}
 
-    def get_tuple_cost(self, data: DataFrame, tuple_index: int, marginals: Marginals) -> float:
+    @staticmethod
+    def get_tuple_cost(data: DataFrame, tuple_index: int, marginals: MarginalsConstraints) -> float:
         data_without_tuple = data.drop(index=tuple_index)
-        marginals_without_tuple = Marginals(data_without_tuple)
-        return marginals.mean_distance(marginals_without_tuple)
+        return marginals.count_satisfied(data_without_tuple)
