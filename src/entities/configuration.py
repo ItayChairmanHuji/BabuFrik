@@ -9,7 +9,7 @@ from src.entities.run_type import RunType
 
 def input_type_validation(list_type_value, *str_type_values) -> bool:
     return isinstance(list_type_value, list) and all(
-        isinstance(str_type_value, (str, int)) for str_type_value in str_type_values)
+        isinstance(str_type_value, (str, int, float)) for str_type_value in str_type_values)
 
 
 @dataclass
@@ -51,6 +51,8 @@ class Configuration:
         for key, value in possible_types.items():
             temp = list(possible_types.copy().values())
             temp.remove(value)
+            print(value)
+            print(temp)
             if input_type_validation(value, *temp):
                 return key
         raise Exception("Invalid configuration input")

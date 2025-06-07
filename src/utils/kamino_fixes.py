@@ -2,7 +2,7 @@ import sys
 import time
 
 import pyvacy
-from sqlalchemy import sql
+import sqlalchemy as sql
 
 from src.utils.pyvacy_fixes import epsilon
 

@@ -36,7 +36,7 @@ class ResultsPublisher:
         return wandb.init(
             project="Private Synthetic Data Repair",
             entity="itay-chairman-hebrew-university-of-jerusalem",
-            name=f"{self.config.dataset_name}_{task.action}",
+            name=f"{self.config.dataset_name}",
             config=self.create_run_config(task),
             settings=wandb.Settings(start_method="thread")
         )

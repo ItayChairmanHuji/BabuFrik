@@ -28,27 +28,28 @@ class Pipeline(ABC):
     marginals_errors_margins: MarginalsErrorsMargins
     results_publisher: ResultsPublisher
 
-    def get_func_action(self, func: Callable[[Task], Task]) -> Action:
-        if func == self.clean_data:
-            return Action.CLEANING
-        elif func == self.generate_synthetic_data:
-            return Action.SYNTHESIZING
-        elif func == self.get_marginals:
-            return Action.MARGINALS
-        elif func == self.repair_data:
-            return Action.REPAIRING
-        raise Exception("Invalid quality_function")
+    def get_func_action(self, action: Action) -> Callable[[Task], Task]:
+        match action:
+            case Action.CLEANING:
+                return self.clean_data
+            case Action.SYNTHESIZING:
+                return self.generate_synthetic_data
+            case Action.MARGINALS:
+                return self.get_marginals
+            case Action.REPAIRING:
+                return self.repair_data
 
     def run(self) -> None:
         pending_tasks = []
         initial_tasks = self.create_initial_tasks() * self.config.repetitions
         for initial_task in initial_tasks:
-            clean_task_id = self.run_task.remote(self, initial_task, self.clean_data)
-            synth_task_id = self.run_task.remote(self, clean_task_id, self.generate_synthetic_data)
-            marginals_task_id = self.run_task.remote(self, synth_task_id, self.get_marginals)
-            repairing_task_id = self.run_task.remote(self, marginals_task_id, self.repair_data)
+            clean_task_id = self.run_task.remote(self, initial_task, Action.CLEANING)
+            synth_task_id = self.run_task.remote(self, clean_task_id, Action.SYNTHESIZING)
+            marginals_task_id = self.run_task.remote(self, synth_task_id, Action.MARGINALS)
+            repairing_task_id = self.run_task.remote(self, marginals_task_id, Action.REPAIRING)
             pending_tasks.append(repairing_task_id)
             pending_tasks = self.wait_for_pending_tasks(pending_tasks)
+            print("7")
         self.finish_last_pending_tasks(pending_tasks)
 
     def wait_for_pending_tasks(self, pending_tasks: list[ObjectRef]) -> list[ObjectRef]:
@@ -67,8 +68,8 @@ class Pipeline(ABC):
         raise NotImplementedError("Not implemented")
 
     @ray.remote
-    def run_task(self, task: Task, task_func: Callable[[Task], Task]) -> Task:
-        action = self.get_func_action(task_func)
+    def run_task(self, task: Task, action: Action) -> Task:
+        task_func = self.get_func_action(action)
         quality_function = self.config.quality_function(action)
         if quality_function == QualityFunctions.NO_QUALITY:
             return task_func(task)
