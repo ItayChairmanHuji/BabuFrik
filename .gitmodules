@@ -1,6 +1,3 @@
-[submodule "holoclean"]
-	path = holoclean
-	url = https://github.com/cgebest/holoclean.git
 [submodule "kamino"]
 	path = kamino
 	url = https://github.com/cgebest/kamino.git
