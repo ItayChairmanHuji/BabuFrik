@@ -16,11 +16,11 @@ from src.constraints.functional_dependencies import FunctionalDependencies
 
 def run_kamino(data: DataFrame, fds: FunctionalDependencies):
     temp_dir_name = str(uuid.uuid4())
-    os.makedirs(os.path.join(temp_dir_name,"data"))
+    os.mkdir(temp_dir_name)
     try:
         data_path = send_data_to_kamino(data, temp_dir_name)
         constraints_path = send_constraints_to_kamino(fds, temp_dir_name)
-        send_weights_to_kamino(fds, temp_dir_name)  # Might be removed, not sure it's used
+        send_weights_to_kamino(fds, temp_dir_name)
         params = get_run_params(data)
         analyze_run_privacy(params)
         return generate_synthetic_data(data_path, constraints_path, params)
@@ -45,9 +45,9 @@ def send_constraints_to_kamino(fds: FunctionalDependencies, working_dir: str) ->
 def send_weights_to_kamino(fds: FunctionalDependencies, working_dir: str) -> str:
     weights_path = os.path.join(working_dir, "data.w")
     with open(weights_path, "w") as weights_file:
-        weights_file.write("++")
+        weights_file.write("++\n")
         for i in range(fds.dc_format.count('\n')):
-            weights_file.write("1000")
+            weights_file.write("1000\n")
     return weights_path
 
 

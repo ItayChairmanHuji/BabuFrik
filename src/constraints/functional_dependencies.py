@@ -54,4 +54,4 @@ class FunctionalDependencies:
 
     @property
     def dc_format(self) -> str:
-        return '\n'.join(fd.dc_format for fd in self.fds)
+        return '\n'.join(fd.dc_format for fd in self.fds) + '\n'
