@@ -1,20 +1,30 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Callable
 
 
-def choose_operation(sign: str) -> Callable[[Any, Any], bool]:
+class Sign(Enum):
+    EQ = '=='
+    NE = '!='
+    GT = '>>'
+    GE = '>='
+    LT = '<<'
+    LE = '<='
+
+
+def choose_operation(sign: Sign) -> Callable[[Any, Any], bool]:
     match sign:
-        case '==':
+        case Sign.EQ:
             return lambda x, y: x == y
-        case '!=':
+        case Sign.NE:
             return lambda x, y: x != y
-        case '>>':
+        case Sign.GT:
             return lambda x, y: x > y
-        case '>=':
+        case Sign.GE:
             return lambda x, y: x >= y
-        case '<<':
+        case Sign.LT:
             return lambda x, y: x < y
-        case '<=':
+        case Sign.LE:
             return lambda x, y: x <= y
         case _:
             raise ValueError(f'Invalid operator: {sign}')
@@ -22,7 +32,7 @@ def choose_operation(sign: str) -> Callable[[Any, Any], bool]:
 
 @dataclass
 class Operator:
-    sign: str
+    sign: Sign
 
     def operate(self, x: Any, y: Any) -> bool:
         return choose_operation(self.sign)(x, y)

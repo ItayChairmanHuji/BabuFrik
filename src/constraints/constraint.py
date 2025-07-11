@@ -1,70 +1,51 @@
 import itertools
 from dataclasses import dataclass
-from typing import Any
+from typing import Iterator
 
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 from src.constraints.predicate import Predicate
 
 
 @dataclass
 class Constraint:
-    num_of_vars: int
-    predicates_vars: dict[Predicate, tuple[int, int]]
+    num_of_tuples: int
+    predicates: list[Predicate]
 
-    @property
-    def predicates(self) -> list[Predicate]:
-        return list(self.predicates_vars.keys())
+    def find_violations(self, data: DataFrame) -> list[tuple[int, ...]]:
+        violations = set()
+        blocks = self.split_data_to_blocks(data)
+        for block in blocks:
+            violations.update(self.find_block_violations(block))
+        return list(violations)
 
-    @property
-    def equality_type_predicates(self) -> list[Predicate]:
-        return [p for p in self.predicates if p.is_equality_type_constraint]
+    def split_data_to_blocks(self, data: DataFrame) -> Iterator[DataFrame]:
+        blocks_attrs = [attr for p in self.predicates
+                        if p.is_equality and len(p.attrs) == 2
+                        for attr in p.attrs]
+        if blocks_attrs:
+            yield from self.get_valid_blocks(data, blocks_attrs)
+        else:
+            yield data
 
-    def violating_tuples(self, data: DataFrame) -> list[tuple[int, ...]]:
-        candidates = []
-        relevant_data = data.drop(columns=list(self.attrs))
-        equality_type_attrs = self.equality_type_attrs
-        for values, subdata in relevant_data.groupby(equality_type_attrs):
-            if not self.is_equality_type_violation(values, equality_type_attrs): continue
-            candidates.extend(self.find_inequality_type_violation(subdata))
-        return candidates
+    # TODO: optimize
+    def get_valid_blocks(self, data: DataFrame, blocks_attrs: list[str]) -> Iterator[DataFrame]:
+        for block_values, block in data.groupby(blocks_attrs, sort=False):
+            if self.is_block_valid(block_values):
+                yield block
 
-    @property
-    def attrs(self) -> set[str]:
-        res = set()
-        for predicate in self.predicates:
-            res.add(predicate.attr1)
-            if predicate.attr2 is not None:
-                res.add(predicate.attr2)
-        return res
+    @staticmethod
+    def is_block_valid(block_values) -> bool:
+        return all(block_values[i] == block_values[i + 1]
+                   for i in range(len(block_values) - 1)) if block_values else True
 
-    @property
-    def equality_type_attrs(self) -> set[str, ...]:
-        res = set()
-        for predicate in self.equality_type_predicates:
-            res.add(predicate.attr1)
-            if predicate.attr2 is not None:
-                res.add(predicate.attr2)
-        return res
+    def find_block_violations(self, block: DataFrame) -> Iterator[tuple[int, ...]]:
+        predicates = [p for p in self.predicates if not p.is_equality or len(p.attrs) == 1]
+        for violation in itertools.combinations(block.index, self.num_of_tuples):
+            if self.is_violation(block, violation, predicates):
+                yield violation
 
-    def is_equality_type_violation(self, values: tuple[Any, ...], attrs: set[str, ...]) -> bool:
-        t = Series({attrs[i]: values[i] for i in range(len(attrs))})
-        for predicate, vars in self.equality_type_predicates:
-            if not predicate.is_satisfied(t, t): return False
-        return True
-
-    def find_inequality_type_violation(self, data: DataFrame) -> list[tuple[int, ...]]:
-        res = []
-        data = data.reset_index(drop=True)
-        for tuples in itertools.combinations(range(len(data)), self.num_of_vars):
-            if self.is_inequality_type_violation(data, tuples):
-                res.append(tuples)
-        return res
-
-    def is_inequality_type_violation(self, data: DataFrame, tuples: tuple[int, ...]) -> bool:
-        for predicate, vars in self.predicates_vars.items():
-            if predicate.is_equality_type_constraint:
-                continue
-            t, s = tuples[vars[0]], tuples[vars[1]]
-            if not predicate.is_satisfied(data.iloc[t], data.iloc[s]): return False
-        return True
+    @staticmethod
+    def is_violation(data: DataFrame, potential_violation: tuple[int, ...], predicates: list[Predicate]) -> bool:
+        tuples = data.loc[potential_violation].reset_index(drop=True)
+        return any(predicate.evaluate(tuples) for predicate in predicates)
