@@ -1,6 +1,6 @@
 import logging
 import time
-
+import kamino
 
 def create_db_table_from_query(self, name, query):
     tic = time.clock()
@@ -14,4 +14,4 @@ def create_db_table_from_query(self, name, query):
     return True
 
 def import_fixes():
-    holoclean.dataset.dbengine.DBengine.create_db_table_from_query = create_db_table_from_query
+    kamino.holoclean.dataset.dbengine.DBengine.create_db_table_from_query = create_db_table_from_query
