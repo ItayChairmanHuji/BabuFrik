@@ -14,7 +14,6 @@ from src.entities.algorithms import QualityFunctions
 from src.entities.configuration import Configuration
 from src.entities.statistics import Statistics
 from src.entities.task import Task
-from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.marginals_accessors import public_marginals_access
 from src.pipelines.results_publisher import ResultsPublisher
 
@@ -25,7 +24,6 @@ class Pipeline(ABC):
     data: DataFrame
     config: Configuration
     fds: Union[FunctionalDependencies | list[FunctionalDependencies]]
-    marginals_errors_margins: MarginalsErrorsMargins
     results_publisher: ResultsPublisher
 
     def get_func_action(self, action: Action) -> Callable[[Task], Task]:
@@ -111,5 +109,4 @@ class Pipeline(ABC):
 
     def calculate_quality(self, task: Task, quality_function: QualityFunctions) -> float:
         return quality_calculator.calculate_quality(task=task, quality_function=quality_function,
-                                                    marginals_error_margins=self.marginals_errors_margins,
                                                     target_attribute=self.config.target_attribute)

@@ -14,7 +14,6 @@ from src.constraints.functional_dependencies import FunctionalDependencies
 from src.entities import consts
 from src.entities.configuration import Configuration
 from src.entities.run_type import RunType
-from src.marginals.marginals_errors_margins import MarginalsErrorsMargins
 from src.pipelines.constraints_num_pipeline import ConstraintsNumPipeline
 from src.pipelines.num_of_private_marginals_pipeline import NumOfPrivateMarginalsPipeline
 from src.pipelines.pipeline import Pipeline
@@ -47,13 +46,6 @@ def load_fds(config: Configuration, run_type: RunType) -> Union[FunctionalDepend
     return [functional_dependencies.load_fds_file(os.path.join(dataset_directory, fds)) for fds in config.fds]
 
 
-def load_marginals_error_margins(config: Configuration) -> MarginalsErrorsMargins:
-    error_margins_file_path = os.path.join(consts.DATASETS_DIR, config.dataset_name, consts.ERROR_MARGINS_FILE_NAME)
-    if not os.path.exists(error_margins_file_path):
-        FileNotFoundError("Error margins file not found")
-    return MarginalsErrorsMargins(str(error_margins_file_path))
-
-
 def get_pipeline_type(run_type: RunType) -> type[T]:
     match run_type:
         case RunType.PRIVATE_DATA:
@@ -74,13 +66,11 @@ def main():
     data = load_dataset(config)
     run_type = config.run_type
     fds = load_fds(config, run_type)
-    marginals_errors = load_marginals_error_margins(config)
     pipeline_type = get_pipeline_type(run_type)
     pipeline_type(run_id=run_id,
                   data=data,
                   config=config,
                   fds=fds,
-                  marginals_errors_margins=marginals_errors,
                   results_publisher=ResultsPublisher(run_id=run_id, config=config)).run()
 
 
