@@ -56,12 +56,11 @@
   },
   {
     "lhs": [
-      "Agency_Text"
+      "insulin"
     ],
     "rhs": [
-      "AssessmentReason",
-      "IsCompleted",
-      "IsDeleted"
+      "examide",
+      "citoglipton"
     ]
   }
 ]
