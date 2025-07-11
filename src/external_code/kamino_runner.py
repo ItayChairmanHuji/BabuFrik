@@ -10,7 +10,7 @@ from src.utils.kamino_fixes import imports_fix as import_kamino_fix
 
 import_kamino_fix()
 
-from src.utils.holoclean_fixes import import_fix as import_holoclean_fix
+from src.utils.holoclean_fixes import import_fixes as import_holoclean_fix
 import_holoclean_fix()
 
 from kamino.synthesizer import kamino
