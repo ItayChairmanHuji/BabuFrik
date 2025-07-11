@@ -1,0 +1,18 @@
+{
+  "dataset_name": "diabetes",
+  "synthesizing_algorithm": "kamino",
+  "synthesizing_quality": "violations_count",
+  "private_data_size": [
+    1000,
+    2000,
+    4000,
+    8000,
+    16000,
+    32000,
+    64000,
+    128000,
+    256000,
+    512000
+  ],
+  "num_of_tasks_in_parallel": 1
+}

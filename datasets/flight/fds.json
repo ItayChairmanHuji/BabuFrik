@@ -1,18 +1,18 @@
 [
   {
-    "lhs": ["date_collected", "flight_number"],
+    "lhs": ["actual_departure_t", "flight_number"],
     "rhs": ["actual_departure"]
   },
   {
-    "lhs": ["date_collected", "flight_number"],
+    "lhs": ["scheduled_arrival_t", "flight_number"],
     "rhs": ["actual_arrival"]
   },
   {
-    "lhs": ["date_collected", "flight_number"],
-    "rhs": ["scheduled_departure"]
+    "lhs": ["actual_departure_t", "scheduled_departure"],
+    "rhs": ["date_collected"]
   },
   {
-    "lhs": ["date_collected", "flight_number"],
-    "rhs": ["scheduled_arrival"]
+    "lhs": ["scheduled_arrival_t", "scheduled_arrival"],
+    "rhs": ["date_collected"]
   }
 ]

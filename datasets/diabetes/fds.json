@@ -1,0 +1,67 @@
+[
+  {
+    "lhs": [
+      "diag_1"
+    ],
+    "rhs": [
+      "examide",
+      "citoglipton"
+    ]
+  },
+  {
+    "lhs": [
+      "admission_source_id",
+      "A1Cresult"
+    ],
+    "rhs": [
+      "acetohexamide",
+      "troglitazone",
+      "examide",
+      "citoglipton",
+      "glimepiride-pioglitazone",
+      "metformin-pioglitazone"
+    ]
+  },
+  {
+    "lhs": [
+      "number_outpatient",
+      "max_glu_serum"
+    ],
+    "rhs": [
+      "weight",
+      "acetohexamide",
+      "miglitol",
+      "troglitazone",
+      "examide",
+      "citoglipton",
+      "glipizide-metformin",
+      "glimepiride-pioglitazone",
+      "metformin-rosiglitazone",
+      "metformin-pioglitazone"
+    ]
+  },
+  {
+    "lhs": [
+      "A1Cresult",
+      "change"
+    ],
+    "rhs": [
+      "acetohexamide",
+      "troglitazone",
+      "examide",
+      "citoglipton",
+      "glimepiride-pioglitazone",
+      "metformin-pioglitazone"
+    ]
+  },
+  {
+    "lhs": [
+      "Agency_Text"
+    ],
+    "rhs": [
+      "AssessmentReason",
+      "IsCompleted",
+      "IsDeleted"
+    ]
+  }
+]

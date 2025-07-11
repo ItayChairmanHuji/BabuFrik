@@ -1,6 +1,37 @@
 [
   {
-    "lhs": ["educational-num"],
-    "rhs": ["education"]
+    "lhs": [
+      "educational-num"
+    ],
+    "rhs": [
+      "education"
+    ]
+  },
+  {
+    "lhs": [
+      "education",
+      "capital-loss"
+    ],
+    "rhs": [
+      "educational-num"
+    ]
+  },
+  {
+    "lhs": [
+      "fnlwgt",
+      "educational-num"
+    ],
+    "rhs": [
+      "education"
+    ]
+  },
+  {
+    "lhs": [
+      "age",
+      "education"
+    ],
+    "rhs": [
+      "educational-num"
+    ]
   }
 ]
